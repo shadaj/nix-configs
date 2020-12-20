@@ -67,7 +67,7 @@ in
       path = with pkgs; [ libvirt procps utillinux kmod ];
       preStart = ''
         mkdir -p /var/lib/libvirt/vbios
-        ln -sf ${./patched.rom} /var/lib/libvirt/vbios/patched-bios.rom
+        ln -sf ${( import ./patched-vbios.nix )}/patched.rom /var/lib/libvirt/vbios/patched-bios.rom
         mkdir -p /var/lib/libvirt/qemu
         ln -sf ${./win10.xml} /var/lib/libvirt/qemu/win10.xml
 
