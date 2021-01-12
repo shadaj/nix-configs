@@ -27,6 +27,11 @@
   boot.kernelParams = [ "acpi_enforce_resources=lax" ];
   virtualisation.libvirtd.enable = true;
 
+  powerManagement = {
+    enable = true;
+    cpuFreqGovernor = "ondemand";
+  };
+
   nixpkgs.config.allowUnfree = true;
 
   networking.hostName = "kedar"; # Define your hostname.
@@ -117,7 +122,10 @@
     };
   };
 
-  environment.systemPackages = [ config.services.samba.package ];
+  environment.systemPackages = [
+    config.services.samba.package
+    pkgs.tailscale
+  ];
 
   # Open ports in the firewall.
   networking.firewall.enable = true;
@@ -159,6 +167,8 @@
   virtualisation.docker.enable = true;
   virtualisation.docker.storageDriver = "zfs";
   virtualisation.docker.extraOptions = "--config-file=${pkgs.writeText "daemon.json" (builtins.toJSON { dns = [ "1.1.1.1" "1.0.0.1" ]; })}";
+
+  services.tailscale.enable = true;
 
   programs.fish.enable = true;
   programs.fish.shellInit = ''
