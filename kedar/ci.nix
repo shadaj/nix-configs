@@ -3,6 +3,8 @@
 let
   secrets = import ./ci.secret.nix;
 in {
+  imports = [ ./ci-access.nix ];
+
   virtualisation.oci-containers.containers.drone-server = {
     image = "drone/drone:1.9";
     environment = {
