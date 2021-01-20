@@ -1,8 +1,17 @@
-let
-  unstable = import <nixos-unstable> {};
-in
 { config, pkgs, ... }:
+let
+  vscode-overlay = self: super:
+  {
+    vscode-extensions = self.lib.recursiveUpdate super.vscode-extensions {
+      ms-vsliveshare.vsliveshare = (pkgs.callPackage (import ./vscode-live-share) {});
+    };
+  };
 
+  unstable = import <nixos-unstable> {
+    config = { allowUnfree = true; };
+    overlays = [ vscode-overlay ];
+  };
+in
 {
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
@@ -157,10 +166,11 @@ in
   programs.vscode = {
     enable = true;
     package = pkgs.vscode;
-    extensions = with pkgs.vscode-extensions; [
+    extensions = with unstable.pkgs.vscode-extensions; [
+      ms-python.vscode-pylance
       ms-python.python
       scalameta.metals
-      unstable.pkgs.vscode-extensions.ms-vsliveshare.vsliveshare
+      ms-vsliveshare.vsliveshare
     ];
   };
 
