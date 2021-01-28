@@ -97,6 +97,7 @@
   };
   services.openssh.forwardX11 = true;
   services.sshd.enable = true;
+  programs.ssh.startAgent = true;
 
   services.samba = {
     enable = true;
