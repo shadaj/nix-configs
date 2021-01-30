@@ -10,6 +10,8 @@ systemctl stop display-manager.service
 ## Uncomment the following line if you use GDM
 pkill -x gdm-x-session
 
+systemctl stop ethminer.service
+
 # Unbind VTconsoles
 echo 0 > /sys/class/vtconsole/vtcon0/bind
 echo 0 > /sys/class/vtconsole/vtcon1/bind

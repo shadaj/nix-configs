@@ -1,6 +1,12 @@
 { config, pkgs, ... }:
 
-{
+let
+  unstable = import <nixos-unstable> {
+    config = { allowUnfree = true; };
+  };
+
+  miningSecrets = import ./mining.secret.nix;
+in {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
@@ -22,7 +28,7 @@
 
   # Enable virtualisation through libvirt
   # also a module for collecting sensors
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages_5_8;
   boot.kernelModules = [ "kvm-amd" "kvm-intel" "nct6775" ];
   boot.kernelParams = [ "acpi_enforce_resources=lax" ];
   virtualisation.libvirtd.enable = true;
@@ -33,6 +39,9 @@
   };
 
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.packageOverrides = pkgs: {
+    ethminer = unstable.ethminer;
+  };
 
   networking.hostName = "kedar"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -149,6 +158,7 @@
   hardware.pulseaudio.enable = true;
 
   services.xserver.videoDrivers = [ "nvidia" ];
+  hardware.opengl.driSupport32Bit = true;
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
@@ -168,8 +178,35 @@
   virtualisation.docker.enable = true;
   virtualisation.docker.storageDriver = "zfs";
   virtualisation.docker.extraOptions = "--config-file=${pkgs.writeText "daemon.json" (builtins.toJSON { dns = [ "1.1.1.1" "1.0.0.1" ]; })}";
+  virtualisation.docker.enableNvidia = true;
 
   services.tailscale.enable = true;
+
+  systemd.services.ethminer = {
+    path = [ pkgs.cudatoolkit ];
+    description = "ethminer ethereum mining service";
+    wantedBy = [ "multi-user.target" ];
+    after = [ "network.target" ];
+
+    serviceConfig = {
+      DynamicUser = true;
+      ExecStartPre = "${pkgs.ethminer}/bin/.ethminer-wrapped --list-devices";
+      ExecStartPost = "+${pkgs.lib.getBin config.boot.kernelPackages.nvidia_x11}/bin/nvidia-smi -i 0 -pl 125";
+      ExecStopPost = "+${pkgs.lib.getBin config.boot.kernelPackages.nvidia_x11}/bin/nvidia-smi -i 0 -pl 215";
+      Restart = "always";
+    };
+
+    environment = {
+      LD_LIBRARY_PATH = "${config.boot.kernelPackages.nvidia_x11}/lib";
+    };
+
+    script = ''
+      ${pkgs.ethminer}/bin/.ethminer-wrapped \
+        --report-hashrate \
+        --cuda \
+        --pool stratum1+ssl://${miningSecrets.address}.${miningSecrets.identifier}@eth-us-west.flexpool.io:5555
+    '';
+  };
 
   programs.fish.enable = true;
   programs.fish.shellInit = ''
