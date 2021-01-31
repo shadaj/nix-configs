@@ -186,7 +186,7 @@ in {
     path = [ pkgs.cudatoolkit ];
     description = "ethminer ethereum mining service";
     wantedBy = [ "multi-user.target" ];
-    after = [ "network.target" ];
+    after = [ "network-online.target" ];
 
     serviceConfig = {
       User = "root";
