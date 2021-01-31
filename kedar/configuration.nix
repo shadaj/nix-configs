@@ -189,10 +189,7 @@ in {
     after = [ "network.target" ];
 
     serviceConfig = {
-      DynamicUser = true;
-      ExecStartPre = "${pkgs.ethminer}/bin/.ethminer-wrapped --list-devices";
-      ExecStartPost = "+${pkgs.lib.getBin config.boot.kernelPackages.nvidia_x11}/bin/nvidia-smi -i 0 -pl 125";
-      ExecStopPost = "+${pkgs.lib.getBin config.boot.kernelPackages.nvidia_x11}/bin/nvidia-smi -i 0 -pl 215";
+      User = "root";
       Restart = "always";
     };
 
@@ -201,10 +198,7 @@ in {
     };
 
     script = ''
-      ${pkgs.ethminer}/bin/.ethminer-wrapped \
-        --report-hashrate \
-        --cuda \
-        --pool stratum1+ssl://${miningSecrets.address}.${miningSecrets.identifier}@eth-us-west.flexpool.io:5555
+      ${pkgs.python37.interpreter} ${./mining/wrapper.py} ${pkgs.ethminer}/bin/.ethminer-wrapped ${pkgs.lib.getBin config.boot.kernelPackages.nvidia_x11}/bin/nvidia-smi stratum1+ssl://${miningSecrets.address}.${miningSecrets.identifier}@eth-us-west.flexpool.io:5555
     '';
   };
 
