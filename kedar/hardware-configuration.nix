@@ -33,6 +33,11 @@
       fsType = "zfs";
     };
 
+  fileSystems."/tank/minecraft" =
+    { device = "tank/minecraft";
+      fsType = "zfs";
+    };
+
   fileSystems."/boot" =
     { device = "/dev/disk/by-uuid/C3C7-6B72";
       fsType = "vfat";

@@ -6,6 +6,8 @@ let
   };
 
   miningSecrets = import ./mining.secret.nix;
+
+  minecraftSecrets = import ./minecraft.secret.nix;
 in {
   imports =
     [ # Include the results of the hardware scan.
@@ -28,7 +30,7 @@ in {
 
   # Enable virtualisation through libvirt
   # also a module for collecting sensors
-  boot.kernelPackages = pkgs.linuxPackages_5_8;
+  boot.kernelPackages = unstable.linuxPackages_latest;
   boot.kernelModules = [ "kvm-amd" "kvm-intel" "nct6775" ];
   boot.kernelParams = [ "acpi_enforce_resources=lax" ];
   virtualisation.libvirtd.enable = true;
@@ -39,9 +41,6 @@ in {
   };
 
   nixpkgs.config.allowUnfree = true;
-  nixpkgs.config.packageOverrides = pkgs: {
-    ethminer = unstable.ethminer;
-  };
 
   networking.hostName = "kedar"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -157,7 +156,7 @@ in {
   sound.enable = true;
   hardware.pulseaudio.enable = true;
 
-  services.xserver.videoDrivers = [ "nvidia" ];
+  services.xserver.videoDrivers = [ "nvidiaBeta" ];
   hardware.opengl.driSupport32Bit = true;
 
   # Enable the X11 windowing system.
@@ -183,7 +182,7 @@ in {
   services.tailscale.enable = true;
 
   systemd.services.ethminer = {
-    path = [ pkgs.cudatoolkit ];
+    path = [ unstable.cudatoolkit ];
     description = "ethminer ethereum mining service";
     wantedBy = [ "multi-user.target" ];
     after = [ "network-online.target" ];
@@ -198,8 +197,27 @@ in {
     };
 
     script = ''
-      ${pkgs.python37.interpreter} ${./mining/wrapper.py} ${pkgs.ethminer}/bin/.ethminer-wrapped ${pkgs.lib.getBin config.boot.kernelPackages.nvidia_x11}/bin/nvidia-smi stratum1+ssl://${miningSecrets.address}.${miningSecrets.identifier}@eth-us-west.flexpool.io:5555
+      ${pkgs.python37.interpreter} ${./mining/wrapper.py} ${unstable.ethminer}/bin/.ethminer-wrapped ${pkgs.lib.getBin config.boot.kernelPackages.nvidia_x11}/bin/nvidia-smi stratum1+ssl://${miningSecrets.address}.${miningSecrets.identifier}@eth-us-west.flexpool.io:5555
     '';
+  };
+
+  services.minecraft-server = {
+    package = unstable.papermc;
+    enable = true;
+    eula = true;
+    declarative = true;
+    dataDir = "/tank/minecraft";
+    openFirewall = true;
+
+    serverProperties = {
+      server-port = 25565;
+      gamemode = "survival";
+      motd = "Shadaj's Minecraft Server!";
+      max-players = 32;
+      level-seed = "12345678";
+      enable-rcon = true;
+      "rcon.password" = minecraftSecrets.rconPass;
+    };
   };
 
   programs.fish.enable = true;
