@@ -23,8 +23,8 @@
       fsType = "zfs";
     };
 
-  fileSystems."/var/lib/docker" =
-    { device = "tank/docker";
+  fileSystems."/tank/minecraft" =
+    { device = "tank/minecraft";
       fsType = "zfs";
     };
 
@@ -33,8 +33,8 @@
       fsType = "zfs";
     };
 
-  fileSystems."/tank/minecraft" =
-    { device = "tank/minecraft";
+  fileSystems."/var/lib/docker" =
+    { device = "tank/docker";
       fsType = "zfs";
     };
 
@@ -55,6 +55,7 @@
 
   swapDevices = [ ];
 
+  powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";
   # high-resolution display
   hardware.video.hidpi.enable = lib.mkDefault true;
 }
