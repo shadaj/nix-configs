@@ -3,6 +3,29 @@
 let
   unstable = import <nixos-unstable> {
     config = { allowUnfree = true; };
+    overlays = [
+      (self: super:
+        {
+          ethminer = super.ethminer.overrideAttrs (old: {
+            version = "0.19.0";
+
+            src =
+              super.fetchFromGitHub {
+                owner = "ethereum-mining";
+                repo = "ethminer";
+                rev = "v0.19.0";
+                sha256 = "1kyff3vx2r4hjpqah9qk99z6dwz7nsnbnhhl6a76mdhjmgp1q646";
+                fetchSubmodules = true;
+              };
+
+            cmakeFlags = old.cmakeFlags ++ [
+              "-DCUDA_PROPAGATE_HOST_FLAGS=off"
+              "-DCUDA_HOST_COMPILER=${super.gcc8}/bin"
+            ];
+          });
+        }
+      )
+    ];
   };
 
   miningSecrets = import ./mining.secret.nix;
@@ -28,19 +51,27 @@ in {
   services.zfs.autoScrub.enable = true;
   services.zfs.trim.enable = true;
 
-  # Enable virtualisation through libvirt
-  # also a module for collecting sensors
-  boot.kernelPackages = unstable.linuxPackages_latest;
-  boot.kernelModules = [ "kvm-amd" "kvm-intel" "nct6775" ];
+  boot.kernelPackages = unstable.linuxPackages_5_11;
+  # enable a module for collecting sensors
+  boot.kernelModules = [ "nct6775" ];
   boot.kernelParams = [ "acpi_enforce_resources=lax" ];
   virtualisation.libvirtd.enable = true;
 
   powerManagement = {
     enable = true;
-    cpuFreqGovernor = "ondemand";
+    cpuFreqGovernor = "schedutil";
   };
 
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs.config = {
+    allowUnfree = true;
+    packageOverrides = super: let self = super.pkgs; in {
+      linuxPackages = unstable.linuxPackages_latest.extend (self: super: {
+        nvidiaPackages = super.nvidiaPackages // {
+          stable = unstable.linuxPackages_latest.nvidiaPackages.stable;
+        };
+      });
+    };
+  };
 
   networking.hostName = "kedar"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -133,13 +164,14 @@ in {
 
   environment.systemPackages = [
     config.services.samba.package
-    pkgs.tailscale
+    unstable.tailscale
   ];
 
   # Open ports in the firewall.
   networking.firewall.enable = true;
   networking.firewall.allowedTCPPorts = [ 80 445 139 ];
-  networking.firewall.allowedUDPPorts = [ 137 138 ];
+  networking.firewall.allowedUDPPorts = [ 137 138 config.services.tailscale.port ];
+  networking.firewall.trustedInterfaces = [ "tailscale0" ];
   networking.firewall.allowPing = true;
   networking.firewall.extraCommands = ''
     iptables -I INPUT ! -s 192.168.0.0/24 -m addrtype --dst-type LOCAL -i docker0 -j DROP;
@@ -156,7 +188,7 @@ in {
   sound.enable = true;
   hardware.pulseaudio.enable = true;
 
-  services.xserver.videoDrivers = [ "nvidiaBeta" ];
+  services.xserver.videoDrivers = [ "nvidia" ];
   hardware.opengl.driSupport32Bit = true;
 
   # Enable the X11 windowing system.
@@ -179,7 +211,12 @@ in {
   virtualisation.docker.extraOptions = "--config-file=${pkgs.writeText "daemon.json" (builtins.toJSON { dns = [ "1.1.1.1" "1.0.0.1" ]; })}";
   virtualisation.docker.enableNvidia = true;
 
-  services.tailscale.enable = true;
+  # services.tailscale.enable = true;
+  systemd.packages = [ unstable.tailscale ];
+  systemd.services.tailscaled = {
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig.Environment = "PORT=41641";
+  };
 
   systemd.services.ethminer = {
     path = [ unstable.cudatoolkit ];
@@ -212,7 +249,7 @@ in {
     serverProperties = {
       server-port = 25565;
       gamemode = "survival";
-      motd = "Shadaj's Minecraft Server!";
+      motd = "PKcraft";
       max-players = 32;
       level-seed = "12345678";
       enable-rcon = true;
