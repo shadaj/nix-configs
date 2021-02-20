@@ -70,6 +70,8 @@ in {
           stable = unstable.linuxPackages_latest.nvidiaPackages.stable;
         };
       });
+
+      tailscale = unstable.tailscale;
     };
   };
 
@@ -164,7 +166,7 @@ in {
 
   environment.systemPackages = [
     config.services.samba.package
-    unstable.tailscale
+    pkgs.tailscale
   ];
 
   # Open ports in the firewall.
@@ -211,12 +213,7 @@ in {
   virtualisation.docker.extraOptions = "--config-file=${pkgs.writeText "daemon.json" (builtins.toJSON { dns = [ "1.1.1.1" "1.0.0.1" ]; })}";
   virtualisation.docker.enableNvidia = true;
 
-  # services.tailscale.enable = true;
-  systemd.packages = [ unstable.tailscale ];
-  systemd.services.tailscaled = {
-    wantedBy = [ "multi-user.target" ];
-    serviceConfig.Environment = "PORT=41641";
-  };
+  services.tailscale.enable = true;
 
   systemd.services.ethminer = {
     path = [ unstable.cudatoolkit ];
