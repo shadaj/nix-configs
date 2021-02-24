@@ -29,7 +29,7 @@ signal.signal(signal.SIGINT, lambda a, b: sys.exit(0))
 while True:
   cur_time = datetime.now()
   print(f"Current time is {cur_time}", flush=True)
-  should_run = not (cur_time.hour >= 17 and cur_time.hour <= 20)
+  should_run = not (cur_time.hour >= 17 and cur_time.hour < 20)
   if open_process == None and should_run:
     print("Starting mining process", flush=True)
     run([miner_path, "--list-devices"])
