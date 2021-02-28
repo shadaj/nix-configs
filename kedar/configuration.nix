@@ -83,7 +83,7 @@ in {
   # replicates the default behaviour.
   networking.useDHCP = false;
   networking.interfaces.enp5s0.useDHCP = true;
-  networking.interfaces.wlp4s0.useDHCP = true;
+  # networking.interfaces.wlp4s0.useDHCP = true;
   networking.hostId = "d503793a";
 
   networking.interfaces.vmbridge0.useDHCP = true;
