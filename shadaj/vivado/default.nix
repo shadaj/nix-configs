@@ -10,7 +10,10 @@ stdenv.mkDerivation rec {
   builder = ./builder.sh;
   inherit ncurses;
 
-  src = ./Xilinx_Vivado_SDK_2019.1_0524_1430.tar.gz;
+  src = fetchurl {
+    url = file://Xilinx_Vivado_SDK_2019.1_0524_1430.tar.gz;
+    sha256 = "0a60fqyrfj0d8wcjlqi2mmi320r3xilndppk16isnddwihd0iczj";
+  };
 
   libPath = stdenv.lib.makeLibraryPath
     [ stdenv.cc.cc ncurses zlib xorg.libX11 xorg.libXrender xorg.libxcb xorg.libXext xorg.libXtst xorg.libXi glib
