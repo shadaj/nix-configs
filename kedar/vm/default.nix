@@ -42,6 +42,7 @@ in
     users.users.shadaj.extraGroups = [ "libvirtd" "kvm" ];
 
     boot.kernelModules = [ "kvm-amd" "kvm-intel" "vfio-pci" ];
+    boot.extraModprobeConfig = "options kvm_amd nested=1";
 
     boot.kernelParams = [
       "amd_iommu=pt"

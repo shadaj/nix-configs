@@ -4,6 +4,14 @@ let
   {
     vscode-extensions = self.lib.recursiveUpdate super.vscode-extensions {
       ms-vsliveshare.vsliveshare = (pkgs.callPackage (import ./vscode-live-share) {});
+      ms-toolsai.jupyter = pkgs.vscode-utils.buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "jupyter";
+          publisher = "ms-toolsai";
+          version = "2020.12.414227025";
+          sha256 = "1zv5p37qsmp2ycdaizb987b3jw45604vakasrggqk36wkhb4bn1v";
+        };
+      };
     };
   };
 
@@ -71,6 +79,7 @@ in
     extensions = with unstable.pkgs.vscode-extensions; [
       ms-python.vscode-pylance
       ms-python.python
+      ms-toolsai.jupyter
       scalameta.metals
       ms-vsliveshare.vsliveshare
     ];
