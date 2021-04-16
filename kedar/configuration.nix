@@ -39,6 +39,7 @@ in {
       ./vivado-drivers.nix
       ./ci.nix
       ./users.secret.nix
+      <nix-ld/modules/nix-ld.nix>
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -142,6 +143,7 @@ in {
   services.openssh.forwardX11 = true;
   services.sshd.enable = true;
   programs.ssh.startAgent = true;
+  programs.mosh.enable = true;
 
   services.samba = {
     enable = true;
@@ -151,9 +153,10 @@ in {
       server string = kedar
       netbios name = kedar
       security = user
-      hosts allow = 192.168.1. localhost
+      hosts allow = 192.168. localhost
       guest account = nobody
       map to guest = bad user
+      client min protocol = NT1
     '';
     shares = {
       media = {
@@ -172,6 +175,8 @@ in {
     pkgs.tailscale
   ];
 
+  services.gvfs.enable = true;
+
   # Open ports in the firewall.
   networking.firewall.enable = true;
   networking.firewall.allowedTCPPorts = [ 80 445 139 ];
@@ -184,6 +189,8 @@ in {
     iptables -N DOCKER-USER;
     iptables -I DOCKER-USER -i docker0 -d 192.168.0.0/16 -j DROP;
     iptables -I DOCKER-USER -i docker0 -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED -j ACCEPT;
+
+    iptables -t raw -A OUTPUT -p udp -m udp --dport 137 -j CT --helper netbios-ns
   '';
 
   # Enable CUPS to print documents.
@@ -199,7 +206,10 @@ in {
   # Enable the X11 windowing system.
   services.xserver.enable = true;
   services.xserver.layout = "us";
-  # services.xserver.xkbOptions = "eurosign:e";
+  services.xserver.deviceSection = ''
+    Option "Coolbits" "12"
+    Option "AllowEmptyInitialConfiguration" "True"
+  '';
 
   # Enable touchpad support.
   # services.xserver.libinput.enable = true;
@@ -234,7 +244,7 @@ in {
     };
 
     script = ''
-      ${pkgs.python37.interpreter} ${./mining/wrapper.py} ${unstable.ethminer}/bin/.ethminer-wrapped ${pkgs.lib.getBin config.boot.kernelPackages.nvidia_x11}/bin/nvidia-smi stratum1+ssl://${miningSecrets.address}.${miningSecrets.identifier}@eth-us-west.flexpool.io:5555
+      DISPLAY=:0 XAUTHORITY=/run/user/132/gdm/Xauthority ${pkgs.python37.interpreter} ${./mining/wrapper.py} ${unstable.ethminer}/bin/.ethminer-wrapped ${pkgs.lib.getBin config.boot.kernelPackages.nvidia_x11}/bin/nvidia-smi ${pkgs.lib.getBin config.boot.kernelPackages.nvidia_x11.settings}/bin/nvidia-settings stratum1+ssl://${miningSecrets.address}.${miningSecrets.identifier}@eth-us-west.flexpool.io:5555
     '';
   };
 

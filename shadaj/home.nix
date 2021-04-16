@@ -3,7 +3,7 @@ let
   vscode-overlay = self: super:
   {
     vscode-extensions = self.lib.recursiveUpdate super.vscode-extensions {
-      ms-vsliveshare.vsliveshare = (pkgs.callPackage (import ./vscode-live-share) {});
+      # ms-vsliveshare.vsliveshare = (pkgs.callPackage (import ./vscode-live-share) {});
       ms-toolsai.jupyter = pkgs.vscode-utils.buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "jupyter";
@@ -60,6 +60,10 @@ in
       ".vsls.json"
     ];
 
+    lfs = {
+      enable = true;
+    };
+
     extraConfig = {
       pull = {
         rebase = "false";
@@ -68,8 +72,8 @@ in
   };
 
   nixpkgs.config.packageOverrides = pkgs: rec {
-    sbtJDK14 = pkgs.sbt.override {
-      jre = pkgs.jdk14;
+    sbtJDK16 = pkgs.sbt.override {
+      jre = unstable.adoptopenjdk-hotspot-bin-16;
     };
   };
 
@@ -95,14 +99,14 @@ in
     pkgs.fortune
     pkgs.cowsay
     pkgs.git
-    pkgs.jdk14
-    pkgs.sbtJDK14
+    unstable.adoptopenjdk-hotspot-bin-16
+    pkgs.sbtJDK16
     pkgs.htop
     pkgs.lm_sensors
     ( import ./vivado )
   ];
 
   home.sessionVariables = {
-    JAVA_HOME = "${pkgs.jdk14}";
+    JAVA_HOME = "${unstable.adoptopenjdk-hotspot-bin-16}";
   };
 }

@@ -32,8 +32,8 @@ in ((pkgs.vscode-utils.override { stdenv = pkgs.gccStdenv; }).buildVscodeMarketp
   mktplcRef = {
     name = "vsliveshare";
     publisher = "ms-vsliveshare";
-    version = "1.0.3784";
-    sha256 = "1fa30acdwm6p8bsnhx5wrypgsb74xfzk8m37xv6i4x3z1wczzcrr";
+    version = "1.0.4018";
+    sha256 = "0cmlq0ch77z36fn2z0l7vq1zslrn8j1bjafmjkgj5fp65rvyab34";
   };
 }).overrideAttrs(attrs: {
   buildInputs = attrs.buildInputs ++ libs ++ [ autoPatchelfHook bash file makeWrapper ];
