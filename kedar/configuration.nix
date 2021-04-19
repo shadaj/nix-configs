@@ -173,6 +173,7 @@ in {
   environment.systemPackages = [
     config.services.samba.package
     pkgs.tailscale
+    pkgs.xpra
   ];
 
   services.gvfs.enable = true;

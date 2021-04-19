@@ -39,7 +39,7 @@ while True:
     print("Starting mining process", flush=True)
     run([miner_path, "--list-devices"])
     run([nvidia_smi_path, "-i", "0", "-pl", "125"])
-    run([nvidia_settings_path, "-a", "[gpu:0]/GPUMemoryTransferRateOffsetAllPerformanceLevels=1600", "-a", "[gpu:0]/GPUGraphicsClockOffsetAllPerformanceLevels=-100"])
+    run([nvidia_settings_path, "-a", "[gpu:0]/GPUMemoryTransferRateOffsetAllPerformanceLevels=400", "-a", "[gpu:0]/GPUGraphicsClockOffsetAllPerformanceLevels=-800"])
     open_process = Popen([miner_path, "--report-hashrate", "--cuda", "--pool", pool_url])
   elif open_process != None and not should_run:
     print("Stopping mining process", flush=True)
