@@ -22,6 +22,8 @@ let
               "-DCUDA_PROPAGATE_HOST_FLAGS=off"
               "-DCUDA_HOST_COMPILER=${super.gcc8}/bin"
             ];
+
+            meta = old.meta // { broken = false; };
           });
         }
       )
@@ -52,7 +54,7 @@ in {
   services.zfs.autoScrub.enable = true;
   services.zfs.trim.enable = true;
 
-  boot.kernelPackages = unstable.linuxPackages_5_11;
+  boot.kernelPackages = pkgs.linuxPackages_5_11;
   # enable a module for collecting sensors
   boot.kernelModules = [ "nct6775" ];
   boot.kernelParams = [ "acpi_enforce_resources=lax" ];
@@ -66,9 +68,9 @@ in {
   nixpkgs.config = {
     allowUnfree = true;
     packageOverrides = super: let self = super.pkgs; in {
-      linuxPackages = unstable.linuxPackages_latest.extend (self: super: {
+      linuxPackages_5_11 = unstable.linuxPackages_5_11.extend(self: super: {
         nvidiaPackages = super.nvidiaPackages // {
-          stable = unstable.linuxPackages_latest.nvidiaPackages.stable;
+          stable = unstable.linuxPackages_5_11.nvidiaPackages.stable;
         };
       });
 
@@ -180,7 +182,7 @@ in {
 
   # Open ports in the firewall.
   networking.firewall.enable = true;
-  networking.firewall.allowedTCPPorts = [ 80 445 139 ];
+  networking.firewall.allowedTCPPorts = [ 80 445 139 8888 ];
   networking.firewall.allowedUDPPorts = [ 137 138 config.services.tailscale.port ];
   networking.firewall.trustedInterfaces = [ "tailscale0" ];
   networking.firewall.allowPing = true;

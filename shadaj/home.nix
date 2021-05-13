@@ -95,7 +95,7 @@ in
 
   home.packages = [
     pkgs.google-chrome
-    pkgs.nodejs-12_x
+    pkgs.nodejs-14_x
     pkgs.fortune
     pkgs.cowsay
     pkgs.git
