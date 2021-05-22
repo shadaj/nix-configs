@@ -266,10 +266,6 @@ in {
     alias nix-fish="nix-shell --run fish";
   '';
 
-  programs.bash.interactiveShellInit = ''
-    exec fish -l;
-  '';
-
   # for home-manager
   nix.extraOptions = ''
     keep-outputs = true
