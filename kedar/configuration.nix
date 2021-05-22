@@ -47,7 +47,6 @@ in {
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.grub.copyKernels = true;
   boot.supportedFilesystems = [ "zfs" ];
   boot.loader.systemd-boot.consoleMode = "max";
 
@@ -58,7 +57,6 @@ in {
   # enable a module for collecting sensors
   boot.kernelModules = [ "nct6775" ];
   boot.kernelParams = [ "acpi_enforce_resources=lax" ];
-  virtualisation.libvirtd.enable = true;
 
   powerManagement = {
     enable = true;
@@ -68,7 +66,7 @@ in {
   nixpkgs.config = {
     allowUnfree = true;
     packageOverrides = super: let self = super.pkgs; in {
-      linuxPackages_5_11 = unstable.linuxPackages_5_11.extend(self: super: {
+      linuxPackages_5_11 = super.linuxPackages_5_11.extend(self: super: {
         nvidiaPackages = super.nvidiaPackages // {
           stable = unstable.linuxPackages_5_11.nvidiaPackages.stable;
         };
@@ -115,12 +113,6 @@ in {
 
   # Set your time zone.
   # time.timeZone = "Europe/Amsterdam";
-
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  # environment.systemPackages = with pkgs; [
-  #   wget vim
-  # ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -217,8 +209,7 @@ in {
   # Enable touchpad support.
   # services.xserver.libinput.enable = true;
 
-  # Enable the KDE Desktop Environment.
-  # services.xserver.displayManager.sddm.enable = true;
+  # Enable the Gnome Desktop Environment.
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome3.enable = true;
   services.xserver.displayManager.gdm.autoSuspend = false;

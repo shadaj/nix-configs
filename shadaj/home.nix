@@ -86,6 +86,7 @@ in
       ms-toolsai.jupyter
       scalameta.metals
       ms-vsliveshare.vsliveshare
+      matklad.rust-analyzer
     ];
   };
 
@@ -103,10 +104,18 @@ in
     pkgs.sbtJDK16
     pkgs.htop
     pkgs.lm_sensors
+
+    unstable.rustup
+    pkgs.clang
+    pkgs.openssl
+    pkgs.binutils
+
     ( import ./vivado )
   ];
 
   home.sessionVariables = {
     JAVA_HOME = "${unstable.adoptopenjdk-hotspot-bin-16}";
+    OPENSSL_DIR = "${pkgs.openssl.dev}";
+    OPENSSL_LIB_DIR = "${pkgs.openssl.out}/lib";
   };
 }
