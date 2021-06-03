@@ -97,7 +97,7 @@ in
 
   nixpkgs.config.packageOverrides = pkgs: rec {
     sbtJDK16 = pkgs.sbt.override {
-      jre = unstable.adoptopenjdk-hotspot-bin-16;
+      jre = pkgs.adoptopenjdk-hotspot-bin-16;
     };
   };
 
@@ -122,7 +122,7 @@ in
     pkgs.fortune
     pkgs.cowsay
     pkgs.git
-    unstable.adoptopenjdk-hotspot-bin-16
+    pkgs.adoptopenjdk-hotspot-bin-16
     pkgs.sbtJDK16
     pkgs.htop
 
@@ -140,7 +140,7 @@ in
   ] else []);
 
   home.sessionVariables = {
-    JAVA_HOME = "${unstable.adoptopenjdk-hotspot-bin-16}";
+    JAVA_HOME = "${pkgs.adoptopenjdk-hotspot-bin-16}";
     OPENSSL_DIR = "${pkgs.openssl.dev}";
     OPENSSL_LIB_DIR = "${pkgs.openssl.out}/lib";
   };

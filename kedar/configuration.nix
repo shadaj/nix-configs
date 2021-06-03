@@ -66,12 +66,6 @@ in {
   nixpkgs.config = {
     allowUnfree = true;
     packageOverrides = super: let self = super.pkgs; in {
-      linuxPackages_5_11 = super.linuxPackages_5_11.extend(self: super: {
-        nvidiaPackages = super.nvidiaPackages // {
-          stable = unstable.linuxPackages_5_11.nvidiaPackages.stable;
-        };
-      });
-
       tailscale = unstable.tailscale;
     };
   };
@@ -211,7 +205,7 @@ in {
 
   # Enable the Gnome Desktop Environment.
   services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome3.enable = true;
+  services.xserver.desktopManager.gnome.enable = true;
   services.xserver.displayManager.gdm.autoSuspend = false;
 
   # Enable Docker
@@ -260,6 +254,8 @@ in {
       "rcon.password" = minecraftSecrets.rconPass;
     };
   };
+
+  services.postgresql.enable = true;
 
   programs.fish.enable = true;
 

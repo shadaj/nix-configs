@@ -15,13 +15,13 @@ stdenv.mkDerivation rec {
     sha256 = "0a60fqyrfj0d8wcjlqi2mmi320r3xilndppk16isnddwihd0iczj";
   };
 
-  libPath = stdenv.lib.makeLibraryPath
+  libPath = lib.makeLibraryPath
     [ stdenv.cc.cc ncurses zlib xorg.libX11 xorg.libXrender xorg.libxcb xorg.libXext xorg.libXtst xorg.libXi glib
       freetype gtk2 ];
   
   meta = {
     description = "Xilinx Vivado";
     homepage = "https://www.xilinx.com/products/design-tools/vivado.html";
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
   };
 }
