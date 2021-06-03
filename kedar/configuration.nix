@@ -262,9 +262,6 @@ in {
   };
 
   programs.fish.enable = true;
-  programs.fish.shellInit = ''
-    alias nix-fish="nix-shell --run fish";
-  '';
 
   # for home-manager
   nix.extraOptions = ''

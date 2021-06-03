@@ -20,6 +20,8 @@ let
     overlays = [ vscode-overlay ];
   };
 in
+let device = ( import ./device.secret.nix );
+in
 {
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
@@ -27,7 +29,7 @@ in
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
   home.username = "shadaj";
-  home.homeDirectory = "/home/shadaj";
+  home.homeDirectory = (if device.name == "kedar" then "/home/shadaj" else "/Users/shadaj");
 
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
@@ -37,17 +39,39 @@ in
   # You can update Home Manager without changing this value. See
   # the Home Manager release notes for a list of state version
   # changes in each release.
-  home.stateVersion = "20.09";
+  home.stateVersion = (if device.name == "kedar" then "20.09" else "21.05");
 
-  xdg.enable = true;
-  xdg.mime.enable = true;
-  targets.genericLinux.enable = true;
+  xdg = if device.name == "kedar" then {
+    enable = true;
+    mime.enable = true;
+  } else {};
+
+  targets = if device.name == "kedar" then {
+    genericLinux.enable = true;
+  } else {};
 
   nixpkgs.config.allowUnfree = true;
 
   programs.fish = {
     enable = true;
     promptInit = (builtins.readFile ./fish-prompt.fish);
+    shellInit = ''
+      alias nix-fish="nix-shell --run fish";
+    '' + (if device.name == "kedar" then '''' else ''
+      fenv source '$HOME/.nix-profile/etc/profile.d/nix.sh'
+    '');
+
+    plugins = if device.name == "kedar" then [] else [
+      {
+        name = "plugin-foreign-env";
+        src = pkgs.fetchFromGitHub {
+          owner = "oh-my-fish";
+          repo = "plugin-foreign-env";
+          rev = "dddd9213272a0ab848d474d0cbde12ad034e65bc";
+          sha256 = "00xqlyl3lffc5l0viin1nyp819wf81fncqyz87jx8ljjdhilmgbs";
+        };
+      }
+    ];
   };
 
   programs.git = {
@@ -78,7 +102,7 @@ in
   };
 
   programs.vscode = {
-    enable = true;
+    enable = (device.name == "kedar");
     package = pkgs.vscode;
     extensions = with unstable.pkgs.vscode-extensions; [
       ms-python.vscode-pylance
@@ -90,28 +114,30 @@ in
     ];
   };
 
-
   programs.direnv.enable = true;
   programs.direnv.enableNixDirenvIntegration = true;
 
   home.packages = [
-    pkgs.google-chrome
-    pkgs.nodejs-14_x
+    (if device.name == "kedar" then pkgs.nodejs-14_x else pkgs.nodejs-16_x)
     pkgs.fortune
     pkgs.cowsay
     pkgs.git
     unstable.adoptopenjdk-hotspot-bin-16
     pkgs.sbtJDK16
     pkgs.htop
-    pkgs.lm_sensors
 
     unstable.rustup
     pkgs.clang
-    pkgs.openssl
-    pkgs.binutils
 
+    pkgs.wget
+    pkgs.unzip
+
+    pkgs.octave
+  ] ++ (if device.name == "kedar" then [
+    pkgs.google-chrome
+    pkgs.lm_sensors
     ( import ./vivado )
-  ];
+  ] else []);
 
   home.sessionVariables = {
     JAVA_HOME = "${unstable.adoptopenjdk-hotspot-bin-16}";
