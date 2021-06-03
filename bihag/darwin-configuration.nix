@@ -19,32 +19,27 @@
     cleanup = "uninstall";
 
     taps = [
+      "homebrew/services"
       "homebrew/cask"
       "homebrew/cask-versions"
       "homebrew/cask-drivers"
       "vitorgalvao/tiny-scripts"
     ];
 
-    brews = [
-      "automake" "bazel" "binwalk" "cmake" "ffmpeg" "gh" "ghostscript"
-      "gnupg" "go" "gource" "handbrake" "highlight" "httpie" "maven" "mosh"
-      "openrct2" "pngquant" "postgresql" "rsync" "ruby"
-      "vitorgalvao/tiny-scripts/cask-repair" "youtube-dl"
-    ];
+    brews = [ "cask-repair" "openrct2" "postgresql" ];
 
     casks = [
-      "android-file-transfer" "idrive" "skype" "android-sdk" "kap"
-      "soundflower" "arduino" "logitech-options" "soundflowerbed" "backblaze"
-      "mactex-no-gui" "spectacle" "background-music" "minecraft" "spotify"
+      "android-file-transfer" "handbrake" "idrive" "skype" "android-sdk" "kap"
+      "soundflower" "logitech-options" "soundflowerbed" "backblaze"
+      "spectacle" "background-music" "minecraft" "spotify"
       "balenaetcher" "miniconda" "visual-studio-code" "chromedriver" "monitorcontrol"
-      "visualvm" "discord" "moonlight" "vlc" "docker" "ngrok" "webtorrent" "firefox"
-      "obs" "wireshark" "ghidra" "osu-development" "xpra" "google-chrome" "parsec" "xquartz"
-      "google-cloud-sdk" "screenflow" "zoom" "google-drive" "sidequest"
+      "visualvm" "discord" "moonlight" "vlc" "docker" "ngrok" "firefox"
+      "obs" "wireshark" "osu-development" "xpra" "google-chrome" "xquartz"
+      "screenflow" "zoom" "google-drive" "sidequest"
     ];
   };
 
-  # Create /etc/bashrc that loads the nix-darwin environment.
-  # programs.zsh.enable = true;  # default shell on catalina
+  # Create profile that loads the nix-darwin environment.
   programs.fish.enable = true;
 
   nix.nixPath = pkgs.lib.mkForce [{

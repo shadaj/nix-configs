@@ -58,7 +58,12 @@ in
     shellInit = ''
       alias nix-fish="nix-shell --run fish";
     '' + (if device.name == "kedar" then '''' else ''
+      set PATH $PATH ~/bin
+      set PATH $PATH $HOME/.cargo/bin
+
       fenv source '$HOME/.nix-profile/etc/profile.d/nix.sh'
+      source (conda info --root)/etc/fish/conf.d/conda.fish
+      alias matlab="/Applications/MATLAB_R2019b.app/bin/matlab -nodesktop"
     '');
 
     plugins = if device.name == "kedar" then [] else [
@@ -121,23 +126,38 @@ in
     (if device.name == "kedar" then pkgs.nodejs-14_x else pkgs.nodejs-16_x)
     pkgs.fortune
     pkgs.cowsay
+
     pkgs.git
+
     pkgs.adoptopenjdk-hotspot-bin-16
     pkgs.sbtJDK16
-    pkgs.htop
 
     unstable.rustup
     pkgs.clang
+    pkgs.automake
+    pkgs.cmake
 
+    pkgs.ruby
+    pkgs.go
+
+    pkgs.htop
     pkgs.wget
     pkgs.unzip
+    pkgs.rsync
+    pkgs.httpie
 
     pkgs.octave
+    pkgs.texlive.combined.scheme-full
+    pkgs.ffmpeg
   ] ++ (if device.name == "kedar" then [
     pkgs.google-chrome
     pkgs.lm_sensors
     ( import ./vivado )
-  ] else []);
+  ] else [
+    pkgs.mosh
+    pkgs.gnupg
+    pkgs.highlight
+  ]);
 
   home.sessionVariables = {
     JAVA_HOME = "${pkgs.adoptopenjdk-hotspot-bin-16}";
