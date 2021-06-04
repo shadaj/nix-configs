@@ -124,8 +124,6 @@ in
 
   home.packages = [
     (if device.name == "kedar" then pkgs.nodejs-14_x else pkgs.nodejs-16_x)
-    pkgs.fortune
-    pkgs.cowsay
 
     pkgs.git
 

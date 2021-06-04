@@ -1,5 +1,13 @@
 function fish_greeting
-  fortune -s computers science riddles | cowsay -f dragon
+  echo -n "Greetings from "
+  echo -n (set_color green)
+  echo -n (hostname)
+  echo -n (set_color normal)
+  echo -n "! The time is "
+  echo -n (set_color yellow)
+  echo -n (date +%T)
+  echo -n (set_color normal)
+  echo "."
 end
 
 function fish_prompt --description 'Write out the prompt'
