@@ -50,6 +50,10 @@ in {
   boot.supportedFilesystems = [ "zfs" ];
   boot.loader.systemd-boot.consoleMode = "max";
 
+  systemd.extraConfig = ''
+    DefaultTimeoutStopSec=20s
+  '';
+
   services.zfs.autoScrub.enable = true;
   services.zfs.trim.enable = true;
 
@@ -57,6 +61,21 @@ in {
   # enable a module for collecting sensors
   boot.kernelModules = [ "nct6775" ];
   boot.kernelParams = [ "acpi_enforce_resources=lax" ];
+
+  boot.initrd.kernelModules = [ "igb" ];
+  boot.initrd.network = {
+    enable = true;
+    ssh = {
+      enable = true;
+      port = 2222;
+      hostKeys = [ "/boot/initrd_rsa_key" ];
+      authorizedKeys = (import ./users.secret.nix { config = config; pkgs = pkgs; }).users.users.shadaj.openssh.authorizedKeys.keys;
+    };
+
+    postCommands = ''
+      echo "zfs load-key -a; killall zfs; exit" >> /root/.profile
+    '';
+  };
 
   powerManagement = {
     enable = true;

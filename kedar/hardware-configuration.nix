@@ -19,12 +19,12 @@
     };
 
   fileSystems."/home" =
-    { device = "tank/home";
+    { device = "tank/root/home";
       fsType = "zfs";
     };
 
   fileSystems."/tank/minecraft" =
-    { device = "tank/minecraft";
+    { device = "tank/root/minecraft";
       fsType = "zfs";
     };
 
