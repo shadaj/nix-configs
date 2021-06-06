@@ -177,6 +177,11 @@ in {
     };
   };
 
+  services.duplicati = {
+    enable = true;
+    interface = "any";
+  };
+
   environment.systemPackages = [
     config.services.samba.package
     pkgs.tailscale
@@ -187,7 +192,7 @@ in {
 
   # Open ports in the firewall.
   networking.firewall.enable = true;
-  networking.firewall.allowedTCPPorts = [ 80 445 139 8888 ];
+  networking.firewall.allowedTCPPorts = [ 80 445 139 8888 config.services.duplicati.port ];
   networking.firewall.allowedUDPPorts = [ 137 138 config.services.tailscale.port ];
   networking.firewall.trustedInterfaces = [ "tailscale0" ];
   networking.firewall.allowPing = true;
