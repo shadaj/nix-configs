@@ -109,10 +109,13 @@ in {
 
   services.avahi = {
     enable = true;
+    nssmdns = true;
+
     publish = {
       enable = true;
       addresses = true;
       workstation = true;
+      userServices = true;
     };
   };
 
@@ -177,23 +180,51 @@ in {
     };
   };
 
-  services.duplicati = {
+  services.netatalk = {
     enable = true;
-    interface = "any";
+
+    settings = {
+      "Time Machine (kedar)" = {
+        "time machine" = "yes";
+        path = "/swamp/time-machine";
+      };
+    };
   };
+
+  systemd.services.duplicati = {
+    description = "Duplicati backup";
+    after = [ "network.target" ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      User = "root";
+      Group = "duplicati";
+      StateDirectory = "duplicati";
+      ExecStart = "${pkgs.duplicati}/bin/duplicati-server --webservice-interface=any --webservice-port=8200 --server-datafolder=/var/lib/duplicati";
+      Restart = "on-failure";
+    };
+  };
+
+  users.groups.duplicati.gid = config.ids.gids.duplicati;
 
   environment.systemPackages = [
     config.services.samba.package
     pkgs.tailscale
     pkgs.xpra
+    pkgs.duplicati
   ];
 
   services.gvfs.enable = true;
 
   # Open ports in the firewall.
   networking.firewall.enable = true;
-  networking.firewall.allowedTCPPorts = [ 80 445 139 8888 config.services.duplicati.port ];
-  networking.firewall.allowedUDPPorts = [ 137 138 config.services.tailscale.port ];
+  networking.firewall.allowedTCPPorts = [
+    139 445 # samba
+    548 # netatalk
+    config.services.duplicati.port
+  ];
+  networking.firewall.allowedUDPPorts = [
+    137 138 # samba
+  ];
   networking.firewall.trustedInterfaces = [ "tailscale0" ];
   networking.firewall.allowPing = true;
   networking.firewall.extraCommands = ''

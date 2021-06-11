@@ -53,6 +53,11 @@
       fsType = "zfs";
     };
 
+  fileSystems."/swamp/time-machine" =
+    { device = "swamp/time-machine";
+      fsType = "zfs";
+    };
+
   swapDevices = [ ];
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";

@@ -56,11 +56,10 @@ in
     enable = true;
     promptInit = (builtins.readFile ./fish-prompt.fish);
     shellInit = ''
-      alias nix-fish="nix-shell --run fish";
-    '' + (if device.name == "kedar" then '''' else ''
       set PATH $PATH ~/bin
       set PATH $PATH $HOME/.cargo/bin
-
+      alias nix-fish="nix-shell --run fish";
+    '' + (if device.name == "kedar" then '''' else ''
       fenv source '$HOME/.nix-profile/etc/profile.d/nix.sh'
       source (conda info --root)/etc/fish/conf.d/conda.fish
       alias matlab="/Applications/MATLAB_R2019b.app/bin/matlab -nodesktop"
@@ -130,7 +129,7 @@ in
     pkgs.adoptopenjdk-hotspot-bin-16
     pkgs.sbtJDK16
 
-    unstable.rustup
+    pkgs.rustup
     pkgs.clang
     pkgs.automake
     pkgs.cmake
