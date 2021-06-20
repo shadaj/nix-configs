@@ -61,7 +61,6 @@ in
       alias nix-fish="nix-shell --run fish";
     '' + (if device.name == "kedar" then '''' else ''
       fenv source '$HOME/.nix-profile/etc/profile.d/nix.sh'
-      source (conda info --root)/etc/fish/conf.d/conda.fish
       alias matlab="/Applications/MATLAB_R2019b.app/bin/matlab -nodesktop"
     '');
 
@@ -119,7 +118,7 @@ in
   };
 
   programs.direnv.enable = true;
-  programs.direnv.enableNixDirenvIntegration = true;
+  programs.direnv.nix-direnv.enable = true;
 
   home.packages = [
     (if device.name == "kedar" then pkgs.nodejs-14_x else pkgs.nodejs-16_x)
