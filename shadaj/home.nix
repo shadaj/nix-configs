@@ -107,7 +107,7 @@ in
   programs.vscode = {
     enable = (device.name == "kedar");
     package = pkgs.vscode;
-    extensions = with unstable.pkgs.vscode-extensions; [
+    extensions = with pkgs.vscode-extensions; [
       ms-python.vscode-pylance
       ms-python.python
       ms-toolsai.jupyter
