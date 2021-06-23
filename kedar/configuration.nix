@@ -44,6 +44,8 @@ in {
       <nix-ld/modules/nix-ld.nix>
     ];
 
+  hardware.cpu.amd.updateMicrocode = true;
+
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -276,7 +278,7 @@ in {
     path = [ unstable.cudatoolkit ];
     description = "ethminer ethereum mining service";
     wantedBy = [ "multi-user.target" ];
-    after = [ "network-online.target" ];
+    after = [ "display-manager.target" ];
 
     serviceConfig = {
       User = "root";
