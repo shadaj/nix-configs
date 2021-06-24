@@ -5,9 +5,7 @@
 nvidia-smi -pm 0
 
 # Stop display manager
-# systemctl stop x11vnc.service
 systemctl stop display-manager.service
-## Uncomment the following line if you use GDM
 pkill -x gdm-x-session
 
 systemctl stop ethminer.service
@@ -31,17 +29,15 @@ modprobe -r nvidia
 modprobe -r ipmi_devintf
 modprobe -r ipmi_msghandler
 
-# modprobe -r snd_hda_intel
-
 virsh nodedev-list
 
 # Unbind the GPU from display driver
-virsh nodedev-detach pci_0000_09_00_0
-virsh nodedev-detach pci_0000_09_00_1
-virsh nodedev-detach pci_0000_09_00_2
-virsh nodedev-detach pci_0000_09_00_3
+virsh nodedev-detach pci_0000_0a_00_0
+virsh nodedev-detach pci_0000_0a_00_1
+virsh nodedev-detach pci_0000_0a_00_2
+virsh nodedev-detach pci_0000_0a_00_3
 
-virsh nodedev-detach pci_0000_0b_00_4
+virsh nodedev-detach pci_0000_0c_00_4
 
 # Load VFIO Kernel Module
 modprobe vfio-pci

@@ -9,7 +9,7 @@
   <memory unit="KiB">25165824</memory>
   <currentMemory unit="KiB">25165824</currentMemory>
   <vcpu placement="static">16</vcpu>
-  <iothreads>2</iothreads>
+  <iothreads>1</iothreads>
   <cputune>
     <vcpupin vcpu="0" cpuset="0"/>
     <vcpupin vcpu="1" cpuset="12"/>
@@ -71,12 +71,12 @@
   </pm>
   <devices>
     <emulator>/run/libvirt/nix-emulators/qemu-system-x86_64</emulator>
-    <disk type="file" device="disk">
-      <driver name="qemu" type="qcow2" cache="writethrough" io="threads"/>
-      <source file="/tank/vm/win10.qcow2"/>
-      <target dev="vda" bus="virtio"/>
+    <hostdev mode="subsystem" type="pci" managed="yes">
+      <source>
+        <address domain="0x0000" bus="0x01" slot="0x00" function="0x0"/>
+      </source>
       <address type="pci" domain="0x0000" bus="0x00" slot="0x06" function="0x0"/>
-    </disk>
+    </hostdev>
     <controller type="usb" index="0" model="qemu-xhci" ports="15">
       <address type="pci" domain="0x0000" bus="0x00" slot="0x05" function="0x0"/>
     </controller>
@@ -91,56 +91,56 @@
     <input type="keyboard" bus="ps2"/>
     <hostdev mode="subsystem" type="pci" managed="yes">
       <source>
-        <address domain="0x0000" bus="0x09" slot="0x00" function="0x0"/>
+        <address domain="0x0000" bus="0x0a" slot="0x00" function="0x0"/>
       </source>
       <rom file="/var/lib/libvirt/vbios/patched-bios.rom"/>
       <address type="pci" domain="0x0000" bus="0x00" slot="0x02" function="0x0"/>
     </hostdev>
     <hostdev mode="subsystem" type="pci" managed="yes">
       <source>
-        <address domain="0x0000" bus="0x09" slot="0x00" function="0x1"/>
+        <address domain="0x0000" bus="0x0a" slot="0x00" function="0x1"/>
       </source>
       <address type="pci" domain="0x0000" bus="0x00" slot="0x04" function="0x0"/>
     </hostdev>
     <hostdev mode="subsystem" type="pci" managed="yes">
       <source>
-        <address domain="0x0000" bus="0x09" slot="0x00" function="0x2"/>
+        <address domain="0x0000" bus="0x0a" slot="0x00" function="0x2"/>
       </source>
       <address type="pci" domain="0x0000" bus="0x00" slot="0x07" function="0x0"/>
     </hostdev>
     <hostdev mode="subsystem" type="pci" managed="yes">
       <source>
-        <address domain="0x0000" bus="0x09" slot="0x00" function="0x3"/>
+        <address domain="0x0000" bus="0x0a" slot="0x00" function="0x3"/>
       </source>
       <address type="pci" domain="0x0000" bus="0x00" slot="0x09" function="0x0"/>
     </hostdev>
     <hostdev mode="subsystem" type="pci" managed="yes">
       <source>
-        <address domain="0x0000" bus="0x06" slot="0x00" function="0x0"/>
+        <address domain="0x0000" bus="0x07" slot="0x00" function="0x0"/>
       </source>
       <address type="pci" domain="0x0000" bus="0x00" slot="0x0a" function="0x0"/>
     </hostdev>
     <hostdev mode="subsystem" type="pci" managed="yes">
       <source>
-        <address domain="0x0000" bus="0x06" slot="0x00" function="0x1"/>
+        <address domain="0x0000" bus="0x07" slot="0x00" function="0x1"/>
       </source>
       <address type="pci" domain="0x0000" bus="0x00" slot="0x0b" function="0x0"/>
     </hostdev>
     <hostdev mode="subsystem" type="pci" managed="yes">
       <source>
-        <address domain="0x0000" bus="0x06" slot="0x00" function="0x3"/>
+        <address domain="0x0000" bus="0x07" slot="0x00" function="0x3"/>
       </source>
       <address type="pci" domain="0x0000" bus="0x00" slot="0x0d" function="0x0"/>
     </hostdev>
     <hostdev mode="subsystem" type="pci" managed="yes">
       <source>
-        <address domain="0x0000" bus="0x0b" slot="0x00" function="0x3"/>
+        <address domain="0x0000" bus="0x0c" slot="0x00" function="0x3"/>
       </source>
       <address type="pci" domain="0x0000" bus="0x00" slot="0x10" function="0x0"/>
     </hostdev>
     <hostdev mode="subsystem" type="pci" managed="yes">
       <source>
-        <address domain="0x0000" bus="0x0b" slot="0x00" function="0x4"/>
+        <address domain="0x0000" bus="0x0c" slot="0x00" function="0x4"/>
       </source>
       <address type="pci" domain="0x0000" bus="0x00" slot="0x11" function="0x0"/>
     </hostdev>

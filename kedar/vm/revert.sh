@@ -7,12 +7,12 @@ modprobe -r vfio_iommu_type1
 modprobe -r vfio
 
 # Re-Bind GPU to Nvidia Driver
-virsh nodedev-reattach pci_0000_09_00_3
-virsh nodedev-reattach pci_0000_09_00_2
-virsh nodedev-reattach pci_0000_09_00_1
-virsh nodedev-reattach pci_0000_09_00_0
+virsh nodedev-reattach pci_0000_0a_00_3
+virsh nodedev-reattach pci_0000_0a_00_2
+virsh nodedev-reattach pci_0000_0a_00_1
+virsh nodedev-reattach pci_0000_0a_00_0
 
-virsh nodedev-reattach pci_0000_0b_00_4
+virsh nodedev-reattach pci_0000_0c_00_4
 
 # Rebind VT consoles
 echo 1 > /sys/class/vtconsole/vtcon0/bind

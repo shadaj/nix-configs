@@ -39,7 +39,7 @@
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/C3C7-6B72";
+    { device = "/dev/disk/by-id/nvme-CT1000P5SSD8_20502BEE72A8-part3";
       fsType = "vfat";
     };
 
