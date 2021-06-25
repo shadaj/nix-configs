@@ -12,6 +12,7 @@
 
   # Auto upgrade nix package and the daemon service.
   services.nix-daemon.enable = false;
+  nix.useDaemon = true;
   nix.package = pkgs.nix;
 
   homebrew = {
@@ -41,13 +42,6 @@
 
   # Create profile that loads the nix-darwin environment.
   programs.fish.enable = true;
-
-  nix.nixPath = pkgs.lib.mkForce [{
-    darwin-config = builtins.concatStringsSep ":" [
-      "$HOME/.nixpkgs/darwin-configuration.nix"
-      "$HOME/.nix-defexpr/channels"
-    ];
-  }];
 
   users.nix.configureBuildUsers = false;
 

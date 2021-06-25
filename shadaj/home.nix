@@ -60,21 +60,8 @@ in
       set PATH $PATH $HOME/.cargo/bin
       alias nix-fish="nix-shell --run fish";
     '' + (if device.name == "kedar" then '''' else ''
-      fenv source '$HOME/.nix-profile/etc/profile.d/nix.sh'
       alias matlab="/Applications/MATLAB_R2019b.app/bin/matlab -nodesktop"
     '');
-
-    plugins = if device.name == "kedar" then [] else [
-      {
-        name = "plugin-foreign-env";
-        src = pkgs.fetchFromGitHub {
-          owner = "oh-my-fish";
-          repo = "plugin-foreign-env";
-          rev = "dddd9213272a0ab848d474d0cbde12ad034e65bc";
-          sha256 = "00xqlyl3lffc5l0viin1nyp819wf81fncqyz87jx8ljjdhilmgbs";
-        };
-      }
-    ];
   };
 
   programs.git = {
