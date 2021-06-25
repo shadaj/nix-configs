@@ -33,6 +33,8 @@ let
   miningSecrets = import ./mining.secret.nix;
 
   minecraftSecrets = import ./minecraft.secret.nix;
+
+  backupSecrets = import ./backup.secret.nix;
 in {
   imports =
     [ # Include the results of the hardware scan.
@@ -120,6 +122,31 @@ in {
       workstation = true;
       userServices = true;
     };
+
+    extraServiceFiles = {
+      tm = ''
+        <?xml version="1.0" standalone='no'?><!--*-nxml-*-->
+        <!DOCTYPE service-group SYSTEM "avahi-service.dtd">
+        <service-group>
+          <name replace-wildcards="yes">%h</name>
+          <service>
+            <type>_smb._tcp</type>
+            <port>445</port>
+          </service>
+          <service>
+            <type>_device-info._tcp</type>
+            <port>9</port>
+            <txt-record>model=TimeCapsule8,119</txt-record>
+          </service>
+          <service>
+            <type>_adisk._tcp</type>
+            <port>9</port>
+            <txt-record>dk0=adVN=Time Machine (kedar),adVF=0x82</txt-record>
+            <txt-record>sys=adVF=0x100</txt-record>
+          </service>
+        </service-group>
+      '';
+    };
   };
 
 
@@ -180,40 +207,72 @@ in {
         "create mask" = "0644";
         "directory mask" = "0755";
       };
-    };
-  };
 
-  services.netatalk = {
-    enable = true;
-
-    settings = {
       "Time Machine (kedar)" = {
-        "time machine" = "yes";
         path = "/swamp/time-machine";
+        browseable = "yes";
+        "read only" = "no";
+        "guest ok" = "no";
+        "vfs objects" = "catia fruit streams_xattr";
+        "fruit:time machine" = "yes";
       };
     };
   };
 
-  systemd.services.duplicati = {
-    description = "Duplicati backup";
-    after = [ "network.target" ];
-    wantedBy = [ "multi-user.target" ];
-    serviceConfig = {
-      User = "root";
-      Group = "duplicati";
-      StateDirectory = "duplicati";
-      ExecStart = "${pkgs.duplicati}/bin/duplicati-server --webservice-interface=any --webservice-port=8200 --server-datafolder=/var/lib/duplicati";
-      Restart = "on-failure";
-    };
+  services.restic.backups.home = {
+    paths = [ "/home" ];
+
+    repository = "b2:kedar-restic:home";
+    initialize = true;
+
+    pruneOpts = [
+      "--keep-daily 7"
+      "--keep-weekly 5"
+      "--keep-monthly 12"
+    ];
+
+    extraBackupArgs = [ "--verbose" ];
+
+    s3CredentialsFile = backupSecrets.s3CredentialsFile;
+    passwordFile = backupSecrets.passwordFile;
   };
 
-  users.groups.duplicati.gid = config.ids.gids.duplicati;
+  services.restic.backups.media = {
+    paths = [ "/swamp/media" ];
+
+    repository = "b2:kedar-restic:media";
+    initialize = true;
+
+    pruneOpts = [
+      "--keep-daily 7"
+      "--keep-weekly 5"
+      "--keep-monthly 12"
+    ];
+
+    extraBackupArgs = [ "--verbose" ];
+
+    s3CredentialsFile = backupSecrets.s3CredentialsFile;
+    passwordFile = backupSecrets.passwordFile;
+  };
+
+  services.restic.backups.time-machine = {
+    paths = [ "/swamp/time-machine" ];
+
+    repository = "b2:kedar-restic:time-machine";
+    initialize = true;
+
+    pruneOpts = [ "--keep-last 1" ];
+
+    extraBackupArgs = [ "--verbose" ];
+
+    s3CredentialsFile = backupSecrets.s3CredentialsFile;
+    passwordFile = backupSecrets.passwordFile;
+  };
 
   environment.systemPackages = [
     config.services.samba.package
     pkgs.tailscale
     pkgs.xpra
-    pkgs.duplicati
   ];
 
   services.gvfs.enable = true;
@@ -222,8 +281,7 @@ in {
   networking.firewall.enable = true;
   networking.firewall.allowedTCPPorts = [
     139 445 # samba
-    548 # netatalk
-    config.services.duplicati.port
+    9 # time machine
   ];
   networking.firewall.allowedUDPPorts = [
     137 138 # samba
