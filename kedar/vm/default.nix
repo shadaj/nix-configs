@@ -36,6 +36,24 @@ let
         done <<< "$(find -L "$HOOKPATH" -maxdepth 1 -type f -executable -print;)"
     fi
   '';
+
+in
+# from https://github.com/NixOS/nixpkgs/pull/114057
+let swtpmPatched = pkgs.swtpm.overrideAttrs (old: {
+  patches = [
+    ./python-installation.patch
+  ];
+
+  configureFlags = [
+    "--with-cuse"
+    "--localstatedir=/var"
+  ];
+
+  postInstall = ''
+    wrapPythonProgramsIn $out/bin "$out $pythonPath"
+    wrapPythonProgramsIn $out/share/swtpm "$out $pythonPath ${pkgs.gnutls}"
+  '';
+});
 in
 {
   config = {
@@ -49,6 +67,16 @@ in
       "kvm.ignore_msrs=1"
       "kvm.report_ignored_msrs=0"
     ];
+
+    nixpkgs.config.packageOverrides = pkgs: rec {
+      # from https://github.com/NixOS/nixpkgs/pull/113245
+      OVMF = (pkgs.OVMF.override { secureBoot = true; }).overrideAttrs(old: {
+        buildFlags = old.buildFlags ++ [
+          "-DTPM_ENABLE=TRUE"
+          "-DTPM_CONFIG_ENABLE=TRUE"
+        ];
+      });
+    };
 
     virtualisation.libvirtd = {
       enable = true;
@@ -65,7 +93,7 @@ in
     systemd.services.libvirtd = {
       # scripts use binaries from these packages
       # NOTE: All these hooks are run with root privileges... Be careful!
-      path = with pkgs; [ libvirt procps utillinux kmod ];
+      path = with pkgs; [ libvirt procps utillinux kmod swtpmPatched ];
       preStart = ''
         mkdir -p /var/lib/libvirt/vbios
         ln -sf ${( import ./patched-vbios.nix )}/patched.rom /var/lib/libvirt/vbios/patched-bios.rom

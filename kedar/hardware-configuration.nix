@@ -28,11 +28,6 @@
       fsType = "zfs";
     };
 
-  fileSystems."/tank/vm" =
-    { device = "tank/vm";
-      fsType = "zfs";
-    };
-
   fileSystems."/var/lib/docker" =
     { device = "tank/docker";
       fsType = "zfs";
