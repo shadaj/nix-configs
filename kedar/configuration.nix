@@ -233,6 +233,10 @@ in {
 
     extraBackupArgs = [ "--verbose" ];
 
+    timerConfig = {
+      OnCalendar = "*-*-* 01:00:00";
+    };
+
     s3CredentialsFile = backupSecrets.s3CredentialsFile;
     passwordFile = backupSecrets.passwordFile;
   };
@@ -251,6 +255,10 @@ in {
 
     extraBackupArgs = [ "--verbose" ];
 
+    timerConfig = {
+      OnCalendar = "*-*-* 02:00:00";
+    };
+
     s3CredentialsFile = backupSecrets.s3CredentialsFile;
     passwordFile = backupSecrets.passwordFile;
   };
@@ -264,6 +272,10 @@ in {
     pruneOpts = [ "--keep-last 1" ];
 
     extraBackupArgs = [ "--verbose" ];
+
+    timerConfig = {
+      OnCalendar = "*-*-* 03:00:00";
+    };
 
     s3CredentialsFile = backupSecrets.s3CredentialsFile;
     passwordFile = backupSecrets.passwordFile;
