@@ -7,7 +7,7 @@ in {
 
   networking.firewall.allowedTCPPorts = [ 80 ];
   virtualisation.oci-containers.containers.drone-server = {
-    image = "drone/drone:1.9";
+    image = "drone/drone:2";
     environment = {
       DRONE_GITHUB_CLIENT_ID = secrets.client-id;
       DRONE_GITHUB_CLIENT_SECRET = secrets.client-secret;
@@ -23,7 +23,7 @@ in {
   };
 
   virtualisation.oci-containers.containers.drone-runner = {
-    image = "drone/drone-runner-docker:1.4";
+    image = "drone/drone-runner-docker:1";
     environment = {
       DRONE_RPC_PROTO = "http";
       DRONE_RPC_HOST = "kedar";
