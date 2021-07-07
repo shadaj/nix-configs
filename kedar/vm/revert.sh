@@ -31,7 +31,6 @@ modprobe snd_hda_intel
 
 # Restart Display Manager
 systemctl start display-manager.service
-
 systemctl start ethminer.service
 
 nvidia-smi -pm 1
