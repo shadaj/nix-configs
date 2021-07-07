@@ -5,10 +5,9 @@
 nvidia-smi -pm 0
 
 # Stop display manager
+systemctl stop ethminer.service
 systemctl stop display-manager.service
 pkill -x gdm-x-session
-
-systemctl stop ethminer.service
 
 # Unbind VTconsoles
 echo 0 > /sys/class/vtconsole/vtcon0/bind

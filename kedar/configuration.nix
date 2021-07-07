@@ -78,6 +78,7 @@ in {
     };
 
     postCommands = ''
+      zpool import swamp
       echo "zfs load-key -a; killall zfs; exit" >> /root/.profile
     '';
   };
@@ -229,6 +230,7 @@ in {
       "--keep-daily 7"
       "--keep-weekly 5"
       "--keep-monthly 12"
+      "--max-unused 5%"
     ];
 
     extraBackupArgs = [ "--verbose" ];
@@ -251,6 +253,7 @@ in {
       "--keep-daily 7"
       "--keep-weekly 5"
       "--keep-monthly 12"
+      "--max-unused 5%"
     ];
 
     extraBackupArgs = [ "--verbose" ];
@@ -269,7 +272,10 @@ in {
     repository = "b2:kedar-restic:time-machine";
     initialize = true;
 
-    pruneOpts = [ "--keep-last 1" ];
+    pruneOpts = [
+      "--keep-last 1"
+      "--max-unused 5%"
+    ];
 
     extraBackupArgs = [ "--verbose" ];
 
@@ -297,6 +303,7 @@ in {
   ];
   networking.firewall.allowedUDPPorts = [
     137 138 # samba
+    config.services.tailscale.port
   ];
   networking.firewall.trustedInterfaces = [ "tailscale0" ];
   networking.firewall.allowPing = true;
