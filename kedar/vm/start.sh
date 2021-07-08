@@ -1,6 +1,4 @@
 #!/bin/sh
-# Helpful to read output when debugging
-# set -x
 
 nvidia-smi -pm 0
 
@@ -14,7 +12,7 @@ echo 0 > /sys/class/vtconsole/vtcon0/bind
 echo 0 > /sys/class/vtconsole/vtcon1/bind
 
 # Unbind EFI-Framebuffer
-echo efi-framebuffer.0 > /sys/bus/platform/drivers/efi-framebuffer/unbind
+echo "efi-framebuffer.0" > /sys/bus/platform/drivers/efi-framebuffer/unbind
 
 # Avoid a Race condition by waiting 2 seconds. This can be calibrated to be shorter or longer if required for your system
 sleep 5
