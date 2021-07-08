@@ -6,10 +6,6 @@
   environment.systemPackages =
     [ ];
 
-  # Use a custom configuration.nix location.
-  # $ darwin-rebuild switch -I darwin-config=$HOME/.config/nixpkgs/darwin/configuration.nix
-  # environment.darwinConfig = "$HOME/.config/nixpkgs/darwin/configuration.nix";
-
   # Auto upgrade nix package and the daemon service.
   services.nix-daemon.enable = false;
   nix.useDaemon = true;
@@ -24,13 +20,12 @@
       "homebrew/cask"
       "homebrew/cask-versions"
       "homebrew/cask-drivers"
-      "vitorgalvao/tiny-scripts"
     ];
 
-    brews = [ "cask-repair" "openrct2" "postgresql" ];
+    brews = [ "openrct2" "postgresql" ];
 
     casks = [
-      "android-file-transfer" "handbrake" "idrive" "skype" "android-sdk" "kap"
+      "android-file-transfer" "handbrake" "skype" "android-sdk" "kap"
       "soundflower" "logitech-options" "soundflowerbed" "backblaze"
       "spectacle" "background-music" "minecraft" "spotify"
       "balenaetcher" "visual-studio-code" "chromedriver" "monitorcontrol"
