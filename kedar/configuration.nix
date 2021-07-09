@@ -43,8 +43,11 @@ in {
       ./vivado-drivers.nix
       ./ci.nix
       ./users.secret.nix
+      ./restic-patched.nix
       <nix-ld/modules/nix-ld.nix>
     ];
+
+  disabledModules = [ "services/backup/restic.nix" ];
 
   hardware.cpu.amd.updateMicrocode = true;
 
@@ -245,6 +248,8 @@ in {
       "--max-unused 5%"
     ];
 
+    checkOpts = [ "--with-cache" ];
+
     extraBackupArgs = [ "--verbose" ];
 
     timerConfig = {
@@ -268,6 +273,8 @@ in {
       "--max-unused 5%"
     ];
 
+    checkOpts = [ "--with-cache" ];
+
     extraBackupArgs = [ "--verbose" ];
 
     timerConfig = {
@@ -288,6 +295,8 @@ in {
       "--keep-last 1"
       "--max-unused 5%"
     ];
+
+    checkOpts = [ "--with-cache" ];
 
     extraBackupArgs = [ "--verbose" ];
 
