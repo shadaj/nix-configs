@@ -1,4 +1,7 @@
 { config, pkgs, ... }:
+
+with pkgs; # bring all of Nixpkgs into scope
+
 let
   vscode-overlay = self: super:
   {
@@ -20,7 +23,9 @@ let
     overlays = [ vscode-overlay ];
   };
 in
-let device = ( import ./device.secret.nix );
+let
+  device = ( import ./device.secret.nix );
+  javaPkg = adoptopenjdk-hotspot-bin-16;
 in
 {
   # Let Home Manager install and manage itself.
@@ -86,15 +91,32 @@ in
   };
 
   nixpkgs.config.packageOverrides = pkgs: rec {
-    sbtJDK16 = pkgs.sbt.override {
-      jre = pkgs.adoptopenjdk-hotspot-bin-16;
+    sbtJDK16 = sbt.override {
+      jre = javaPkg;
     };
+
+    yosys = pkgs.yosys.overrideAttrs(old: {
+      preBuild = old.preBuild + ''
+        echo 'ENABLE_NDEBUG := 1' >> Makefile.conf
+        cat Makefile.conf
+      '';
+    });
+
+    nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
+      inherit pkgs;
+    };
+
+    symbiflow-arch-defs-patched = nur.repos.mcaju.symbiflow-arch-defs.overrideAttrs(old: {
+      installPhase = old.installPhase + ''
+        sed -i 's/\[ -z $VPR_OPTIONS \]/[[ -z $VPR_OPTIONS ]]/g' $out/bin/vpr_common
+      '';
+    });
   };
 
   programs.vscode = {
     enable = (device.name == "kedar");
-    package = pkgs.vscode;
-    extensions = with pkgs.vscode-extensions; [
+    package = vscode;
+    extensions = with vscode-extensions; [
       ms-python.vscode-pylance
       ms-python.python
       ms-toolsai.jupyter
@@ -108,43 +130,45 @@ in
   programs.direnv.nix-direnv.enable = true;
 
   home.packages = [
-    (if device.name == "kedar" then pkgs.nodejs-14_x else pkgs.nodejs-16_x)
+    (if device.name == "kedar" then nodejs-14_x else nodejs-16_x)
 
-    pkgs.git
+    git
 
-    pkgs.adoptopenjdk-hotspot-bin-16
+    javaPkg
     pkgs.sbtJDK16
 
-    pkgs.rustup
-    pkgs.clang
-    pkgs.automake
-    pkgs.cmake
+    rustup
+    clang
+    automake
+    cmake
 
-    pkgs.ruby
-    pkgs.go
+    ruby
+    go
 
-    pkgs.htop
-    pkgs.wget
-    pkgs.unzip
-    pkgs.rsync
-    pkgs.httpie
+    htop
+    wget
+    unzip
+    rsync
+    httpie
 
-    pkgs.octave
-    pkgs.texlive.combined.scheme-full
-    pkgs.ffmpeg
+    octave
+    texlive.combined.scheme-full
+    ffmpeg
   ] ++ (if device.name == "kedar" then [
-    pkgs.google-chrome
-    pkgs.lm_sensors
+    google-chrome
+    lm_sensors
     ( import ./vivado )
+    nur.repos.mcaju.prjxray-tools
+    symbiflow-arch-defs-patched
   ] else [
-    pkgs.mosh
-    pkgs.gnupg
-    pkgs.highlight
+    mosh
+    gnupg
+    highlight
   ]);
 
   home.sessionVariables = {
-    JAVA_HOME = "${pkgs.adoptopenjdk-hotspot-bin-16}";
-    OPENSSL_DIR = "${pkgs.openssl.dev}";
-    OPENSSL_LIB_DIR = "${pkgs.openssl.out}/lib";
+    JAVA_HOME = "${javaPkg}";
+    OPENSSL_DIR = "${openssl.dev}";
+    OPENSSL_LIB_DIR = "${openssl.out}/lib";
   };
 }
