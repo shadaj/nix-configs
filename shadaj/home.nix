@@ -51,10 +51,6 @@ in
     mime.enable = true;
   } else {};
 
-  targets = if device.name == "kedar" then {
-    genericLinux.enable = true;
-  } else {};
-
   nixpkgs.config.allowUnfree = true;
 
   programs.fish = {
@@ -64,9 +60,7 @@ in
       set PATH $PATH ~/bin
       set PATH $PATH $HOME/.cargo/bin
       alias nix-fish="nix-shell --run fish";
-    '' + (if device.name == "kedar" then ''
-      export NIX_PATH="$HOME/.nix-defexpr/channels:$NIX_PATH"
-    '' else ''
+    '' + (if device.name == "kedar" then '''' else ''
       alias matlab="/Applications/MATLAB_R2019b.app/bin/matlab -nodesktop"
     '');
   };
@@ -96,23 +90,6 @@ in
     sbtJDK16 = sbt.override {
       jre = javaPkg;
     };
-
-    yosys = pkgs.yosys.overrideAttrs(old: {
-      preBuild = old.preBuild + ''
-        echo 'ENABLE_NDEBUG := 1' >> Makefile.conf
-        cat Makefile.conf
-      '';
-    });
-
-    nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
-      inherit pkgs;
-    };
-
-    symbiflow-arch-defs-patched = nur.repos.mcaju.symbiflow-arch-defs.overrideAttrs(old: {
-      installPhase = old.installPhase + ''
-        sed -i 's/\[ -z $VPR_OPTIONS \]/[[ -z $VPR_OPTIONS ]]/g' $out/bin/vpr_common
-      '';
-    });
   };
 
   programs.vscode = {
@@ -160,8 +137,6 @@ in
     google-chrome
     lm_sensors
     ( import ./vivado )
-    nur.repos.mcaju.prjxray-tools
-    symbiflow-arch-defs-patched
   ] else [
     mosh
     gnupg
