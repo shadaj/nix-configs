@@ -64,7 +64,9 @@ in
       set PATH $PATH ~/bin
       set PATH $PATH $HOME/.cargo/bin
       alias nix-fish="nix-shell --run fish";
-    '' + (if device.name == "kedar" then '''' else ''
+    '' + (if device.name == "kedar" then ''
+      export NIX_PATH="$HOME/.nix-defexpr/channels:$NIX_PATH"
+    '' else ''
       alias matlab="/Applications/MATLAB_R2019b.app/bin/matlab -nodesktop"
     '');
   };
