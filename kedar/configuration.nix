@@ -3,49 +3,21 @@
 let
   unstable = import <nixos-unstable> {
     config = { allowUnfree = true; };
-    overlays = [
-      (self: super:
-        {
-          ethminer = super.ethminer.overrideAttrs (old: {
-            version = "0.19.0";
-
-            src =
-              super.fetchFromGitHub {
-                owner = "ethereum-mining";
-                repo = "ethminer";
-                rev = "v0.19.0";
-                sha256 = "1kyff3vx2r4hjpqah9qk99z6dwz7nsnbnhhl6a76mdhjmgp1q646";
-                fetchSubmodules = true;
-              };
-
-            cmakeFlags = old.cmakeFlags ++ [
-              "-DCUDA_PROPAGATE_HOST_FLAGS=off"
-              "-DCUDA_HOST_COMPILER=${super.gcc8}/bin"
-            ];
-
-            meta = old.meta // { broken = false; };
-          });
-        }
-      )
-    ];
   };
-
-  miningSecrets = import ./mining.secret.nix;
 
   minecraftSecrets = import ./minecraft.secret.nix;
 
   backupSecrets = import ./backup.secret.nix;
 in {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      ./vm
-      ./vivado-drivers.nix
-      ./ci.nix
-      ./users.secret.nix
-      ./restic-patched.nix
-      <nix-ld/modules/nix-ld.nix>
-    ];
+  imports = [
+    ./hardware-configuration.nix
+    ./vm
+    ./vivado-drivers.nix
+    ./ci.nix
+    ./users.secret.nix
+    ./restic-patched.nix
+    <nix-ld/modules/nix-ld.nix>
+  ];
 
   disabledModules = [ "services/backup/restic.nix" ];
 
@@ -64,7 +36,7 @@ in {
   services.zfs.autoScrub.enable = true;
   services.zfs.trim.enable = true;
 
-  boot.kernelPackages = pkgs.linuxPackages_5_12;
+  boot.kernelPackages = pkgs.linuxPackages_5_13;
   # enable a module for collecting sensors
   boot.kernelModules = [ "nct6775" ];
   boot.kernelParams = [ "acpi_enforce_resources=lax" ];
@@ -92,25 +64,22 @@ in {
 
   nixpkgs.config = {
     allowUnfree = true;
+
     packageOverrides = super: let self = super.pkgs; in {
       tailscale = unstable.tailscale;
-      linuxPackages_5_12 = unstable.linuxPackages_5_12.extend (linuxSelf: linuxSuper:
-      let
-        generic = args: linuxSelf.callPackage (import <nixos-unstable/pkgs/os-specific/linux/nvidia-x11/generic.nix> args) { };
-      in
-      {
-        nvidiaPackages.stable = generic {
+
+      linuxPackages_5_13 = unstable.linuxPackages_5_13.extend (linuxSelf: linuxSuper: {
+        nvidiaPackages.stable = let
+          generic = args: linuxSelf.callPackage (import <nixos-unstable/pkgs/os-specific/linux/nvidia-x11/generic.nix> args) { };
+        in generic {
           version = "465.31";
           sha256_64bit = "1nic4xvx5ihqijm2f57kg97nyh4nmfk7p3ikkh266n1kr40x0230";
           settingsSha256 = "1wgnag0d5g82vcmpwgz3rsx6w6q6yf48bsmi268xxzn62xgwfz6z";
           persistencedSha256 = "11n26vnzp33fqmyr7dj04fb0mirydh9ylf34x8vsz0xi6fmd1gyn";
         };
       });
-      zfs = unstable.zfs;
 
-      nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
-        inherit pkgs;
-      };
+      zfs = unstable.zfs;
     };
   };
 
@@ -375,26 +344,6 @@ in {
   virtualisation.docker.enableNvidia = true;
 
   services.tailscale.enable = true;
-
-  systemd.services.ethminer = {
-    path = [ unstable.cudatoolkit ];
-    description = "ethminer ethereum mining service";
-    wantedBy = [ "multi-user.target" ];
-    after = [ "display-manager.target" ];
-
-    serviceConfig = {
-      User = "root";
-      Restart = "always";
-    };
-
-    environment = {
-      LD_LIBRARY_PATH = "${config.boot.kernelPackages.nvidia_x11}/lib";
-    };
-
-    script = ''
-      DISPLAY=:0 XAUTHORITY=/run/user/132/gdm/Xauthority ${pkgs.python37.interpreter} ${./mining/wrapper.py} ${unstable.ethminer}/bin/.ethminer-wrapped ${pkgs.lib.getBin config.boot.kernelPackages.nvidia_x11}/bin/nvidia-smi ${pkgs.lib.getBin config.boot.kernelPackages.nvidia_x11.settings}/bin/nvidia-settings stratum1+ssl://${miningSecrets.address}.${miningSecrets.identifier}@eth-us-west.flexpool.io:5555
-    '';
-  };
 
   services.minecraft-server = {
     package = unstable.papermc;
