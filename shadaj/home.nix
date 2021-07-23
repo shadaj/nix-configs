@@ -73,6 +73,7 @@ in
       "shell.nix" ".direnv/" ".envrc" ".venv/"
       "project/metals.sbt" ".bloop/" ".bsp/" ".metals/"
       ".vsls.json"
+      ".vscode/"
     ];
 
     lfs = {

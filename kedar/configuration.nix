@@ -182,11 +182,12 @@ in {
       server string = kedar
       netbios name = kedar
       security = user
-      hosts allow = 192.168. localhost
+      hosts allow = 192.168.0.0/16 fe80::/10 100.64.0.0/10 localhost
       guest account = nobody
       map to guest = bad user
       client min protocol = NT1
     '';
+
     shares = {
       media = {
         path = "/swamp/media";
@@ -302,12 +303,15 @@ in {
   networking.firewall.trustedInterfaces = [ "tailscale0" ];
   networking.firewall.allowPing = true;
   networking.firewall.extraCommands = ''
-    iptables -I INPUT ! -s 192.168.0.0/24 -m addrtype --dst-type LOCAL -i docker0 -j DROP;
+    iptables -I INPUT -i docker0 ! -s 192.168.0.0/24 -m addrtype --dst-type LOCAL -j DROP;
     iptables -I INPUT -i docker0 ! -s 192.168.0.0/24 -m addrtype --dst-type LOCAL -m state --state ESTABLISHED,RELATED -j ACCEPT;
-    iptables -N DOCKER-USER;
+    iptables -N DOCKER-USER || true;
     iptables -I DOCKER-USER -i docker0 -d 192.168.0.0/16 -j DROP;
     iptables -I DOCKER-USER -i docker0 -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED -j ACCEPT;
+    iptables -I DOCKER-USER -i docker0 -d 100.64.0.0/10 -j DROP;
+    iptables -I DOCKER-USER -i docker0 -d 100.64.0.0/10 -m state --state ESTABLISHED,RELATED -j ACCEPT;
 
+    # Samba connectivity
     iptables -t raw -A OUTPUT -p udp -m udp --dport 137 -j CT --helper netbios-ns
   '';
 
