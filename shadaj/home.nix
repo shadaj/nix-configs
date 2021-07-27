@@ -101,9 +101,11 @@ in
       ms-python.python
       ms-toolsai.jupyter
       scalameta.metals
+      scala-lang.scala
       ms-vsliveshare.vsliveshare
       matklad.rust-analyzer
       ms-vscode.cpptools
+      zhuangtongfa.material-theme
     ];
   };
 

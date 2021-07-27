@@ -80,6 +80,14 @@ in {
       });
 
       zfs = unstable.zfs;
+
+      code-server = unstable.code-server.overrideAttrs(old: rec {
+        buildPhase = ''
+          sed -i 's/<\/head>/<link type="text\/css" href="https:\/\/fonts.googleapis.com\/css2?family=JetBrains+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800\&display=swap" rel="stylesheet"><\/head>/g' src/browser/pages/vscode.html
+          sed -i 's/font-src/font-src fonts.gstatic.com/g' src/browser/pages/vscode.html
+          sed -i 's/style-src/style-src fonts.googleapis.com/g' src/browser/pages/vscode.html
+        '' + old.buildPhase;
+      });
     };
   };
 
@@ -365,6 +373,24 @@ in {
       level-seed = "12345678";
       enable-rcon = true;
       "rcon.password" = minecraftSecrets.rconPass;
+    };
+  };
+
+  systemd.services.code-server = {
+    enable = true;
+    description = "Remote VSCode Server";
+    after = ["network.target"];
+    wantedBy = ["multi-user.target"];
+
+    path = [ pkgs.openssl ];
+
+    serviceConfig = {
+      Type = "simple";
+      ExecStart = "${pkgs.code-server}/bin/code-server --host 0.0.0.0 --cert-host kedar --user-data-dir /home/shadaj/.vscode";
+      WorkingDirectory = "/home/shadaj";
+      NoNewPrivileges = true;
+      User = "shadaj";
+      Group = "nogroup";
     };
   };
 
