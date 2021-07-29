@@ -79,7 +79,7 @@ in {
         };
       });
 
-      zfs = unstable.zfs;
+      zfs = pkgs.zfsUnstable;
 
       code-server = unstable.code-server.overrideAttrs(old: rec {
         buildPhase = ''
