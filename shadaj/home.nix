@@ -3,27 +3,10 @@
 with pkgs; # bring all of Nixpkgs into scope
 
 let
-  vscode-overlay = self: super:
-  {
-    vscode-extensions = self.lib.recursiveUpdate super.vscode-extensions {
-      # ms-vsliveshare.vsliveshare = (pkgs.callPackage (import ./vscode-live-share) {});
-      ms-toolsai.jupyter = pkgs.vscode-utils.buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "jupyter";
-          publisher = "ms-toolsai";
-          version = "2020.12.414227025";
-          sha256 = "1zv5p37qsmp2ycdaizb987b3jw45604vakasrggqk36wkhb4bn1v";
-        };
-      };
-    };
-  };
-
   unstable = import <nixos-unstable> {
     config = { allowUnfree = true; };
-    overlays = [ vscode-overlay ];
   };
-in
-let
+
   device = ( import ./device.secret.nix );
   javaPkg = adoptopenjdk-hotspot-bin-16;
 in
@@ -87,12 +70,6 @@ in
     };
   };
 
-  nixpkgs.config.packageOverrides = pkgs: rec {
-    sbtJDK16 = sbt.override {
-      jre = javaPkg;
-    };
-  };
-
   programs.vscode = {
     enable = (device.name == "kedar");
     package = vscode;
@@ -118,7 +95,9 @@ in
     git
 
     javaPkg
-    pkgs.sbtJDK16
+    (sbt.override {
+      jre = javaPkg;
+    })
 
     rustup
     clang

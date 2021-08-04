@@ -68,16 +68,7 @@ in {
     packageOverrides = super: let self = super.pkgs; in {
       tailscale = unstable.tailscale;
 
-      linuxPackages_5_13 = unstable.linuxPackages_5_13.extend (linuxSelf: linuxSuper: {
-        nvidiaPackages.stable = let
-          generic = args: linuxSelf.callPackage (import <nixos-unstable/pkgs/os-specific/linux/nvidia-x11/generic.nix> args) { };
-        in generic {
-          version = "465.31";
-          sha256_64bit = "1nic4xvx5ihqijm2f57kg97nyh4nmfk7p3ikkh266n1kr40x0230";
-          settingsSha256 = "1wgnag0d5g82vcmpwgz3rsx6w6q6yf48bsmi268xxzn62xgwfz6z";
-          persistencedSha256 = "11n26vnzp33fqmyr7dj04fb0mirydh9ylf34x8vsz0xi6fmd1gyn";
-        };
-      });
+      linuxPackages_5_13 = unstable.linuxPackages_5_13;
 
       zfs = pkgs.zfsUnstable;
 
