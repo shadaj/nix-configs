@@ -57,7 +57,7 @@ in
       "project/metals.sbt" ".bloop/" ".bsp/" ".metals/"
       ".vsls.json"
       ".vscode/"
-    ];
+    ] ++ (if device.name == "bihag" then [ ".DS_Store" ] else []);
 
     lfs = {
       enable = true;

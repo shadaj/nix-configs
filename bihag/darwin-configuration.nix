@@ -28,7 +28,7 @@
       "android-file-transfer" "handbrake" "skype" "android-sdk" "kap"
       "soundflower" "logitech-options" "soundflowerbed" "backblaze"
       "spectacle" "background-music" "minecraft" "spotify"
-      "balenaetcher" "visual-studio-code" "chromedriver" "monitorcontrol"
+      "balenaetcher" "visual-studio-code" "monitorcontrol"
       "visualvm" "discord" "moonlight" "vlc" "docker" "ngrok" "firefox"
       "obs" "wireshark" "osu-development" "xpra" "google-chrome" "xquartz"
       "screenflow" "zoom" "google-drive" "sidequest"
