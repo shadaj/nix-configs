@@ -350,7 +350,7 @@ in {
 
   services.minecraft-server = {
     package = unstable.papermc;
-    enable = true;
+    enable = false;
     eula = true;
     declarative = true;
     dataDir = "/tank/minecraft";

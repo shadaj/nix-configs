@@ -1,5 +1,8 @@
 #!/bin/sh
 
+mkdir -p /var/lib/libvirt/swtpm/05776f22-15b8-4e4f-ae00-047d63bfd6fc/tpm2
+cp /home/shadaj/vm/swtpm/05776f22-15b8-4e4f-ae00-047d63bfd6fc/tpm2-00.permall /var/lib/libvirt/swtpm/05776f22-15b8-4e4f-ae00-047d63bfd6fc/tpm2/tpm2-00.permall
+
 nvidia-smi -pm 0
 
 # Stop display manager

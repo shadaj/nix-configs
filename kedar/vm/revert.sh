@@ -32,3 +32,5 @@ systemctl start display-manager.service
 systemctl start ethminer.service
 
 nvidia-smi -pm 1
+
+cp /var/lib/libvirt/swtpm/05776f22-15b8-4e4f-ae00-047d63bfd6fc/tpm2/tpm2-00.permall /home/shadaj/vm/swtpm/05776f22-15b8-4e4f-ae00-047d63bfd6fc/tpm2-00.permall

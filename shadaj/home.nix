@@ -73,7 +73,7 @@ in
   programs.vscode = {
     enable = (device.name == "kedar");
     package = vscode;
-    extensions = with vscode-extensions; [
+    extensions = with unstable.vscode-extensions; [
       ms-python.vscode-pylance
       ms-python.python
       ms-toolsai.jupyter
