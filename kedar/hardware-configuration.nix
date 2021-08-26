@@ -28,6 +28,11 @@
       fsType = "zfs";
     };
 
+  fileSystems."/tank/games" =
+    { device = "tank/root/games";
+      fsType = "zfs";
+    };
+
   fileSystems."/var/lib/docker" =
     { device = "tank/docker";
       fsType = "zfs";

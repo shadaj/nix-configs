@@ -91,6 +91,10 @@ in {
   networking.useDHCP = false;
   networking.interfaces.enp6s0.useDHCP = true;
   networking.hostId = "d503793a";
+  networking.interfaces.vmbridge0.useDHCP = true;
+  networking.bridges.vmbridge0 = {
+    interfaces = [ "enp6s0" ];
+  };
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -181,11 +185,25 @@ in {
       guest account = nobody
       map to guest = bad user
       client min protocol = NT1
+
+      [global]
+      printcap name = /dev/null
+      load printers = no
+      printing = bsd
     '';
 
     shares = {
       media = {
         path = "/swamp/media";
+        browseable = "yes";
+        "read only" = "no";
+        "guest ok" = "no";
+        "create mask" = "0644";
+        "directory mask" = "0755";
+      };
+
+      games = {
+        path = "/tank/games";
         browseable = "yes";
         "read only" = "no";
         "guest ok" = "no";
