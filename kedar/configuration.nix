@@ -41,7 +41,26 @@ in {
   boot.kernelModules = [ "nct6775" ];
   boot.kernelParams = [ "acpi_enforce_resources=lax" ];
 
-  boot.initrd.kernelModules = [ "igb" ];
+  boot.initrd.kernelModules = [ "igb" "tun" ];
+  boot.initrd.secrets = {
+    "/root/tailscale.state" = ./tailscale.state;
+  };
+
+  boot.initrd.extraUtilsCommands = ''
+    for BIN in ${pkgs.iproute2}/{s,}bin/*; do
+      copy_bin_and_libs $BIN
+    done
+
+    for BIN in ${pkgs.iptables}/{s,}bin/*; do
+      copy_bin_and_libs $BIN
+    done
+
+    copy_bin_and_libs ${pkgs.tailscale}/bin/.tailscaled-wrapped
+
+    mkdir -p $out/secrets/etc/ssl/certs
+    cp ${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt $out/secrets/etc/ssl/certs/ca-bundle.crt
+  '';
+
   boot.initrd.network = {
     enable = true;
     ssh = {
@@ -52,6 +71,8 @@ in {
     };
 
     postCommands = ''
+      /bin/.tailscaled-wrapped --state /root/tailscale.state &
+
       zpool import swamp
       echo "zfs load-key -a; killall zfs; exit" >> /root/.profile
     '';
