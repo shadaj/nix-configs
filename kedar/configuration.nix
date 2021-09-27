@@ -27,6 +27,7 @@ in {
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.supportedFilesystems = [ "zfs" ];
+  boot.zfs.enableUnstable = true;
   boot.loader.systemd-boot.consoleMode = "max";
 
   systemd.extraConfig = ''
@@ -36,7 +37,7 @@ in {
   services.zfs.autoScrub.enable = true;
   services.zfs.trim.enable = true;
 
-  boot.kernelPackages = pkgs.linuxPackages_5_13;
+  boot.kernelPackages = pkgs.linuxPackages_5_14;
   # enable a module for collecting sensors
   boot.kernelModules = [ "nct6775" ];
   boot.kernelParams = [ "acpi_enforce_resources=lax" ];
@@ -88,10 +89,6 @@ in {
 
     packageOverrides = super: let self = super.pkgs; in {
       tailscale = unstable.tailscale;
-
-      linuxPackages_5_13 = unstable.linuxPackages_5_13;
-
-      zfs = pkgs.zfsUnstable;
 
       code-server = unstable.code-server.overrideAttrs(old: rec {
         buildPhase = ''

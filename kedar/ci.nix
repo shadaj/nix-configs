@@ -5,7 +5,6 @@ let
 in {
   imports = [ ./ci-access.nix ];
 
-  networking.firewall.allowedTCPPorts = [ 80 ];
   virtualisation.oci-containers.containers.drone-server = {
     image = "drone/drone:2";
     environment = {

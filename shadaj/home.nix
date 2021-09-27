@@ -54,7 +54,7 @@ in
     userEmail = "shadaj@users.noreply.github.com";
     ignores = [
       "shell.nix" ".direnv/" ".envrc" ".venv/"
-      "project/metals.sbt" ".bloop/" ".bsp/" ".metals/"
+      "metals.sbt" ".bloop/" ".bsp/" ".metals/"
       ".vsls.json"
       ".vscode/"
     ] ++ (if device.name == "bihag" then [ ".DS_Store" ] else []);
@@ -75,7 +75,7 @@ in
     package = vscode;
     extensions = with unstable.vscode-extensions; [
       ms-python.vscode-pylance
-      ms-python.python
+      pkgs.vscode-extensions.ms-python.python
       ms-toolsai.jupyter
       scalameta.metals
       scala-lang.scala
