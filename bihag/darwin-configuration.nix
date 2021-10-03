@@ -7,7 +7,7 @@
     [ ];
 
   # Auto upgrade nix package and the daemon service.
-  services.nix-daemon.enable = false;
+  services.nix-daemon.enable = true;
   nix.useDaemon = true;
   nix.package = pkgs.nix;
 
@@ -25,8 +25,8 @@
     brews = [ "postgresql" ];
 
     casks = [
-      "android-file-transfer" "handbrake" "skype" "android-sdk" "kap"
-      "soundflower" "logitech-options" "soundflowerbed" "backblaze"
+      "aerial" "android-file-transfer" "handbrake" "skype" "android-sdk" "kap"
+      "soundflower" "logitech-options" "soundflowerbed"
       "spectacle" "background-music" "minecraft" "openrct2" "spotify"
       "balenaetcher" "visual-studio-code" "monitorcontrol"
       "visualvm" "discord" "iterm2" "moonlight" "notion" "vlc" "docker"
