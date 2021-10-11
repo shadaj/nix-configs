@@ -89,12 +89,14 @@ in
   programs.direnv.enable = true;
   programs.direnv.nix-direnv.enable = true;
 
+  programs.java.enable = true;
+  programs.java.package = javaPkg;
+
   home.packages = [
     (if device.name == "kedar" then nodejs-14_x else nodejs-16_x)
 
     git
 
-    javaPkg
     (sbt.override {
       jre = javaPkg;
     })
@@ -127,7 +129,6 @@ in
   ]);
 
   home.sessionVariables = {
-    JAVA_HOME = "${javaPkg}";
     OPENSSL_DIR = "${openssl.dev}";
     OPENSSL_LIB_DIR = "${openssl.out}/lib";
   };
