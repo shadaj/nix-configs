@@ -121,9 +121,9 @@ in
     lm_sensors
     ( import ./vivado )
   ] else [
-    mosh
     gnupg
     highlight
+    ngrok
   ]);
 
   home.sessionVariables = {

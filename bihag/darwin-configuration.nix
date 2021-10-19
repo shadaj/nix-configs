@@ -25,13 +25,12 @@
     brews = [ "postgresql" ];
 
     casks = [
-      "aerial" "android-file-transfer" "handbrake" "skype" "android-sdk" "kap"
-      "soundflower" "logitech-options" "soundflowerbed"
-      "spectacle" "background-music" "minecraft" "openrct2" "spotify"
+      "aerial" "android-file-transfer" "handbrake" "kap"
+      "logitech-options" "spectacle" "background-music" "openrct2" "spotify"
       "balenaetcher" "visual-studio-code" "monitorcontrol"
-      "visualvm" "discord" "iterm2" "moonlight" "notion" "vlc" "docker"
-      "ngrok" "firefox" "obs" "wireshark" "osu-development" "xpra"
-      "google-chrome" "xquartz" "screenflow" "zoom" "google-drive" "sidequest"
+      "discord" "iterm2" "moonlight" "notion" "vlc" "docker"
+      "obs" "wireshark" "osu-development" "xpra"
+      "google-chrome" "xquartz" "zoom" "google-drive" "sidequest"
     ];
   };
 
