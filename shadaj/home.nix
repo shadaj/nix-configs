@@ -75,14 +75,11 @@ in
     package = vscode;
     extensions = with unstable.vscode-extensions; [
       ms-python.vscode-pylance
-      pkgs.vscode-extensions.ms-python.python
-      ms-toolsai.jupyter
+      ms-python.python
       scalameta.metals
-      scala-lang.scala
       ms-vsliveshare.vsliveshare
       matklad.rust-analyzer
       ms-vscode.cpptools
-      zhuangtongfa.material-theme
     ];
   };
 
@@ -114,6 +111,7 @@ in
     unzip
     rsync
     httpie
+    killall
 
     octave
     texlive.combined.scheme-full

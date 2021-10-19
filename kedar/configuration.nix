@@ -74,6 +74,7 @@ in {
     postCommands = ''
       /bin/.tailscaled-wrapped --state /root/tailscale.state &
 
+      zpool import tank
       zpool import swamp
       echo "zfs load-key -a; killall zfs; exit" >> /root/.profile
     '';
