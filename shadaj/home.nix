@@ -40,8 +40,8 @@ in
     enable = true;
     promptInit = (builtins.readFile ./fish-prompt.fish);
     shellInit = ''
-      set PATH $PATH ~/bin
-      set PATH $PATH $HOME/.cargo/bin
+      set PATH ~/bin $PATH
+      set PATH $HOME/.cargo/bin $PATH
       alias nix-fish="nix-shell --run fish";
     '' + (if device.name == "kedar" then '''' else ''
       alias matlab="/Applications/MATLAB_R2019b.app/bin/matlab -nodesktop"
@@ -125,6 +125,8 @@ in
     gnupg
     highlight
     ngrok
+    nodePackages.serve
+    unstable.nodePackages.webtorrent-cli
   ]);
 
   home.sessionVariables = {
