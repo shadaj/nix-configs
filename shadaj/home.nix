@@ -42,7 +42,8 @@ in
     shellInit = ''
       set PATH ~/bin $PATH
       set PATH $HOME/.cargo/bin $PATH
-      alias nix-fish="nix-shell --run fish";
+      alias nix-fish="nix-shell --run fish"
+      source ~/bin/iterm2_shell_integration.fish
     '' + (if device.name == "kedar" then '''' else ''
       alias matlab="/Applications/MATLAB_R2019b.app/bin/matlab -nodesktop"
     '');

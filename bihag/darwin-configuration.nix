@@ -27,7 +27,7 @@
       "balenaetcher" "visual-studio-code" "monitorcontrol"
       "discord" "iterm2" "moonlight" "notion" "vlc" "docker"
       "obs" "wireshark" "osu-development" "xpra"
-      "google-chrome" "xquartz" "zoom" "google-drive" "sidequest"
+      "google-chrome" "firefox" "xquartz" "zoom" "google-drive" "sidequest"
     ];
   };
 
