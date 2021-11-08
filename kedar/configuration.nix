@@ -203,9 +203,12 @@ in {
       hosts allow = 192.168.0.0/16 fe80::/10 100.64.0.0/10 localhost
       guest account = nobody
       map to guest = bad user
-      client min protocol = NT1
+      server min protocol = SMB2
 
-      [global]
+      smb2 leases = yes
+      kernel oplocks = no
+      use sendfile = yes
+
       printcap name = /dev/null
       load printers = no
       printing = bsd
@@ -236,7 +239,9 @@ in {
         "read only" = "no";
         "guest ok" = "no";
         "vfs objects" = "catia fruit streams_xattr";
+        "fruit:aapl" = "yes";
         "fruit:time machine" = "yes";
+        "fruit:resource" = "xattr";
       };
     };
   };

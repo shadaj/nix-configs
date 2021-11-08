@@ -9,6 +9,8 @@ let
 
   device = ( import ./device.secret.nix );
   javaPkg = adoptopenjdk-hotspot-bin-16;
+
+  nixpkgs-tars = "https://github.com/NixOS/nixpkgs/archive";
 in
 {
   # Let Home Manager install and manage itself.
@@ -34,7 +36,9 @@ in
     mime.enable = true;
   } else {};
 
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs.config = {
+    allowUnfree = true;
+  };
 
   programs.fish = {
     enable = true;
@@ -122,6 +126,7 @@ in
     google-chrome
     lm_sensors
     ( import ./vivado )
+    z3
   ] else [
     gnupg
     highlight
