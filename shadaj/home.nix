@@ -40,6 +40,10 @@ in
     allowUnfree = true;
   };
 
+  imports = if device.name == "kedar" then [
+    "${fetchTarball "https://github.com/msteen/nixos-vscode-server/tarball/master"}/modules/vscode-server/home.nix"
+  ] else [];
+
   programs.fish = {
     enable = true;
     promptInit = (builtins.readFile ./fish-prompt.fish);
@@ -95,8 +99,14 @@ in
   programs.java.enable = true;
   programs.java.package = javaPkg;
 
+  services = if device.name == "kedar" then {
+    vscode-server = {
+      enable = true;
+    };
+  } else {};
+
   home.packages = [
-    (if device.name == "kedar" then nodejs-14_x else nodejs-16_x)
+    nodejs-16_x
 
     git
 

@@ -8,7 +8,7 @@
   </metadata>
   <memory unit="KiB">25165824</memory>
   <currentMemory unit="KiB">25165824</currentMemory>
-  <vcpu placement="static">16</vcpu>
+  <vcpu placement="static">18</vcpu>
   <iothreads>1</iothreads>
   <cputune>
     <vcpupin vcpu="0" cpuset="0"/>
@@ -27,7 +27,9 @@
     <vcpupin vcpu="13" cpuset="18"/>
     <vcpupin vcpu="14" cpuset="7"/>
     <vcpupin vcpu="15" cpuset="19"/>
-    <emulatorpin cpuset="8-9,20-21"/>
+    <vcpupin vcpu="16" cpuset="8"/>
+    <vcpupin vcpu="17" cpuset="20"/>
+    <emulatorpin cpuset="9-10,21-22"/>
   </cputune>
   <os>
     <type arch="x86_64" machine="pc-i440fx-4.2">hvm</type>
@@ -50,7 +52,7 @@
     <vmport state="off"/>
   </features>
   <cpu mode="host-passthrough" check="partial">
-    <topology sockets="1" dies="1" cores="8" threads="2"/>
+    <topology sockets="1" dies="1" cores="9" threads="2"/>
     <cache mode="passthrough"/>
     <feature policy="require" name="invtsc"/>
     <feature policy="require" name="topoext"/>
