@@ -37,7 +37,7 @@ in {
   services.zfs.autoScrub.enable = true;
   services.zfs.trim.enable = true;
 
-  boot.kernelPackages = pkgs.linuxPackages_5_14;
+  boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
   # enable a module for collecting sensors
   boot.kernelModules = [ "nct6775" ];
   boot.kernelParams = [ "acpi_enforce_resources=lax" ];
@@ -52,7 +52,7 @@ in {
       copy_bin_and_libs $BIN
     done
 
-    for BIN in ${pkgs.iptables}/{s,}bin/*; do
+    for BIN in ${pkgs.iptables-legacy}/{s,}bin/*; do
       copy_bin_and_libs $BIN
     done
 

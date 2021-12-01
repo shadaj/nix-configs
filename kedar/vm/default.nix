@@ -38,23 +38,6 @@ let
   '';
 
 in
-# from https://github.com/NixOS/nixpkgs/pull/114057
-let swtpmPatched = pkgs.swtpm.overrideAttrs (old: {
-  patches = [
-    ./python-installation.patch
-  ];
-
-  configureFlags = [
-    "--with-cuse"
-    "--localstatedir=/var"
-  ];
-
-  postInstall = ''
-    wrapPythonProgramsIn $out/bin "$out $pythonPath"
-    wrapPythonProgramsIn $out/share/swtpm "$out $pythonPath ${pkgs.gnutls}"
-  '';
-});
-in
 {
   config = {
     users.users.shadaj.extraGroups = [ "libvirtd" "kvm" ];
@@ -80,7 +63,7 @@ in
 
     virtualisation.libvirtd = {
       enable = true;
-      qemuOvmf = true;
+      qemu.ovmf.enable = true;
       onBoot = "ignore";
       onShutdown = "shutdown";
       extraConfig = "log_filters=\"3:remote 4:event 3:util.json 3:rpc 1:*\"\nlog_outputs=\"1:file:/var/log/libvirt/libvirtd.log\"";
@@ -93,7 +76,7 @@ in
     systemd.services.libvirtd = {
       # scripts use binaries from these packages
       # NOTE: All these hooks are run with root privileges... Be careful!
-      path = with pkgs; [ libvirt procps utillinux kmod swtpmPatched ];
+      path = with pkgs; [ libvirt procps utillinux kmod swtpm ];
       preStart = ''
         mkdir -p /var/lib/libvirt/vbios
         ln -sf ${( import ./patched-vbios.nix )}/patched.rom /var/lib/libvirt/vbios/patched-bios.rom

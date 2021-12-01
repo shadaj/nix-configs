@@ -46,7 +46,7 @@ in
 
   programs.fish = {
     enable = true;
-    promptInit = (builtins.readFile ./fish-prompt.fish);
+    interactiveShellInit = (builtins.readFile ./fish-prompt.fish);
     shellInit = ''
       set PATH ~/bin $PATH
       set PATH $HOME/.cargo/bin $PATH
@@ -147,7 +147,7 @@ in
     highlight
     ngrok
     nodePackages.serve
-    unstable.nodePackages.webtorrent-cli
+    nodePackages.webtorrent-cli
   ]);
 
   home.sessionVariables = {
