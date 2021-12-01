@@ -37,17 +37,6 @@ in {
   services.zfs.autoScrub.enable = true;
   services.zfs.trim.enable = true;
 
-  # from https://git.project-insanity.org/onny/nixos-picloud/-/blob/master/configuration.nix
-  systemd.services.hdparm = {
-    description = "Automatically spin down hard drives";
-    wantedBy = [ "multi-user.target" ];
-    serviceConfig = {
-      ExecStart = ''
-        ${pkgs.hdparm}/sbin/hdparm -S 120 -y /dev/sda /dev/sdb /dev/sdc
-      '';
-    };
-  };
-
   boot.kernelPackages = pkgs.linuxPackages_5_14;
   # enable a module for collecting sensors
   boot.kernelModules = [ "nct6775" ];

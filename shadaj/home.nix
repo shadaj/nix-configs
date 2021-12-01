@@ -76,6 +76,10 @@ in
       pull = {
         rebase = "false";
       };
+
+      init = {
+        defaultBranch = "main";
+      };
     };
   };
 
@@ -137,6 +141,7 @@ in
     lm_sensors
     ( import ./vivado )
     z3
+    racket
   ] else [
     gnupg
     highlight
