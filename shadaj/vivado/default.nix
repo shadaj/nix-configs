@@ -3,7 +3,8 @@
 with import <nixpkgs> {}; # bring all of Nixpkgs into scope
 
 stdenv.mkDerivation rec {
-  name = "vivado-2019.1";
+  name = "vivado";
+  version = "2021.2";
 
   buildInputs = [ patchelf procps ncurses makeWrapper zlib unzip ];
   
@@ -11,8 +12,8 @@ stdenv.mkDerivation rec {
   inherit ncurses;
 
   src = fetchurl {
-    url = file://Xilinx_Vivado_SDK_2019.1_0524_1430.tar.gz;
-    sha256 = "0a60fqyrfj0d8wcjlqi2mmi320r3xilndppk16isnddwihd0iczj";
+    url = file://Xilinx_Unified_2021.2_1021_0703.tar.gz;
+    sha256 = "10v59sngh0zncv0kfp8p68lp8c9jl7xlyq6b892qc0y9mrlkarp2";
   };
 
   libPath = lib.makeLibraryPath
