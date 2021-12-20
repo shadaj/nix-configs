@@ -32,7 +32,7 @@
     <emulatorpin cpuset="9-10,21-22"/>
   </cputune>
   <os>
-    <type arch="x86_64" machine="pc-i440fx-4.2">hvm</type>
+    <type arch="x86_64" machine="q35">hvm</type>
     <loader readonly="yes" type="pflash">/run/libvirt/nix-ovmf/OVMF_CODE.fd</loader>
     <nvram>/var/lib/libvirt/qemu/nvram/win10_VARS.fd</nvram>
     <boot dev="hd"/>
@@ -68,21 +68,26 @@
   <on_reboot>restart</on_reboot>
   <on_crash>destroy</on_crash>
   <pm>
-    <suspend-to-mem enabled="no"/>
+    <suspend-to-mem enabled="yes"/>
     <suspend-to-disk enabled="no"/>
   </pm>
   <devices>
     <emulator>/run/libvirt/nix-emulators/qemu-system-x86_64</emulator>
+    <controller type="pci" index="0" model="pcie-root"/>
+    <controller type="pci" index="1" model="pcie-root-port">
+      <model name="pcie-root-port"/>
+      <target chassis="1" port="0x10"/>
+      <address type='pci' domain="0x0000" bus="0x00" slot="0x01" function="0x0"/>
+    </controller>
+    <controller type="usb" index="0" model="qemu-xhci" ports="15">
+      <address type="pci" domain="0x0000" bus="0x00" slot="0x05" function="0x0"/>
+    </controller>
     <hostdev mode="subsystem" type="pci" managed="yes">
       <source>
         <address domain="0x0000" bus="0x01" slot="0x00" function="0x0"/>
       </source>
       <address type="pci" domain="0x0000" bus="0x00" slot="0x06" function="0x0"/>
     </hostdev>
-    <controller type="usb" index="0" model="qemu-xhci" ports="15">
-      <address type="pci" domain="0x0000" bus="0x00" slot="0x05" function="0x0"/>
-    </controller>
-    <controller type="pci" index="0" model="pci-root"/>
     <interface type="bridge">
       <mac address="52:54:00:56:d9:73"/>
       <source bridge="vmbridge0"/>

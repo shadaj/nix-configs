@@ -94,6 +94,7 @@ in {
   };
 
   networking.hostName = "kedar"; # Define your hostname.
+  networking.nameservers = [ "1.1.1.1" "1.0.0.1" ];
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
