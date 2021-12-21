@@ -8,7 +8,7 @@ let
   };
 
   device = ( import ./device.secret.nix );
-  javaPkg = adoptopenjdk-hotspot-bin-16;
+  javaPkg = openjdk17;
 
   nixpkgs-tars = "https://github.com/NixOS/nixpkgs/archive";
 in
