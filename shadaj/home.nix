@@ -142,6 +142,7 @@ in
     ( import ./vivado )
     z3
     racket
+    tmux
   ] else [
     gnupg
     highlight

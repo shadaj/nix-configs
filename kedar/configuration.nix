@@ -187,6 +187,7 @@ in {
 
   services.samba = {
     enable = true;
+    openFirewall = true;
     securityType = "user";
     extraConfig = ''
       workgroup = WORKGROUP
@@ -226,6 +227,15 @@ in {
         "directory mask" = "0755";
       };
 
+      honeymelon-cache = {
+        path = "/home/shadaj/.honeymelon";
+        browseable = "yes";
+        "read only" = "no";
+        "guest ok" = "no";
+        "create mask" = "0644";
+        "directory mask" = "0755";
+      };
+
       "Time Machine (kedar)" = {
         path = "/swamp/time-machine";
         browseable = "yes";
@@ -237,6 +247,20 @@ in {
         "fruit:resource" = "xattr";
       };
     };
+  };
+
+  virtualisation.oci-containers.containers.photoprism = {
+    image = "photoprism/photoprism:20211215";
+    environment = {
+      PHOTOPRISM_ADMIN_PASSWORD = (import ./photoprism.secret.nix).password;
+    };
+
+    volumes = [
+      "/tank/photoprism:/photoprism/storage"
+      "/swamp/media/honeymelon:/photoprism/originals"
+    ];
+
+    ports = ["2342:2342"];
   };
 
   services.restic.backups.home = {
@@ -323,11 +347,9 @@ in {
   # Open ports in the firewall.
   networking.firewall.enable = true;
   networking.firewall.allowedTCPPorts = [
-    139 445 # samba
     9 # time machine
   ];
   networking.firewall.allowedUDPPorts = [
-    137 138 # samba
     config.services.tailscale.port
   ];
   networking.firewall.trustedInterfaces = [ "tailscale0" ];
