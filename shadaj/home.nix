@@ -94,6 +94,7 @@ in
       ms-vsliveshare.vsliveshare
       matklad.rust-analyzer
       ms-vscode.cpptools
+      golang.go
     ];
   };
 

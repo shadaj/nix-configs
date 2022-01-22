@@ -11,7 +11,7 @@ in {
       DRONE_GITHUB_CLIENT_ID = secrets.client-id;
       DRONE_GITHUB_CLIENT_SECRET = secrets.client-secret;
       DRONE_RPC_SECRET = secrets.rpc-secret;
-      DRONE_SERVER_HOST = "***REMOVED***";
+      DRONE_SERVER_HOST = secrets.host;
       DRONE_SERVER_PROTO = "http";
       DRONE_USER_CREATE = "username:shadaj,admin:true";
     };
