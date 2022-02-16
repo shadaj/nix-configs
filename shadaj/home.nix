@@ -126,6 +126,7 @@ in
 
     ruby
     go
+    coq
 
     htop
     wget
