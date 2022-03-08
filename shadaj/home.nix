@@ -131,12 +131,15 @@ in
 
     ruby
     go
+    racket
+    z3
 
     htop
     wget
     unzip
     rsync
     httpie
+    gnupg
     killall
 
     ffmpeg
@@ -144,14 +147,11 @@ in
     google-chrome
     lm_sensors
     ( import ./vivado )
-    z3
-    racket
     coq
     octave
     texlive.combined.scheme-full
     tmux
   ] else [
-    gnupg
     highlight
     ngrok
     nodePackages.serve
