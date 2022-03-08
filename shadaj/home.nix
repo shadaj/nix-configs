@@ -126,7 +126,6 @@ in
 
     ruby
     go
-    coq
 
     htop
     wget
@@ -135,8 +134,6 @@ in
     httpie
     killall
 
-    octave
-    texlive.combined.scheme-full
     ffmpeg
   ] ++ (if device.name == "kedar" then [
     google-chrome
@@ -144,6 +141,9 @@ in
     ( import ./vivado )
     z3
     racket
+    coq
+    octave
+    texlive.combined.scheme-full
     tmux
   ] else [
     gnupg

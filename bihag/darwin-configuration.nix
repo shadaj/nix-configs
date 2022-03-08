@@ -22,11 +22,11 @@
     ];
 
     casks = [
-      "aerial" "android-file-transfer" "handbrake" "kap"
-      "logitech-options" "spectacle" "background-music" "openrct2" "spotify"
+      "aerial" "android-file-transfer" "handbrake" "kap" "slack"
+      "logitech-options" "rectangle" "background-music" "openrct2" "spotify"
       "balenaetcher" "visual-studio-code" "monitorcontrol"
       "discord" "iterm2" "moonlight" "notion" "vlc" "docker"
-      "obs" "wireshark" "osu-development" "xpra"
+      "obs" "wireshark" "osu-development" "xpra" "element"
       "google-chrome" "firefox" "xquartz" "zoom" "google-drive" "sidequest"
     ];
   };
