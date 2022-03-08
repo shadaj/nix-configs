@@ -7,6 +7,8 @@ let
 
   minecraftSecrets = import ./minecraft.secret.nix;
 
+  serverSecrets = import ./server.secret.nix;
+
   backupSecrets = import ./backup.secret.nix;
 in {
   imports = [
@@ -184,6 +186,21 @@ in {
   services.sshd.enable = true;
   programs.ssh.startAgent = true;
   programs.mosh.enable = true;
+
+  services.code-server = {
+    enable = true;
+    package = unstable.code-server.overrideAttrs(old: rec {
+      installPhase = old.installPhase + ''
+        sed -i 's/<\/head>/<link type="text\/css" href="https:\/\/fonts.googleapis.com\/css2?family=JetBrains+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800\&display=swap" rel="stylesheet"><\/head>/g' $out/libexec/code-server/vendor/modules/code-oss-dev/out/vs/code/browser/workbench/workbench.html
+        grep -rl "font-src 'self' blob:" $out/libexec/code-server/vendor/modules/code-oss-dev | xargs sed -i "s/font-src 'self' blob:/font-src 'self' blob: fonts.gstatic.com/g"
+        grep -rl "style-src 'self' 'unsafe-inline'" $out/libexec/code-server/vendor/modules/code-oss-dev | xargs sed -i "s/style-src 'self' 'unsafe-inline'/style-src 'self' 'unsafe-inline' fonts.googleapis.com/g"
+      '';
+    });
+    host = serverSecrets.tailscaleIp;
+    port = 8443;
+    user = "shadaj";
+    auth = "none";
+  };
 
   services.samba = {
     enable = true;
