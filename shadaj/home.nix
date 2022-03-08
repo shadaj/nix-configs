@@ -50,6 +50,7 @@ in
     shellInit = ''
       set PATH ~/bin $PATH
       set PATH $HOME/.cargo/bin $PATH
+      set PATH /opt/homebrew/bin $PATH
       alias nix-fish="nix-shell --run fish"
       source ~/bin/iterm2_shell_integration.fish
     '' + (if device.name == "kedar" then '''' else ''
@@ -66,7 +67,7 @@ in
       "metals.sbt" ".bloop/" ".bsp/" ".metals/"
       ".vsls.json"
       ".vscode/"
-    ] ++ (if device.name == "bihag" then [ ".DS_Store" ] else []);
+    ] ++ (if device.name == "sarang" then [ ".DS_Store" ] else []);
 
     lfs = {
       enable = true;
