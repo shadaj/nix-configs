@@ -141,21 +141,21 @@ in
     httpie
     gnupg
     killall
+    tmux
 
     ffmpeg
+    texlive.combined.scheme-full
   ] ++ (if device.name == "kedar" then [
     google-chrome
     lm_sensors
     ( import ./vivado )
     coq
     octave
-    texlive.combined.scheme-full
-    tmux
   ] else [
     highlight
     ngrok
     nodePackages.serve
-    nodePackages.webtorrent-cli
+    unstable.nodePackages.webtorrent-cli
   ]);
 
   home.sessionVariables = {
