@@ -29,7 +29,6 @@ in {
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.supportedFilesystems = [ "zfs" ];
-  boot.zfs.enableUnstable = true;
   boot.loader.systemd-boot.consoleMode = "max";
 
   systemd.extraConfig = ''
@@ -43,6 +42,11 @@ in {
   # enable a module for collecting sensors
   boot.kernelModules = [ "nct6775" ];
   boot.kernelParams = [ "acpi_enforce_resources=lax" ];
+
+  boot.kernel.sysctl = {
+    "net.ipv6.conf.all.forwarding" = true;
+    "net.ipv4.ip_forward" = true;
+  };
 
   boot.initrd.kernelModules = [ "igb" "tun" ];
   boot.initrd.secrets = {
@@ -160,7 +164,7 @@ in {
   # };
 
   # Set your time zone.
-  # time.timeZone = "Europe/Amsterdam";
+  time.timeZone = "America/Los_Angeles";
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -187,21 +191,6 @@ in {
   programs.ssh.startAgent = true;
   programs.mosh.enable = true;
 
-  services.code-server = {
-    enable = true;
-    package = unstable.code-server.overrideAttrs(old: rec {
-      installPhase = old.installPhase + ''
-        sed -i 's/<\/head>/<link type="text\/css" href="https:\/\/fonts.googleapis.com\/css2?family=JetBrains+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800\&display=swap" rel="stylesheet"><\/head>/g' $out/libexec/code-server/vendor/modules/code-oss-dev/out/vs/code/browser/workbench/workbench.html
-        grep -rl "font-src 'self' blob:" $out/libexec/code-server/vendor/modules/code-oss-dev | xargs sed -i "s/font-src 'self' blob:/font-src 'self' blob: fonts.gstatic.com/g"
-        grep -rl "style-src 'self' 'unsafe-inline'" $out/libexec/code-server/vendor/modules/code-oss-dev | xargs sed -i "s/style-src 'self' 'unsafe-inline'/style-src 'self' 'unsafe-inline' fonts.googleapis.com/g"
-      '';
-    });
-    host = serverSecrets.tailscaleIp;
-    port = 8443;
-    user = "shadaj";
-    auth = "none";
-  };
-
   services.samba = {
     enable = true;
     openFirewall = true;
@@ -216,13 +205,15 @@ in {
       map to guest = bad user
       server min protocol = SMB2
 
-      smb2 leases = yes
       kernel oplocks = no
       use sendfile = yes
 
       printcap name = /dev/null
       load printers = no
       printing = bsd
+
+      vfs objects = catia fruit streams_xattr
+      fruit:metadata = stream
     '';
 
     shares = {
