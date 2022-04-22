@@ -23,7 +23,7 @@
 
     casks = [
       "aerial" "android-file-transfer" "handbrake" "kap" "slack"
-      "rectangle" "background-music" "openrct2" "spotify"
+      "rectangle" "openrct2" "spotify"
       "balenaetcher" "visual-studio-code" "monitorcontrol"
       "discord" "iterm2" "moonlight" "notion" "vlc" "docker"
       "obs" "wireshark" "osu-development" "xpra" "element"
