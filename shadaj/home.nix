@@ -156,6 +156,7 @@ in
     ngrok
     nodePackages.serve
     unstable.nodePackages.webtorrent-cli
+    unstable.youtube-dl
   ]);
 
   home.sessionVariables = {
