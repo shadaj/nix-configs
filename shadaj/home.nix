@@ -131,14 +131,12 @@ in
 
     ruby
     go
-    racket
     z3
 
     htop
     wget
     unzip
     rsync
-    httpie
     gnupg
     killall
     tmux
@@ -149,7 +147,9 @@ in
     google-chrome
     lm_sensors
     ( import ./vivado )
+    httpie
     coq
+    racket
     octave
   ] else [
     highlight
