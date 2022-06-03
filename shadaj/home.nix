@@ -90,7 +90,7 @@ in
     extensions = with unstable.vscode-extensions; [
       ms-python.vscode-pylance
       ms-python.python
-      ms-toolsai.jupyter
+      (import ./jupyter.nix)
       scalameta.metals
       ms-vsliveshare.vsliveshare
       matklad.rust-analyzer

@@ -18,7 +18,6 @@ in {
     ./ci.nix
     ./users.secret.nix
     ./restic-patched.nix
-    <nix-ld/modules/nix-ld.nix>
   ];
 
   disabledModules = [ "services/backup/restic.nix" ];
@@ -190,6 +189,7 @@ in {
   services.sshd.enable = true;
   programs.ssh.startAgent = true;
   programs.mosh.enable = true;
+  programs.nix-ld.enable = true;
 
   services.samba = {
     enable = true;
@@ -203,9 +203,7 @@ in {
       hosts allow = 192.168.0.0/16 fe80::/10 100.64.0.0/10 localhost
       guest account = nobody
       map to guest = bad user
-      server min protocol = SMB2
 
-      kernel oplocks = no
       use sendfile = yes
 
       printcap name = /dev/null
@@ -354,6 +352,7 @@ in {
 
   # Open ports in the firewall.
   networking.firewall.enable = true;
+  networking.firewall.checkReversePath = "loose";
   networking.firewall.allowedTCPPorts = [
     9 # time machine
   ];
