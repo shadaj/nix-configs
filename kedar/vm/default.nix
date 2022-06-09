@@ -51,19 +51,14 @@ in
       "kvm.report_ignored_msrs=0"
     ];
 
-    nixpkgs.config.packageOverrides = pkgs: rec {
-      # from https://github.com/NixOS/nixpkgs/pull/113245
-      OVMF = (pkgs.OVMF.override { secureBoot = true; }).overrideAttrs(old: {
-        buildFlags = old.buildFlags ++ [
-          "-DTPM_ENABLE=TRUE"
-          "-DTPM_CONFIG_ENABLE=TRUE"
-        ];
-      });
-    };
-
     virtualisation.libvirtd = {
       enable = true;
-      qemu.ovmf.enable = true;
+
+      qemu.ovmf = {
+        enable = true;
+        package = pkgs.OVMF;
+      };
+
       onBoot = "ignore";
       onShutdown = "shutdown";
       extraConfig = "log_filters=\"3:remote 4:event 3:util.json 3:rpc 1:*\"\nlog_outputs=\"1:file:/var/log/libvirt/libvirtd.log\"";
