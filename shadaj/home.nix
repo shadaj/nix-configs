@@ -125,7 +125,10 @@ in
     })
 
     rustup
-    clang
+    (pkgs.clang.overrideAttrs (attrs: {
+      # lower priority than binutils
+      meta.priority = pkgs.binutils.meta.priority + 1;
+    }))
     automake
     cmake
     bintools
