@@ -128,6 +128,7 @@ in
     clang
     automake
     cmake
+    bintools
 
     ruby
     go
