@@ -85,6 +85,8 @@ in {
     '';
   };
 
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+
   powerManagement = {
     enable = true;
     cpuFreqGovernor = "schedutil";
@@ -190,6 +192,10 @@ in {
   programs.ssh.startAgent = true;
   programs.mosh.enable = true;
   programs.nix-ld.enable = true;
+
+  virtualisation.virtualbox.host.enable = true;
+  virtualisation.virtualbox.host.enableExtensionPack = true;
+  users.extraGroups.vboxusers.members = [ "shadaj" ];
 
   services.samba = {
     enable = true;

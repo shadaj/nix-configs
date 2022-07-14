@@ -56,7 +56,13 @@ in
 
       qemu.ovmf = {
         enable = true;
-        package = pkgs.OVMF;
+        package = ((pkgs.OVMF.override { secureBoot = true; }).overrideAttrs(old: {
+          buildFlags = old.buildFlags ++ [
+            "-D TPM1_ENABLE"
+            "-D TPM2_ENABLE"
+            "-D TPM2_CONFIG_ENABLE"
+          ];
+        }));
       };
 
       onBoot = "ignore";
