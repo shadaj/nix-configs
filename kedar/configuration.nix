@@ -193,6 +193,14 @@ in {
   programs.mosh.enable = true;
   programs.nix-ld.enable = true;
 
+  environment.variables = {
+    NIX_LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [
+      pkgs.stdenv.cc.cc
+    ];
+
+    NIX_LD = pkgs.lib.fileContents "${pkgs.stdenv.cc}/nix-support/dynamic-linker";
+  };
+
   virtualisation.virtualbox.host.enable = true;
   virtualisation.virtualbox.host.enableExtensionPack = true;
   users.extraGroups.vboxusers.members = [ "shadaj" ];
@@ -433,6 +441,14 @@ in {
     };
   };
 
+  systemd.services.openvscode-server = {
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      User = "shadaj";
+      ExecStart = "${unstable.openvscode-server}/bin/openvscode-server --port 2000 --host 0.0.0.0 --extensions-dir /home/shadaj/.vscode/extensions";
+    };
+  };
+
   services.postgresql.enable = true;
   services.postgresql.package = pkgs.postgresql_13;
   services.postgresql.authentication = pkgs.lib.mkForce ''
@@ -452,6 +468,49 @@ in {
   '';
 
   programs.fish.enable = true;
+
+  services.prometheus = {
+    enable = true;
+    exporters.smartctl = {
+      user = "root";
+      enable = true;
+    };
+
+    exporters.node = {
+      enable = true;
+      enabledCollectors = [ "systemd" ];
+    };
+
+
+    scrapeConfigs = [
+      {
+        job_name = "smartctl";
+        static_configs = [{
+          targets = [ "127.0.0.1:${toString config.services.prometheus.exporters.smartctl.port}" ];
+        }];
+      }
+
+      {
+        job_name = "node";
+        static_configs = [{
+          targets = [ "127.0.0.1:${toString config.services.prometheus.exporters.node.port}" ];
+        }];
+      }
+    ];
+  };
+
+  # https://github.com/NixOS/nixpkgs/pull/176553
+  systemd.services."prometheus-smartctl-exporter".serviceConfig.DeviceAllow = pkgs.lib.mkOverride 50 [
+    "block-blkext rw"
+    "block-sd rw"
+    "char-nvme rw"
+  ];
+
+  services.grafana = {
+    enable = true;
+    port = 2343;
+    addr = "0.0.0.0";
+  };
 
   # for home-manager
   nix.extraOptions = ''
