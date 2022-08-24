@@ -92,6 +92,7 @@ in
       ms-python.python
       (import ./jupyter.nix)
       scalameta.metals
+      scala-lang.scala
       ms-vsliveshare.vsliveshare
       matklad.rust-analyzer
       ms-vscode.cpptools
