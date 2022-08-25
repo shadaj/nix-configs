@@ -25,9 +25,9 @@
       "logi-options-plus" "signal" "slack"
       "rectangle" "openrct2" "spotify"
       "balenaetcher" "visual-studio-code" "monitorcontrol"
-      "discord" "iterm2" "moonlight" "notion" "vlc" "docker"
-      "obs" "wireshark" "osu" "xpra" "element"
-      "google-chrome" "firefox" "xquartz" "zoom" "google-drive"
+      "discord" "iterm2" "moonlight" "vlc" "docker"
+      "obs" "wireshark" "osu" "xpra"
+      "firefox" "xquartz" "zoom" "google-drive"
       "sidequest" "adobe-creative-cloud" "zotero" "utm"
     ];
   };
