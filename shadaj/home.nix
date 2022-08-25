@@ -124,8 +124,12 @@ in
     (sbt.override {
       jre = javaPkg;
     })
-
     rustup
+    ruby
+    go
+    z3
+    coq
+
     (pkgs.clang.overrideAttrs (attrs: {
       # lower priority than binutils
       meta.priority = pkgs.binutils.meta.priority + 1;
@@ -133,10 +137,6 @@ in
     automake
     cmake
     bintools
-
-    ruby
-    go
-    z3
 
     htop
     wget
@@ -153,7 +153,6 @@ in
     lm_sensors
     ( import ./vivado )
     httpie
-    coq
     racket
     octave
   ] else [
