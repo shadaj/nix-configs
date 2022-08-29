@@ -26,7 +26,7 @@ in {
     image = "drone/drone-runner-docker:1";
     environment = {
       DRONE_RPC_PROTO = "http";
-      DRONE_RPC_HOST = "localhost";
+      DRONE_RPC_HOST = "localhost:3001";
       DRONE_RPC_SECRET = "abcd1234";
       DRONE_RUNNER_CAPACITY = "2";
       DRONE_RUNNER_NAME = "kedar-runner";
