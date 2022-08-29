@@ -8,18 +8,18 @@ let
   minecraftSecrets = import ./minecraft.secret.nix;
 
   serverSecrets = import ./server.secret.nix;
-
-  backupSecrets = import ./backup.secret.nix;
-
-  tailsSecrets = import ./tails.secret.nix;
 in {
   imports = [
     ./hardware-configuration.nix
+    ./users.secret.nix
     ./vm
     ./vivado-drivers.nix
     ./ci.nix
-    ./users.secret.nix
+    ./media.nix
     ./restic-patched.nix
+    ./backups.nix
+    ./monitoring.nix
+    ./nginx.nix
   ];
 
   disabledModules = [ "services/backup/restic.nix" ];
@@ -117,79 +117,20 @@ in {
     interfaces = [ "enp6s0" ];
   };
 
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  services.avahi = {
-    enable = true;
-    nssmdns = true;
-
-    publish = {
-      enable = true;
-      addresses = true;
-      workstation = true;
-      userServices = true;
-    };
-
-    extraServiceFiles = {
-      tm = ''
-        <?xml version="1.0" standalone='no'?><!--*-nxml-*-->
-        <!DOCTYPE service-group SYSTEM "avahi-service.dtd">
-        <service-group>
-          <name replace-wildcards="yes">%h</name>
-          <service>
-            <type>_smb._tcp</type>
-            <port>445</port>
-          </service>
-          <service>
-            <type>_device-info._tcp</type>
-            <port>9</port>
-            <txt-record>model=TimeCapsule8,119</txt-record>
-          </service>
-          <service>
-            <type>_adisk._tcp</type>
-            <port>9</port>
-            <txt-record>dk0=adVN=Time Machine (kedar),adVF=0x82</txt-record>
-            <txt-record>sys=adVF=0x100</txt-record>
-          </service>
-        </service-group>
-      '';
-    };
-  };
-
-
-  # Select internationalisation properties.
-  # i18n.defaultLocale = "en_US.UTF-8";
-  # console = {
-  #   font = "Lat2-Terminus16";
-  #   keyMap = "us";
-  # };
-
   # Set your time zone.
   time.timeZone = "America/Los_Angeles";
-
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  #   pinentryFlavor = "gnome3";
-  # };
-
-  # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
   services.openssh = {
     enable = true;
+    forwardX11 = true;
     extraConfig = ''
       AllowAgentForwarding yes
       X11Forwarding yes
       X11UseLocalHost no
     '';
   };
-  services.openssh.forwardX11 = true;
+
   services.sshd.enable = true;
   programs.ssh.startAgent = true;
   programs.mosh.enable = true;
@@ -207,157 +148,6 @@ in {
   virtualisation.virtualbox.host.enableExtensionPack = true;
   users.extraGroups.vboxusers.members = [ "shadaj" ];
 
-  services.samba = {
-    enable = true;
-    openFirewall = true;
-    securityType = "user";
-    extraConfig = ''
-      workgroup = WORKGROUP
-      server string = kedar
-      netbios name = kedar
-      security = user
-      hosts allow = 192.168.0.0/16 fe80::/10 100.64.0.0/10 localhost
-      guest account = nobody
-      map to guest = bad user
-
-      use sendfile = yes
-
-      printcap name = /dev/null
-      load printers = no
-      printing = bsd
-
-      vfs objects = catia fruit streams_xattr
-      fruit:metadata = stream
-    '';
-
-    shares = {
-      media = {
-        path = "/swamp/media";
-        browseable = "yes";
-        "read only" = "no";
-        "guest ok" = "no";
-        "create mask" = "0644";
-        "directory mask" = "0755";
-      };
-
-      games = {
-        path = "/tank/games";
-        browseable = "yes";
-        "read only" = "no";
-        "guest ok" = "no";
-        "create mask" = "0644";
-        "directory mask" = "0755";
-      };
-
-      honeymelon-cache = {
-        path = "/home/shadaj/.honeymelon";
-        browseable = "yes";
-        "read only" = "no";
-        "guest ok" = "no";
-        "create mask" = "0644";
-        "directory mask" = "0755";
-      };
-
-      "Time Machine (kedar)" = {
-        path = "/swamp/time-machine";
-        browseable = "yes";
-        "read only" = "no";
-        "guest ok" = "no";
-        "vfs objects" = "catia fruit streams_xattr";
-        "fruit:aapl" = "yes";
-        "fruit:time machine" = "yes";
-        "fruit:resource" = "xattr";
-      };
-    };
-  };
-
-  virtualisation.oci-containers.containers.photoprism = {
-    image = "photoprism/photoprism:20211215";
-    environment = {
-      PHOTOPRISM_ADMIN_PASSWORD = (import ./photoprism.secret.nix).password;
-    };
-
-    volumes = [
-      "/tank/photoprism:/photoprism/storage"
-      "/swamp/media/honeymelon:/photoprism/originals"
-    ];
-
-    ports = ["2342:2342"];
-  };
-
-  services.restic.backups.home = {
-    paths = [ "/home" ];
-
-    repository = "b2:kedar-restic:home";
-    initialize = true;
-
-    pruneOpts = [
-      "--keep-daily 7"
-      "--keep-weekly 5"
-      "--keep-monthly 12"
-      "--max-unused 5%"
-    ];
-
-    checkOpts = [ "--with-cache" ];
-
-    extraBackupArgs = [ "--verbose" ];
-
-    timerConfig = {
-      OnCalendar = "*-*-* 01:00:00";
-    };
-
-    s3CredentialsFile = backupSecrets.s3CredentialsFile;
-    passwordFile = backupSecrets.passwordFile;
-  };
-
-  services.restic.backups.media = {
-    paths = [ "/swamp/media" ];
-
-    repository = "b2:kedar-restic:media";
-    initialize = true;
-
-    pruneOpts = [
-      "--keep-daily 7"
-      "--keep-weekly 5"
-      "--keep-monthly 12"
-      "--max-unused 5%"
-    ];
-
-    checkOpts = [ "--with-cache" ];
-
-    extraBackupArgs = [ "--verbose" ];
-
-    timerConfig = {
-      OnCalendar = "*-*-* 02:00:00";
-    };
-
-    s3CredentialsFile = backupSecrets.s3CredentialsFile;
-    passwordFile = backupSecrets.passwordFile;
-  };
-
-  services.restic.backups.time-machine = {
-    paths = [ "/swamp/time-machine" ];
-
-    repository = "b2:kedar-restic:time-machine";
-    initialize = true;
-
-    pruneOpts = [
-      "--keep-last 1"
-      "--max-unused 5%"
-    ];
-
-    checkOpts = [ "--with-cache" ];
-
-    extraBackupArgs = [ "--verbose" ];
-
-    timerConfig = {
-      OnCalendar = "*-*-* 03:00:00";
-    };
-
-    s3CredentialsFile = backupSecrets.s3CredentialsFile;
-    passwordFile = backupSecrets.passwordFile;
-  };
-
   environment.systemPackages = [
     config.services.samba.package
     pkgs.tailscale
@@ -369,12 +159,7 @@ in {
   # Open ports in the firewall.
   networking.firewall.enable = true;
   networking.firewall.checkReversePath = "loose";
-  networking.firewall.allowedTCPPorts = [
-    9 # time machine
-  ];
-  networking.firewall.allowedUDPPorts = [
-    config.services.tailscale.port
-  ];
+  networking.firewall.allowedTCPPorts = [ 9 ]; # time machine
   networking.firewall.trustedInterfaces = [ "tailscale0" ];
   networking.firewall.allowPing = true;
   networking.firewall.extraCommands = ''
@@ -390,9 +175,6 @@ in {
     iptables -t raw -A OUTPUT -p udp -m udp --dport 137 -j CT --helper netbios-ns
   '';
 
-  # Enable CUPS to print documents.
-  # services.printing.enable = true;
-
   # Enable sound.
   sound.enable = true;
   hardware.pulseaudio.enable = true;
@@ -407,9 +189,6 @@ in {
     Option "Coolbits" "12"
     Option "AllowEmptyInitialConfiguration" "True"
   '';
-
-  # Enable touchpad support.
-  # services.xserver.libinput.enable = true;
 
   # Enable the Gnome Desktop Environment.
   services.xserver.displayManager.gdm.enable = true;
@@ -477,123 +256,6 @@ in {
       alias code="openvscode-server"
     end
   '';
-
-  services.prometheus = {
-    enable = true;
-    exporters.smartctl = {
-      user = "root";
-      enable = true;
-    };
-
-    exporters.node = {
-      enable = true;
-      enabledCollectors = [ "systemd" ];
-    };
-
-    scrapeConfigs = [
-      {
-        job_name = "smartctl";
-        static_configs = [{
-          targets = [ "127.0.0.1:${toString config.services.prometheus.exporters.smartctl.port}" ];
-        }];
-      }
-
-      {
-        job_name = "node";
-        static_configs = [{
-          targets = [ "127.0.0.1:${toString config.services.prometheus.exporters.node.port}" ];
-        }];
-      }
-    ];
-  };
-
-  # https://github.com/NixOS/nixpkgs/pull/176553
-  systemd.services."prometheus-smartctl-exporter".serviceConfig.DeviceAllow = pkgs.lib.mkOverride 50 [
-    "block-blkext rw"
-    "block-sd rw"
-    "char-nvme rw"
-  ];
-
-  services.grafana = {
-    enable = true;
-    protocol = "socket";
-  };
-
-  security.acme.acceptTerms = true;
-  security.acme.defaults.email = serverSecrets.acmeEmail;
-  security.acme.defaults = {
-    dnsProvider = "cloudflare";
-    credentialsFile = "/var/lib/secrets/certs.secret";
-    dnsResolver = "1.1.1.1:53";
-  };
-
-  services.nginx.enable = true;
-  services.nginx = {
-    recommendedGzipSettings = true;
-    recommendedOptimisation = true;
-    recommendedProxySettings = true;
-    recommendedTlsSettings = true;
-  };
-
-  systemd.services.nginx.serviceConfig = {
-    SupplementaryGroups = [ "grafana" "openvscode-server" ];
-  };
-
-  services.nginx.virtualHosts."kedar.shadaj.me" = {
-    forceSSL = true;
-    enableACME = true;
-    acmeRoot = null;
-    locations."/".proxyPass = "http://unix:${config.services.grafana.socket}";
-    locations."/".proxyWebsockets = true;
-
-    extraConfig = pkgs.lib.concatStringsSep "\n" (map (ip: ''
-      allow ${ip};
-    '') tailsSecrets."kedar.shadaj.me") + ''
-      deny all;
-    '';
-  };
-
-  services.nginx.virtualHosts."photos.kedar.shadaj.me" = {
-    forceSSL = true;
-    enableACME = true;
-    acmeRoot = null;
-    locations."/".proxyPass = "http://127.0.0.1:2342/";
-    locations."/".proxyWebsockets = true;
-
-    extraConfig = pkgs.lib.concatStringsSep "\n" (map (ip: ''
-      allow ${ip};
-    '') tailsSecrets."photos.kedar.shadaj.me") + ''
-      deny all;
-    '';
-  };
-
-  services.nginx.virtualHosts."ci.kedar.shadaj.me" = {
-    forceSSL = true;
-    enableACME = true;
-    acmeRoot = null;
-    locations."/".proxyPass = "http://127.0.0.1:3001/";
-    locations."/".proxyWebsockets = true;
-
-    extraConfig = pkgs.lib.concatStringsSep "\n" (map (ip: ''
-      allow ${ip};
-    '') tailsSecrets."ci.kedar.shadaj.me") + ''
-      deny all;
-    '';
-  };
-
-  services.nginx.virtualHosts."shadaj.code.kedar.shadaj.me" = {
-    forceSSL = true;
-    enableACME = true;
-    acmeRoot = null;
-    locations."/".proxyPass = "http://unix:/run/openvscode-server/shadaj.sock";
-    locations."/".proxyWebsockets = true;
-
-    extraConfig = pkgs.lib.concatStringsSep "\n" (map (ip: ''
-      allow ${ip};
-    '') tailsSecrets."shadaj.code.kedar.shadaj.me") + ''
-      deny all;
-    '';
-  };
 
   # for home-manager
   nix.extraOptions = ''
