@@ -10,6 +10,8 @@ let
   serverSecrets = import ./server.secret.nix;
 
   backupSecrets = import ./backup.secret.nix;
+
+  tailsSecrets = import ./tails.secret.nix;
 in {
   imports = [
     ./hardware-configuration.nix
@@ -441,11 +443,13 @@ in {
     };
   };
 
+  users.groups.openvscode-server = {};
   systemd.services.openvscode-server = {
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {
       User = "shadaj";
-      ExecStart = "${unstable.openvscode-server}/bin/openvscode-server --port 2000 --host 0.0.0.0 --extensions-dir /home/shadaj/.vscode/extensions";
+      Group = "openvscode-server";
+      ExecStart = "${unstable.openvscode-server}/bin/openvscode-server --socket-path /run/openvscode-server/shadaj.sock --extensions-dir /home/shadaj/.vscode/extensions";
     };
   };
 
@@ -468,6 +472,11 @@ in {
   '';
 
   programs.fish.enable = true;
+  programs.fish.shellInit = ''
+    if type -q openvscode-server
+      alias code="openvscode-server"
+    end
+  '';
 
   services.prometheus = {
     enable = true;
@@ -480,7 +489,6 @@ in {
       enable = true;
       enabledCollectors = [ "systemd" ];
     };
-
 
     scrapeConfigs = [
       {
@@ -508,8 +516,83 @@ in {
 
   services.grafana = {
     enable = true;
-    port = 2343;
-    addr = "0.0.0.0";
+    protocol = "socket";
+  };
+
+  security.acme.acceptTerms = true;
+  security.acme.defaults.email = serverSecrets.acmeEmail;
+  security.acme.defaults = {
+    dnsProvider = "cloudflare";
+    credentialsFile = "/var/lib/secrets/certs.secret";
+    dnsResolver = "1.1.1.1:53";
+  };
+
+  services.nginx.enable = true;
+  services.nginx = {
+    recommendedGzipSettings = true;
+    recommendedOptimisation = true;
+    recommendedProxySettings = true;
+    recommendedTlsSettings = true;
+  };
+
+  systemd.services.nginx.serviceConfig = {
+    SupplementaryGroups = [ "grafana" "openvscode-server" ];
+  };
+
+  services.nginx.virtualHosts."kedar.shadaj.me" = {
+    forceSSL = true;
+    enableACME = true;
+    acmeRoot = null;
+    locations."/".proxyPass = "http://unix:${config.services.grafana.socket}";
+    locations."/".proxyWebsockets = true;
+
+    extraConfig = pkgs.lib.concatStringsSep "\n" (map (ip: ''
+      allow ${ip};
+    '') tailsSecrets."kedar.shadaj.me") + ''
+      deny all;
+    '';
+  };
+
+  services.nginx.virtualHosts."photos.kedar.shadaj.me" = {
+    forceSSL = true;
+    enableACME = true;
+    acmeRoot = null;
+    locations."/".proxyPass = "http://127.0.0.1:2342/";
+    locations."/".proxyWebsockets = true;
+
+    extraConfig = pkgs.lib.concatStringsSep "\n" (map (ip: ''
+      allow ${ip};
+    '') tailsSecrets."photos.kedar.shadaj.me") + ''
+      deny all;
+    '';
+  };
+
+  services.nginx.virtualHosts."ci.kedar.shadaj.me" = {
+    forceSSL = true;
+    enableACME = true;
+    acmeRoot = null;
+    locations."/".proxyPass = "http://127.0.0.1:3001/";
+    locations."/".proxyWebsockets = true;
+
+    extraConfig = pkgs.lib.concatStringsSep "\n" (map (ip: ''
+      allow ${ip};
+    '') tailsSecrets."ci.kedar.shadaj.me") + ''
+      deny all;
+    '';
+  };
+
+  services.nginx.virtualHosts."shadaj.code.kedar.shadaj.me" = {
+    forceSSL = true;
+    enableACME = true;
+    acmeRoot = null;
+    locations."/".proxyPass = "http://unix:/run/openvscode-server/shadaj.sock";
+    locations."/".proxyWebsockets = true;
+
+    extraConfig = pkgs.lib.concatStringsSep "\n" (map (ip: ''
+      allow ${ip};
+    '') tailsSecrets."shadaj.code.kedar.shadaj.me") + ''
+      deny all;
+    '';
   };
 
   # for home-manager

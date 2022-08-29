@@ -12,6 +12,7 @@ in {
       DRONE_GITHUB_CLIENT_SECRET = secrets.client-secret;
       DRONE_RPC_SECRET = secrets.rpc-secret;
       DRONE_SERVER_HOST = secrets.host;
+      DRONE_SERVER_PORT = ":3001";
       DRONE_SERVER_PROTO = "http";
       DRONE_USER_CREATE = "username:shadaj,admin:true";
     };
@@ -39,7 +40,7 @@ in {
   virtualisation.oci-containers.containers.smee = {
     image = "node:lts-alpine";
     entrypoint = "npx";
-    cmd = [ "smee-client" "-u" secrets.smee-url "-t" "http://localhost:80/hook" ];
+    cmd = [ "smee-client" "-u" secrets.smee-url "-t" "http://localhost:3001/hook" ];
     extraOptions = [ "--init" "--network=host" ];
   };
 }
