@@ -102,7 +102,7 @@
   };
 
   virtualisation.oci-containers.containers.photoprism = {
-    image = "photoprism/photoprism:20211215";
+    image = "photoprism/photoprism:220730-bookworm";
     environment = {
       PHOTOPRISM_ADMIN_PASSWORD = (import ./photoprism.secret.nix).password;
     };
