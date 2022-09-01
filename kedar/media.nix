@@ -105,12 +105,16 @@
     image = "photoprism/photoprism:220730-bookworm";
     environment = {
       PHOTOPRISM_ADMIN_PASSWORD = (import ./photoprism.secret.nix).password;
+      PHOTOPRISM_ORIGINALS_LIMIT = "-1";
+      PHOTOPRISM_READONLY = "1";
     };
 
     volumes = [
       "/tank/photoprism:/photoprism/storage"
       "/swamp/media/honeymelon:/photoprism/originals"
     ];
+
+    extraOptions = [ "--gpus" "all" ];
 
     ports = ["2342:2342"];
   };
