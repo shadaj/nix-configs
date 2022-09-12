@@ -223,12 +223,22 @@ in {
   };
 
   users.groups.openvscode-server = {};
-  systemd.services.openvscode-server = {
+
+  systemd.services.openvscode-socket-folder = {
+    wantedBy = [ "openvscode-server-shadaj.service" ];
+    serviceConfig = {
+      User = "root";
+      ExecStart = "${pkgs.bash}/bin/bash -c \"mkdir /run/openvscode-server; chgrp openvscode-server /run/openvscode-server; chmod g+rw /run/openvscode-server\"";
+    };
+  };
+
+  systemd.services.openvscode-server-shadaj = {
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {
       User = "shadaj";
       Group = "openvscode-server";
       ExecStart = "${unstable.openvscode-server}/bin/openvscode-server --socket-path /run/openvscode-server/shadaj.sock --extensions-dir /home/shadaj/.vscode/extensions";
+      ExecStartPost = "${pkgs.bash}/bin/bash -c \"until [ -e /run/openvscode-server/shadaj.sock ]; do sleep 1; done; chgrp openvscode-server /run/openvscode-server/shadaj.sock; chmod g+rw /run/openvscode-server/shadaj.sock\"";
     };
   };
 
