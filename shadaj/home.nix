@@ -1,37 +1,15 @@
-{ config, pkgs, ... }:
+{ config, pkgs, unstable, device, ... }:
 
 with pkgs; # bring all of Nixpkgs into scope
 
 let
-  unstable = import <nixos-unstable> {
-    config = { allowUnfree = true; };
-  };
-
-  device = ( import ./device.secret.nix );
   javaPkg = openjdk17;
-
-  nixpkgs-tars = "https://github.com/NixOS/nixpkgs/archive";
 in
 {
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
-  # Home Manager needs a bit of information about you and the
-  # paths it should manage.
-  home.username = "shadaj";
-  home.homeDirectory = (if device.name == "kedar" then "/home/shadaj" else "/Users/shadaj");
-
-  # This value determines the Home Manager release that your
-  # configuration is compatible with. This helps avoid breakage
-  # when a new Home Manager release introduces backwards
-  # incompatible changes.
-  #
-  # You can update Home Manager without changing this value. See
-  # the Home Manager release notes for a list of state version
-  # changes in each release.
-  home.stateVersion = (if device.name == "kedar" then "20.09" else "21.05");
-
-  xdg = if device.name == "kedar" then {
+  xdg = if host == "kedar" then {
     enable = true;
     mime.enable = true;
   } else {};
@@ -39,10 +17,6 @@ in
   nixpkgs.config = {
     allowUnfree = true;
   };
-
-  imports = if device.name == "kedar" then [
-    "${fetchTarball "https://github.com/msteen/nixos-vscode-server/tarball/master"}/modules/vscode-server/home.nix"
-  ] else [];
 
   programs.fish = {
     enable = true;
@@ -53,7 +27,7 @@ in
       set PATH /opt/homebrew/bin $PATH
       alias nix-fish="nix-shell --run fish"
       source ~/bin/iterm2_shell_integration.fish
-    '' + (if device.name == "kedar" then '''' else ''
+    '' + (if host == "kedar" then '''' else ''
       alias matlab="/Applications/MATLAB_R2019b.app/bin/matlab -nodesktop"
     '');
   };
@@ -67,7 +41,7 @@ in
       "metals.sbt" ".bloop/" ".bsp/" ".metals/"
       ".vsls.json"
       ".vscode/"
-    ] ++ (if device.name == "sarang" then [ ".DS_Store" ] else []);
+    ] ++ (if host == "sarang" then [ ".DS_Store" ] else []);
 
     lfs = {
       enable = true;
@@ -85,7 +59,7 @@ in
   };
 
   programs.vscode = {
-    enable = (device.name == "kedar");
+    enable = (host == "kedar");
     package = vscode;
     extensions = with unstable.vscode-extensions; [
       ms-python.vscode-pylance
@@ -110,7 +84,7 @@ in
   programs.java.enable = true;
   programs.java.package = javaPkg;
 
-  services = if device.name == "kedar" then {
+  services = if host == "kedar" then {
     vscode-server = {
       enable = true;
     };
@@ -148,7 +122,7 @@ in
 
     ffmpeg
     texlive.combined.scheme-full
-  ] ++ (if device.name == "kedar" then [
+  ] ++ (if host == "kedar" then [
     google-chrome
     lm_sensors
     ( import ./vivado )
