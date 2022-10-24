@@ -1,5 +1,5 @@
 {
-  description = "darwin configurations";
+  description = "system configurations";
 
   inputs = {
     nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-22.05-darwin";
@@ -10,7 +10,7 @@
   outputs = { self, darwin, nixpkgs-darwin }: {
     darwinConfigurations."sarang" = darwin.lib.darwinSystem {
       system = "aarch64-darwin";
-      modules = [ ./darwin-configuration.nix ];
+      modules = [ ./sarang/darwin-configuration.nix ];
       inputs = {
         inherit darwin;
         nixpkgs = nixpkgs-darwin;
