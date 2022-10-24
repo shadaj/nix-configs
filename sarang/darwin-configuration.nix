@@ -10,10 +10,12 @@
   services.nix-daemon.enable = true;
   nix.useDaemon = true;
   nix.package = pkgs.nix;
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   homebrew = {
     enable = true;
-    cleanup = "uninstall";
+    onActivation.cleanup = "uninstall";
+    onActivation.upgrade = true;
 
     taps = [
       "homebrew/cask"
@@ -22,7 +24,7 @@
 
     casks = [
       "aerial" "android-file-transfer" "handbrake" "kap"
-      "logi-options-plus" "signal" "slack"
+      "google-chrome" "logi-options-plus" "signal" "slack"
       "rectangle" "openrct2" "spotify"
       "balenaetcher" "visual-studio-code" "monitorcontrol"
       "discord" "iterm2" "moonlight" "vlc" "docker"
