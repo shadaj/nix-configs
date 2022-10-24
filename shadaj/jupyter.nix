@@ -1,4 +1,6 @@
-with import <nixpkgs> {}; # bring all of Nixpkgs into scope
+{ pkgs, ... }:
+
+with pkgs;
 
 let
   inherit (vscode-utils) buildVscodeMarketplaceExtension;

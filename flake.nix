@@ -63,7 +63,7 @@
 
       configuration = _: {
         imports = [
-          vscode-server.nixosModule
+          vscode-server.nixosModules.home
           ./shadaj/home.nix
         ];
       };

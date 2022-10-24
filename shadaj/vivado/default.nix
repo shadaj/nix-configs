@@ -1,6 +1,8 @@
 # based on https://github.com/lukaslaobeyer/nix-fpgapkgs/tree/master/pkgs/vivado
 
-with import <nixpkgs> {}; # bring all of Nixpkgs into scope
+{pkgs, ...}:
+
+with pkgs; # bring all of Nixpkgs into scope
 
 stdenv.mkDerivation rec {
   name = "vivado";

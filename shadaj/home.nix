@@ -1,4 +1,4 @@
-{ config, pkgs, unstable, device, ... }:
+{ config, pkgs, unstable, host, ... }:
 
 with pkgs; # bring all of Nixpkgs into scope
 
@@ -64,7 +64,7 @@ in
     extensions = with unstable.vscode-extensions; [
       ms-python.vscode-pylance
       ms-python.python
-      (import ./jupyter.nix)
+      (import ./jupyter.nix { inherit pkgs; })
       scalameta.metals
       scala-lang.scala
       ms-vsliveshare.vsliveshare
@@ -125,7 +125,7 @@ in
   ] ++ (if host == "kedar" then [
     google-chrome
     lm_sensors
-    ( import ./vivado )
+    (import ./vivado { inherit pkgs; })
     httpie
     racket
     octave
