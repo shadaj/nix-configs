@@ -1,8 +1,8 @@
-{ config, pkgs, ... }:
+{ config, pkgs, secrets, ... }:
 
 let
-  serverSecrets = import ./server.secret.nix;
-  tailsSecrets = import ./tails.secret.nix;
+  serverSecrets = import secrets.server;
+  tailsSecrets = import secrets.tails;
 in {
   security.acme.acceptTerms = true;
   security.acme.defaults.email = serverSecrets.acmeEmail;

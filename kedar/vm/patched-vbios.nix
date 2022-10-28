@@ -1,4 +1,6 @@
-with import <nixpkgs> {};
+{ pkgs, secrets, ... }:
+
+with pkgs;
 
 let vbiosPatcher =
   stdenv.mkDerivation {
@@ -21,7 +23,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ pkgs.python3 ];
 
-  src = ./EVGA.RTX2070Super.8192.190621.rom;
+  src = secrets.rtxRom;
   dontUnpack = true;
 
   installPhase = ''

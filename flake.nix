@@ -11,10 +11,25 @@
     home-manager.url = "github:nix-community/home-manager/release-22.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
+    secrets.url = "github:input-output-hk/empty-flake?rev=2040a05b67bf9a669ce17eca56beb14b4206a99a";
+
     vscode-server.url = "github:msteen/nixos-vscode-server";
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, darwin, home-manager, vscode-server }: {
+  outputs = { self, nixpkgs, nixpkgs-unstable, darwin, home-manager, secrets, vscode-server }: {
+    nixosConfigurations.kedar = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      specialArgs = {
+        inherit secrets;
+
+        unstable = import nixpkgs-unstable {
+          system = "x86_64-linux";
+          config = { allowUnfree = true; };
+        };
+      };
+      modules = [ ./kedar/configuration.nix ];
+    };
+
     darwinConfigurations."sarang" = darwin.lib.darwinSystem {
       system = "aarch64-darwin";
       modules = [ ./sarang/darwin-configuration.nix ];

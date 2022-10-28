@@ -1,5 +1,5 @@
 # based on https://github.com/cole-h/nixos-config/blob/nixos/hosts/scadrial/modules/libvirt/default.nix
-{ config, pkgs, ... }:
+{ config, pkgs, secrets, ... }:
 let
   # https://github.com/PassthroughPOST/VFIO-Tools/blob/0bdc0aa462c0acd8db344c44e8692ad3a281449a/libvirt_hooks/qemu
   qemuHook = pkgs.writeShellScript "qemu" ''
@@ -80,7 +80,7 @@ in
       path = with pkgs; [ libvirt procps utillinux kmod swtpm ];
       preStart = ''
         mkdir -p /var/lib/libvirt/vbios
-        ln -sf ${( import ./patched-vbios.nix )}/patched.rom /var/lib/libvirt/vbios/patched-bios.rom
+        ln -sf ${( import ./patched-vbios.nix { inherit pkgs secrets; } )}/patched.rom /var/lib/libvirt/vbios/patched-bios.rom
 
         mkdir -p /var/lib/libvirt/qemu
         ln -sf ${./win10.xml} /var/lib/libvirt/qemu/win10.xml

@@ -1,7 +1,7 @@
-{ config, pkgs, ...}:
+{ config, pkgs, secrets, ...}:
 
 let
-  backupSecrets = import ./backup.secret.nix;
+  backupSecrets = import secrets.backup;
 in {
   services.restic.backups.home = {
     paths = [ "/home" ];

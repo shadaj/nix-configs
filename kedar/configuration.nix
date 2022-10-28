@@ -1,17 +1,13 @@
-{ config, pkgs, ... }:
+{ config, pkgs, unstable, secrets, ... }:
 
 let
-  unstable = import <nixos-unstable> {
-    config = { allowUnfree = true; };
-  };
+  minecraftSecrets = import secrets.minecraft;
 
-  minecraftSecrets = import ./minecraft.secret.nix;
-
-  serverSecrets = import ./server.secret.nix;
+  serverSecrets = import secrets.server;
 in {
   imports = [
     ./hardware-configuration.nix
-    ./users.secret.nix
+    secrets.users
     ./vm
     ./vivado-drivers.nix
     ./ci.nix
@@ -51,7 +47,7 @@ in {
 
   boot.initrd.kernelModules = [ "igb" "tun" ];
   boot.initrd.secrets = {
-    "/root/tailscale.state" = ./tailscale.state;
+    "/root/tailscale.state" = secrets.tailscale-state;
   };
 
   boot.initrd.extraUtilsCommands = ''
@@ -75,7 +71,7 @@ in {
       enable = true;
       port = 2222;
       hostKeys = [ "/boot/initrd_rsa_key" ];
-      authorizedKeys = (import ./users.secret.nix { config = config; pkgs = pkgs; }).users.users.shadaj.openssh.authorizedKeys.keys;
+      authorizedKeys = (import secrets.users { config = config; pkgs = pkgs; }).users.users.shadaj.openssh.authorizedKeys.keys;
     };
 
     postCommands = ''
@@ -140,8 +136,6 @@ in {
     NIX_LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [
       pkgs.stdenv.cc.cc
     ];
-
-    NIX_LD = pkgs.lib.fileContents "${pkgs.stdenv.cc}/nix-support/dynamic-linker";
   };
 
   virtualisation.virtualbox.host.enable = true;
@@ -265,6 +259,8 @@ in {
     if type -q openvscode-server
       alias code="openvscode-server"
     end
+
+    export NIX_LD=(cat ${pkgs.stdenv.cc}/nix-support/dynamic-linker);
   '';
 
   # for home-manager

@@ -1,7 +1,7 @@
-{ config, pkgs, ... }:
+{ config, pkgs, secrets, ... }:
 
 let
-  secrets = import ./ci-access.secret.nix;
+  ci-secrets = import secrets.ci-access;
 in {
   networking.firewall.extraCommands = ''
     iptables -A INPUT  -i wgandy0 -p tcp --dport 80 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
@@ -9,7 +9,7 @@ in {
 
   networking.wireguard.interfaces.wgandy0 = {
     ips = [ "30.100.0.50/32" ];
-    privateKey = secrets.secret;
+    privateKey = ci-secrets.secret;
 
     peers = [
       {

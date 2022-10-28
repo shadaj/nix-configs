@@ -1,4 +1,4 @@
-{ config, pkgs, ...}:
+{ config, pkgs, secrets, ...}:
 {
   services.samba = {
     enable = true;
@@ -104,7 +104,7 @@
   virtualisation.oci-containers.containers.photoprism = {
     image = "photoprism/photoprism:220730-bookworm";
     environment = {
-      PHOTOPRISM_ADMIN_PASSWORD = (import ./photoprism.secret.nix).password;
+      PHOTOPRISM_ADMIN_PASSWORD = (import secrets.photoprism).password;
       PHOTOPRISM_ORIGINALS_LIMIT = "-1";
       PHOTOPRISM_READONLY = "1";
     };
