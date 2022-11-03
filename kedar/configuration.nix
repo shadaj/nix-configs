@@ -1,4 +1,4 @@
-{ config, pkgs, unstable, secrets, ... }:
+{ config, pkgs, inputs, unstable, secrets, ... }:
 
 let
   minecraftSecrets = import secrets.minecraft;
@@ -17,6 +17,8 @@ in {
     ./monitoring.nix
     ./nginx.nix
   ];
+
+  nix.registry.nixpkgs.flake = inputs.nixpkgs;
 
   disabledModules = [ "services/backup/restic.nix" ];
 

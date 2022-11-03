@@ -14,11 +14,12 @@ in {
       "--keep-weekly 5"
       "--keep-monthly 12"
       "--max-unused 5%"
+      "--compression max"
     ];
 
     checkOpts = [ "--with-cache" ];
 
-    extraBackupArgs = [ "--verbose" ];
+    extraBackupArgs = [ "--compression max" "--verbose" ];
 
     timerConfig = {
       OnCalendar = "*-*-* 01:00:00";
@@ -39,11 +40,12 @@ in {
       "--keep-weekly 5"
       "--keep-monthly 12"
       "--max-unused 5%"
+      "--compression max"
     ];
 
     checkOpts = [ "--with-cache" ];
 
-    extraBackupArgs = [ "--verbose" ];
+    extraBackupArgs = [ "--compression max" "--verbose" ];
 
     timerConfig = {
       OnCalendar = "*-*-* 02:00:00";
@@ -62,11 +64,12 @@ in {
     pruneOpts = [
       "--keep-last 1"
       "--max-unused 5%"
+      "--compression max"
     ];
 
     checkOpts = [ "--with-cache" ];
 
-    extraBackupArgs = [ "--verbose" ];
+    extraBackupArgs = [ "--compression max" "--verbose" ];
 
     timerConfig = {
       OnCalendar = "*-*-* 03:00:00";
