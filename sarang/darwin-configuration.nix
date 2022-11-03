@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
   # List packages installed in system profile. To search by name, run:
@@ -11,6 +11,8 @@
   nix.useDaemon = true;
   nix.package = pkgs.nix;
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  nix.registry.nixpkgs.flake = inputs.nixpkgs;
 
   homebrew = {
     enable = true;

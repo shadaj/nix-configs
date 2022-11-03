@@ -34,7 +34,10 @@
     darwinConfigurations."sarang" = darwin.lib.darwinSystem {
       system = "aarch64-darwin";
       modules = [ ./sarang/darwin-configuration.nix ];
-      inputs = { inherit darwin nixpkgs; };
+      inputs = {
+        inherit darwin nixpkgs;
+        inputs = self.inputs;
+      };
     };
 
     homeConfigurations."shadaj@sarang" = home-manager.lib.homeManagerConfiguration {
