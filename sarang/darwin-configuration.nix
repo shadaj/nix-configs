@@ -25,7 +25,7 @@
     ];
 
     casks = [
-      "aerial" "android-file-transfer" "handbrake" "kap"
+      "aerial" "android-file-transfer" "handbrake" "kap" "loom"
       "google-chrome" "logi-options-plus" "signal" "slack"
       "rectangle" "openrct2" "spotify"
       "balenaetcher" "visual-studio-code" "monitorcontrol"
