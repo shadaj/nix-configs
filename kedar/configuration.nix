@@ -233,7 +233,7 @@ in {
     serviceConfig = {
       User = "shadaj";
       Group = "openvscode-server";
-      ExecStart = "${unstable.openvscode-server}/bin/openvscode-server --socket-path /run/openvscode-server/shadaj.sock --extensions-dir /home/shadaj/.vscode/extensions";
+      ExecStart = "${pkgs.bash}/bin/bash -c \"eval \\\"\$(${pkgs.openssh}/bin/ssh-agent -s)\\\"; ${unstable.openvscode-server}/bin/openvscode-server --socket-path /run/openvscode-server/shadaj.sock --extensions-dir /home/shadaj/.vscode/extensions\"";
       ExecStartPost = "${pkgs.bash}/bin/bash -c \"until [ -e /run/openvscode-server/shadaj.sock ]; do sleep 1; done; chgrp openvscode-server /run/openvscode-server/shadaj.sock; chmod g+rw /run/openvscode-server/shadaj.sock\"";
     };
   };
