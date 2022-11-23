@@ -13,6 +13,7 @@
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   nix.registry.nixpkgs.flake = inputs.nixpkgs;
+  nix.registry.nixpkgs-unstable.flake = inputs.inputs.nixpkgs-unstable;
 
   homebrew = {
     enable = true;
