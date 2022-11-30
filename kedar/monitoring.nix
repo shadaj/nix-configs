@@ -38,6 +38,6 @@
 
   services.grafana = {
     enable = true;
-    protocol = "socket";
+    settings.server.protocol = "socket";
   };
 }

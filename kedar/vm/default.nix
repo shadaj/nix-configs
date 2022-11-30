@@ -56,10 +56,12 @@ in
 
       qemu.ovmf = {
         enable = true;
-        package = (pkgs.OVMF.override {
-          secureBoot = true;
-          tpmSupport = true;
-        });
+        packages = [
+          (pkgs.OVMF.override {
+            secureBoot = true;
+            tpmSupport = true;
+          }).fd
+        ];
       };
 
       onBoot = "ignore";

@@ -28,7 +28,7 @@ in {
     forceSSL = true;
     enableACME = true;
     acmeRoot = null;
-    locations."/".proxyPass = "http://unix:${config.services.grafana.socket}";
+    locations."/".proxyPass = "http://unix:${config.services.grafana.settings.server.socket}";
     locations."/".proxyWebsockets = true;
 
     extraConfig = pkgs.lib.concatStringsSep "\n" (map (ip: ''

@@ -75,6 +75,7 @@
       };
 
       modules = [
+        vscode-server.nixosModules.home
         ./shadaj/home.nix
         {
           home = {
