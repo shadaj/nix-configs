@@ -103,6 +103,11 @@ in
     go
     z3
     coq
+    (unstable.racket.overrideAttrs(old: {
+      meta = old.meta // {
+        broken = false;
+      };
+    }))
 
     (pkgs.clang.overrideAttrs (attrs: {
       # lower priority than binutils
@@ -127,13 +132,12 @@ in
     lm_sensors
     (import ./vivado { inherit pkgs; })
     httpie
-    racket
     octave
   ] else [
     highlight
     ngrok
     nodePackages.serve
-    unstable.nodePackages.webtorrent-cli
+    nodePackages.webtorrent-cli
     unstable.youtube-dl
   ]);
 

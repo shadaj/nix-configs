@@ -2,13 +2,13 @@
   description = "system configurations";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-22.05";
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-22.11";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
     darwin.url = "github:lnl7/nix-darwin/master";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
 
-    home-manager.url = "github:nix-community/home-manager/release-22.05";
+    home-manager.url = "github:nix-community/home-manager/release-22.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     secrets.url = "github:input-output-hk/empty-flake?rev=2040a05b67bf9a669ce17eca56beb14b4206a99a";
@@ -47,17 +47,16 @@
         config = { allowUnfree = true; };
       };
 
-      system = "aarch64-darwin";
-
-      username = "shadaj";
-      homeDirectory = "/Users/shadaj";
-      stateVersion = "21.05";
-
-      configuration = _: {
-        imports = [
-          ./shadaj/home.nix
-        ];
-      };
+      modules = [
+        ./shadaj/home.nix
+        {
+          home = {
+            username = "shadaj";
+            homeDirectory = "/Users/shadaj";
+            stateVersion = "21.05";
+          };
+        }
+      ];
 
       extraSpecialArgs = {
         unstable = import nixpkgs-unstable {
@@ -75,18 +74,16 @@
         config = { allowUnfree = true; };
       };
 
-      system = "x86_64-linux";
-
-      username = "shadaj";
-      homeDirectory = "/home/shadaj";
-      stateVersion = "20.09";
-
-      configuration = _: {
-        imports = [
-          vscode-server.nixosModules.home
-          ./shadaj/home.nix
-        ];
-      };
+      modules = [
+        ./shadaj/home.nix
+        {
+          home = {
+            username = "shadaj";
+            homeDirectory = "/home/shadaj";
+            stateVersion = "20.09";
+          };
+        }
+      ];
 
       extraSpecialArgs = {
         unstable = import nixpkgs-unstable {
