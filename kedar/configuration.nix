@@ -230,6 +230,7 @@ in {
   };
 
   systemd.services.openvscode-server-shadaj = {
+    after = [ "network-online.target" ];
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {
       User = "shadaj";
