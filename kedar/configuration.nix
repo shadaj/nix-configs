@@ -38,7 +38,9 @@ in {
   services.zfs.autoScrub.enable = true;
   services.zfs.trim.enable = true;
 
-  boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
+  # NVIDIA driver has trouble on 6.0
+  # boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
+
   # enable a module for collecting sensors
   boot.kernelModules = [ "nct6775" ];
   boot.kernelParams = [ "acpi_enforce_resources=lax" ];
