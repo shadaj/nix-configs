@@ -103,11 +103,8 @@ in
     go
     z3
     coq
-    (unstable.racket.overrideAttrs(old: {
-      meta = old.meta // {
-        broken = false;
-      };
-    }))
+    racket
+    octave
 
     (pkgs.clang.overrideAttrs (attrs: {
       # lower priority than binutils
@@ -124,6 +121,7 @@ in
     gnupg
     killall
     tmux
+    httpie
 
     ffmpeg
     texlive.combined.scheme-full
@@ -131,8 +129,6 @@ in
     google-chrome
     lm_sensors
     (import ./vivado { inherit pkgs; })
-    httpie
-    octave
   ] else [
     highlight
     ngrok
