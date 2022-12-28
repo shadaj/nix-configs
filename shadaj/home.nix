@@ -64,7 +64,7 @@ in
     extensions = with unstable.vscode-extensions; [
       ms-python.vscode-pylance
       ms-python.python
-      (import ./jupyter.nix { inherit pkgs; })
+      ms-toolsai.jupyter
       scalameta.metals
       scala-lang.scala
       ms-vsliveshare.vsliveshare
