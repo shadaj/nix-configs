@@ -34,6 +34,7 @@
       "obs" "wireshark" "osu" "xpra"
       "firefox" "xquartz" "zoom" "google-drive"
       "sidequest" "adobe-creative-cloud" "zotero" "utm"
+      "raycast"
     ];
   };
 
