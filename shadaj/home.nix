@@ -68,7 +68,6 @@ in
       ms-toolsai.jupyter
       scalameta.metals
       scala-lang.scala
-      ms-vsliveshare.vsliveshare
       matklad.rust-analyzer
       ms-vscode.cpptools
       golang.go
