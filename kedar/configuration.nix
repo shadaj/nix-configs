@@ -70,8 +70,12 @@ in {
     cp ${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt $out/secrets/etc/ssl/certs/ca-bundle.crt
   '';
 
+
   boot.initrd.network = {
     enable = true;
+
+    udhcpc.extraArgs = [ "--timeout 5 --tryagain 20 --background" ];
+
     ssh = {
       enable = true;
       port = 2222;
