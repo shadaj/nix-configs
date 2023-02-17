@@ -27,7 +27,7 @@
 
     casks = [
       "aerial" "android-file-transfer" "handbrake" "kap" "loom"
-      "google-chrome" "logi-options-plus" "signal" "slack"
+      "google-chrome" "logi-options-plus" "signal"
       "rectangle" "openrct2" "spotify"
       "balenaetcher" "visual-studio-code" "monitorcontrol"
       "discord" "iterm2" "moonlight" "vlc" "docker"
