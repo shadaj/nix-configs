@@ -105,6 +105,7 @@ in
     coq
     racket
     octave
+    python3
 
     (pkgs.clang.overrideAttrs (attrs: {
       # lower priority than binutils

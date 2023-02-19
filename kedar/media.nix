@@ -60,6 +60,7 @@
         "fruit:aapl" = "yes";
         "fruit:time machine" = "yes";
         "fruit:resource" = "xattr";
+        "fruit:time machine max size" = "1T";
       };
     };
   };
