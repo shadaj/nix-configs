@@ -94,6 +94,8 @@ in
     nodejs-16_x
 
     git
+    unstable.sapling
+    gh
 
     (sbt.override {
       jre = javaPkg;
@@ -112,6 +114,7 @@ in
       meta.priority = pkgs.binutils.meta.priority + 1;
     }))
     automake
+    gnumake
     cmake
     bintools
 
