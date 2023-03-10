@@ -95,6 +95,7 @@ in
 
     git
     unstable.sapling
+    watchman
     gh
 
     (sbt.override {
