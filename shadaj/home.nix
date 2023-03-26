@@ -40,6 +40,7 @@ in
     ignores = [
       "shell.nix" ".direnv/" ".envrc" ".venv/"
       "metals.sbt" ".bloop/" ".bsp/" ".metals/"
+      ".sl/"
       ".vsls.json"
       ".vscode/"
     ] ++ (if host == "sarang" then [ ".DS_Store" ] else []);
