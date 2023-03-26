@@ -20,6 +20,10 @@ in {
 
   nix.registry.nixpkgs.flake = inputs.nixpkgs;
   nix.registry.nixpkgs-unstable.flake = inputs.nixpkgs-unstable;
+  nix.nixPath = [
+    "nixpkgs=${inputs.nixpkgs}"
+    "nixos-unstable=${inputs.nixpkgs-unstable}"
+  ];
 
   disabledModules = [ "services/backup/restic.nix" ];
 
