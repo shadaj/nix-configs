@@ -145,6 +145,17 @@ in {
   programs.mosh.enable = true;
   programs.nix-ld.enable = true;
 
+  programs.fish.enable = true;
+  programs.fish.shellInit = ''
+    if type -q openvscode-server
+      alias code="openvscode-server"
+    end
+
+    export NIX_LD=(cat ${pkgs.stdenv.cc}/nix-support/dynamic-linker);
+  '';
+
+  programs.zsh.enable = true;
+
   environment.variables = {
     NIX_LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [
       pkgs.stdenv.cc.cc
@@ -266,15 +277,6 @@ in {
     local   replication     all                                     trust
     host    replication     all             127.0.0.1/32            trust
     host    replication     all             ::1/128                 trust
-  '';
-
-  programs.fish.enable = true;
-  programs.fish.shellInit = ''
-    if type -q openvscode-server
-      alias code="openvscode-server"
-    end
-
-    export NIX_LD=(cat ${pkgs.stdenv.cc}/nix-support/dynamic-linker);
   '';
 
   # for home-manager
