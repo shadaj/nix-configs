@@ -243,7 +243,7 @@ in {
   users.groups.openvscode-server = {};
 
   systemd.services.openvscode-socket-folder = {
-    wantedBy = [ "openvscode-server-shadaj.service" ];
+    wantedBy = [ "openvscode-server-shadaj.service" "openvscode-server-ramnivas.service" ];
     serviceConfig = {
       User = "root";
       ExecStart = "${pkgs.bash}/bin/bash -c \"mkdir /run/openvscode-server; chgrp openvscode-server /run/openvscode-server; chmod g+rw /run/openvscode-server\"";
@@ -258,6 +258,17 @@ in {
       Group = "openvscode-server";
       ExecStart = "${pkgs.bash}/bin/bash -c \"eval \\\"\$(${pkgs.openssh}/bin/ssh-agent -s)\\\"; ${unstable.openvscode-server}/bin/openvscode-server --socket-path /run/openvscode-server/shadaj.sock --extensions-dir /home/shadaj/.vscode/extensions\"";
       ExecStartPost = "${pkgs.bash}/bin/bash -c \"until [ -e /run/openvscode-server/shadaj.sock ]; do sleep 1; done; chgrp openvscode-server /run/openvscode-server/shadaj.sock; chmod g+rw /run/openvscode-server/shadaj.sock\"";
+    };
+  };
+
+  systemd.services.openvscode-server-ramnivas = {
+    after = [ "network-online.target" ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      User = "ramnivas";
+      Group = "openvscode-server";
+      ExecStart = "${pkgs.bash}/bin/bash -c \"eval \\\"\$(${pkgs.openssh}/bin/ssh-agent -s)\\\"; ${unstable.openvscode-server}/bin/openvscode-server --socket-path /run/openvscode-server/ramnivas.sock --extensions-dir /home/ramnivas/.vscode/extensions\"";
+      ExecStartPost = "${pkgs.bash}/bin/bash -c \"until [ -e /run/openvscode-server/ramnivas.sock ]; do sleep 1; done; chgrp openvscode-server /run/openvscode-server/ramnivas.sock; chmod g+rw /run/openvscode-server/ramnivas.sock\"";
     };
   };
 

@@ -79,4 +79,18 @@ in {
       deny all;
     '';
   };
+
+  services.nginx.virtualHosts."ramnivas.code.kedar.shadaj.me" = {
+    forceSSL = true;
+    enableACME = true;
+    acmeRoot = null;
+    locations."/".proxyPass = "http://unix:/run/openvscode-server/ramnivas.sock";
+    locations."/".proxyWebsockets = true;
+
+    extraConfig = pkgs.lib.concatStringsSep "\n" (map (ip: ''
+      allow ${ip};
+    '') tailsSecrets."ramnivas.code.kedar.shadaj.me") + ''
+      deny all;
+    '';
+  };
 }

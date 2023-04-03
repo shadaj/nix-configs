@@ -74,8 +74,6 @@ in
       golang.go
       bbenoist.nix
       tomoki1207.pdf
-
-      zhuangtongfa.material-theme
     ];
   };
 
