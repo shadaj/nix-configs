@@ -78,4 +78,28 @@ in {
     s3CredentialsFile = backupSecrets.s3CredentialsFile;
     passwordFile = backupSecrets.passwordFile;
   };
+
+  services.restic.backups.vaultwarden = {
+    paths = [ "/var/lib/bitwarden_rs" ];
+
+    repository = "b2:kedar-restic:vaultwarden";
+    initialize = true;
+
+    pruneOpts = [
+      "--keep-last 1"
+      "--max-unused 5%"
+      "--compression max"
+    ];
+
+    checkOpts = [ "--with-cache" ];
+
+    extraBackupArgs = [ "--compression max" "--verbose" ];
+
+    timerConfig = {
+      OnCalendar = "*-*-* 00:00:00";
+    };
+
+    s3CredentialsFile = backupSecrets.s3CredentialsFile;
+    passwordFile = backupSecrets.passwordFile;
+  };
 }

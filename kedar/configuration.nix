@@ -290,6 +290,18 @@ in {
     host    replication     all             ::1/128                 trust
   '';
 
+  services.vaultwarden = {
+    enable = true;
+    config = {
+      DOMAIN = "https://bitwarden.kedar.shadaj.me";
+      SIGNUPS_ALLOWED = true;
+
+      ROCKET_ADDRESS = "127.0.0.1";
+      ROCKET_PORT = 8222;
+      ROCKET_LOG = "critical";
+    };
+  };
+
   # for home-manager
   nix.extraOptions = ''
     keep-outputs = true
