@@ -108,10 +108,15 @@ in
     racket
     octave
     python3
+    protobuf
 
-    (pkgs.clang.overrideAttrs (attrs: {
+    (clang.overrideAttrs (attrs: {
       # lower priority than binutils
-      meta.priority = pkgs.binutils.meta.priority + 1;
+      meta.priority = binutils.meta.priority + 1;
+    }))
+    (gcc.overrideAttrs (attrs: {
+      # lower priority than binutils and clang
+      meta.priority = binutils.meta.priority + 2;
     }))
     automake
     gnumake
