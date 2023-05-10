@@ -12,7 +12,6 @@ in {
     ./vivado-drivers.nix
     ./ci.nix
     ./media.nix
-    ./restic-patched.nix
     ./backups.nix
     ./monitoring.nix
     ./nginx.nix
@@ -24,8 +23,6 @@ in {
     "nixpkgs=${inputs.nixpkgs}"
     "nixos-unstable=${inputs.nixpkgs-unstable}"
   ];
-
-  disabledModules = [ "services/backup/restic.nix" ];
 
   hardware.cpu.amd.updateMicrocode = true;
 
