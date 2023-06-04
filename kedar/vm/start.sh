@@ -6,7 +6,6 @@ cp /home/shadaj/vm/swtpm/05776f22-15b8-4e4f-ae00-047d63bfd6fc/tpm2-00.permall /v
 nvidia-smi -pm 0
 
 # Stop display manager
-systemctl stop ethminer.service
 systemctl stop display-manager.service
 pkill -x gdm-x-session
 

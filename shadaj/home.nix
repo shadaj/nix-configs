@@ -90,7 +90,7 @@ in
   } else {};
 
   home.packages = [
-    nodejs-16_x
+    nodejs-18_x
 
     git
     unstable.sapling

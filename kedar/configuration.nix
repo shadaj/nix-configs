@@ -129,7 +129,7 @@ in {
   # Enable the OpenSSH daemon.
   services.openssh = {
     enable = true;
-    forwardX11 = true;
+    settings.X11Forwarding = true;
     extraConfig = ''
       AllowAgentForwarding yes
       X11Forwarding yes
@@ -153,11 +153,9 @@ in {
 
   programs.zsh.enable = true;
 
-  environment.variables = {
-    NIX_LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [
-      pkgs.stdenv.cc.cc
-    ];
-  };
+  programs.nix-ld.libraries = [
+    pkgs.stdenv.cc.cc
+  ];
 
   virtualisation.virtualbox.host.enable = true;
   virtualisation.virtualbox.host.enableExtensionPack = true;
