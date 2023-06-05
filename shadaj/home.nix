@@ -3,7 +3,7 @@
 with pkgs; # bring all of Nixpkgs into scope
 
 let
-  javaPkg = openjdk17;
+  javaPkg = openjdk19;
 in
 {
   # Let Home Manager install and manage itself.
