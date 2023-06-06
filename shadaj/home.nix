@@ -69,7 +69,6 @@ in
       ms-toolsai.jupyter
       scalameta.metals
       scala-lang.scala
-      matklad.rust-analyzer
       ms-vscode.cpptools
       golang.go
       bbenoist.nix
