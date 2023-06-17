@@ -29,13 +29,6 @@
     ];
   };
 
-  # https://github.com/NixOS/nixpkgs/pull/176553
-  systemd.services."prometheus-smartctl-exporter".serviceConfig.DeviceAllow = pkgs.lib.mkOverride 50 [
-    "block-blkext rw"
-    "block-sd rw"
-    "char-nvme rw"
-  ];
-
   services.grafana = {
     enable = true;
     settings.server.protocol = "socket";
