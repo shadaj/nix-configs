@@ -43,6 +43,7 @@
       inputs = {
         inherit darwin nixpkgs;
         inputs = self.inputs;
+        host = "sarang";
       };
     };
 
@@ -70,6 +71,7 @@
         };
 
         host = "sarang";
+        isDarwin = true;
       };
     };
 

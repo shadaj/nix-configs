@@ -1,4 +1,4 @@
-{ config, pkgs, unstable, host, ... }:
+{ config, pkgs, unstable, host, isDarwin, ... }:
 
 with pkgs; # bring all of Nixpkgs into scope
 
@@ -27,10 +27,10 @@ in
       set PATH /opt/homebrew/bin $PATH
       alias nix-fish="nix-shell --run fish"
       source ~/bin/iterm2_shell_integration.fish
-    '' + (if host == "kedar" then '''' else ''
+    '' + (if host == "kedar" then '''' else if host == "sarang" then ''
       alias matlab="/Applications/MATLAB_R2019b.app/bin/matlab -nodesktop"
       set PATH /Applications/Tailscale.app/Contents/MacOS $PATH
-    '');
+    '' else '''');
   };
 
   programs.git = {
@@ -43,7 +43,7 @@ in
       ".sl/"
       ".vsls.json"
       ".vscode/"
-    ] ++ (if host == "sarang" then [ ".DS_Store" ] else []);
+    ] ++ (if isDarwin then [ ".DS_Store" ] else []);
 
     lfs = {
       enable = true;
@@ -137,13 +137,13 @@ in
     google-chrome
     lm_sensors
     (import ./vivado { inherit pkgs; })
-  ] else [
+  ] else if host == "sarang" then [
     highlight
     ngrok
     nodePackages.serve
     nodePackages.webtorrent-cli
     unstable.youtube-dl
-  ]);
+  ] else []);
 
   home.sessionVariables = {
     OPENSSL_DIR = "${openssl.dev}";

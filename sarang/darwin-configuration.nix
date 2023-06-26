@@ -1,4 +1,4 @@
-{ config, pkgs, inputs, ... }:
+{ config, pkgs, inputs, host, ... }:
 
 {
   # List packages installed in system profile. To search by name, run:
@@ -26,20 +26,19 @@
 
     taps = [
       "homebrew/cask"
-      "homebrew/cask-drivers"
     ];
 
     casks = [
-      "aerial" "android-file-transfer" "handbrake" "kap" "loom"
-      "google-chrome" "logi-options-plus" "signal"
-      "rectangle" "openrct2" "spotify"
+      "aerial" "kap" "arc" "logi-options-plus" "rectangle"
       "balenaetcher" "visual-studio-code" "monitorcontrol"
-      "discord" "iterm2" "moonlight" "vlc" "docker"
-      "obs" "wireshark" "osu" "xpra"
-      "firefox" "xquartz" "zoom" "google-drive"
-      "sidequest" "adobe-creative-cloud" "zotero" "utm"
-      "raycast"
-    ];
+      "iterm2" "vlc" "docker"
+      "obs" "wireshark" "xpra"
+      "xquartz" "zoom" "zotero" "utm" "raycast"
+    ] ++ (if inputs.host == "sarang" then [
+      "android-file-transfer" "loom" "signal" "spotify" "google-chrome"
+      "google-drive" "signal" "openrct2" "moonlight" "osu" "sidequest"
+      "firefox" "adobe-creative-cloud"
+    ] else []);
   };
 
   services.postgresql = {
