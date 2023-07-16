@@ -24,10 +24,6 @@
     onActivation.cleanup = "uninstall";
     onActivation.upgrade = true;
 
-    taps = [
-      "homebrew/cask"
-    ];
-
     casks = [
       "aerial" "kap" "arc" "logi-options-plus" "rectangle"
       "balenaetcher" "visual-studio-code" "monitorcontrol"
