@@ -250,8 +250,8 @@ in {
     serviceConfig = {
       User = "shadaj";
       Group = "openvscode-server";
-      ExecStart = "${pkgs.bash}/bin/bash -c \"eval \\\"\$(${pkgs.openssh}/bin/ssh-agent -s)\\\"; ${unstable.openvscode-server}/bin/openvscode-server --socket-path /run/openvscode-server/shadaj.sock --extensions-dir /home/shadaj/.vscode/extensions\"";
-      ExecStartPost = "${pkgs.bash}/bin/bash -c \"until [ -e /run/openvscode-server/shadaj.sock ]; do sleep 1; done; chgrp openvscode-server /run/openvscode-server/shadaj.sock; chmod g+rw /run/openvscode-server/shadaj.sock\"";
+      ExecStart = "${pkgs.bash}/bin/bash -c \"eval \\\"\$(${pkgs.openssh}/bin/ssh-agent -s)\\\"; rm -f /run/openvscode-server/shadaj.sock; ${unstable.openvscode-server}/bin/openvscode-server --socket-path /run/openvscode-server/shadaj.sock --extensions-dir /home/shadaj/.vscode/extensions\"";
+      ExecStartPost = "${pkgs.bash}/bin/bash -c \"until [ -S /run/openvscode-server/shadaj.sock ]; do sleep 1; done; sleep 1; chgrp openvscode-server /run/openvscode-server/shadaj.sock; chmod g+rw /run/openvscode-server/shadaj.sock\"";
     };
   };
 
@@ -261,8 +261,8 @@ in {
     serviceConfig = {
       User = "ramnivas";
       Group = "openvscode-server";
-      ExecStart = "${pkgs.bash}/bin/bash -c \"eval \\\"\$(${pkgs.openssh}/bin/ssh-agent -s)\\\"; ${unstable.openvscode-server}/bin/openvscode-server --socket-path /run/openvscode-server/ramnivas.sock --extensions-dir /home/ramnivas/.vscode/extensions\"";
-      ExecStartPost = "${pkgs.bash}/bin/bash -c \"until [ -e /run/openvscode-server/ramnivas.sock ]; do sleep 1; done; chgrp openvscode-server /run/openvscode-server/ramnivas.sock; chmod g+rw /run/openvscode-server/ramnivas.sock\"";
+      ExecStart = "${pkgs.bash}/bin/bash -c \"eval \\\"\$(${pkgs.openssh}/bin/ssh-agent -s)\\\"; rm -f /run/openvscode-server/ramnivas.sock; ${unstable.openvscode-server}/bin/openvscode-server --socket-path /run/openvscode-server/ramnivas.sock --extensions-dir /home/ramnivas/.vscode/extensions\"";
+      ExecStartPost = "${pkgs.bash}/bin/bash -c \"until [ -S /run/openvscode-server/ramnivas.sock ]; do sleep 1; done; sleep 1; chgrp openvscode-server /run/openvscode-server/ramnivas.sock; chmod g+rw /run/openvscode-server/ramnivas.sock\"";
     };
   };
 

@@ -67,8 +67,6 @@ in
       ms-python.vscode-pylance
       ms-python.python
       ms-toolsai.jupyter
-      scalameta.metals
-      scala-lang.scala
       ms-vscode.cpptools
       golang.go
       bbenoist.nix
