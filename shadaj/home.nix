@@ -134,7 +134,7 @@ in
   ] ++ (if host == "kedar" then [
     google-chrome
     lm_sensors
-    (import ./vivado { inherit pkgs; })
+    # (import ./vivado { inherit pkgs; })
   ] else if host == "sarang" then [
     highlight
     ngrok

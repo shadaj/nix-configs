@@ -1,0 +1,93 @@
+From a429b6936d8747d2984b1dcfdfa628b4e760cd0f Mon Sep 17 00:00:00 2001
+From: Shadaj Laddad <shadaj@users.noreply.github.com>
+Date: Sat, 14 Oct 2023 15:43:01 -0700
+Subject: [PATCH] openvscode-server: 1.79.2 -> 1.83.0
+
+---
+ pkgs/servers/openvscode-server/default.nix | 22 ++++++++++++++++------
+ pkgs/top-level/all-packages.nix            |  3 ++-
+ 2 files changed, 18 insertions(+), 7 deletions(-)
+
+diff --git a/pkgs/servers/openvscode-server/default.nix b/pkgs/servers/openvscode-server/default.nix
+index 43f9d7a7fe7390..8d2f5c86315f06 100644
+--- a/pkgs/servers/openvscode-server/default.nix
++++ b/pkgs/servers/openvscode-server/default.nix
+@@ -12,7 +12,9 @@
+ , python3
+ , esbuild
+ , nodejs
++, node-gyp
+ , libsecret
++, libkrb5
+ , xorg
+ , ripgrep
+ , AppKit
+@@ -58,13 +60,13 @@ let
+ in
+ stdenv.mkDerivation (finalAttrs: {
+   pname = "openvscode-server";
+-  version = "1.79.2";
++  version = "1.83.0";
+ 
+   src = fetchFromGitHub {
+     owner = "gitpod-io";
+     repo = "openvscode-server";
+     rev = "openvscode-server-v${finalAttrs.version}";
+-    hash = "sha256-u5LuDcKTN4CEpRnFCeEbni6hiDDwTV9LUEmXaQYJvJw=";
++    hash = "sha256-vZ7+5BgpbJGV2QPvGYJ59w9IhUdPRvRA1mTbJjfbKT0=";
+   };
+ 
+   yarnCache = stdenv.mkDerivation {
+@@ -87,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
+ 
+     outputHashMode = "recursive";
+     outputHashAlgo = "sha256";
+-    outputHash = "sha256-P6mzeE3HnS/KoP7kCXJlDkFWkTKiGjJkOUXfGOru/xE=";
++    outputHash = "sha256-T4PdBn7k0WccRbgJRNFEEixJAhLGuFpT2p1/F0aq23U=";
+   };
+ 
+   nativeBuildInputs = [
+@@ -102,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
+   ];
+ 
+   buildInputs = lib.optionals (!stdenv.isDarwin) [ libsecret ]
+-    ++ (with xorg; [ libX11 libxkbfile ])
++    ++ (with xorg; [ libX11 libxkbfile libkrb5 ])
+     ++ lib.optionals stdenv.isDarwin [
+     AppKit
+     Cocoa
+@@ -140,8 +142,16 @@ stdenv.mkDerivation (finalAttrs: {
+     # set offline mirror to yarn cache we created in previous steps
+     yarn --offline config set yarn-offline-mirror "${finalAttrs.yarnCache}"
+ 
+-    # set nodedir, so we can build binaries later
+-    npm config set nodedir "${nodejs}"
++    # set nodedir to prevent node-gyp from downloading headers
++    # taken from https://nixos.org/manual/nixpkgs/stable/#javascript-tool-specific
++    mkdir -p $HOME/.node-gyp/${nodejs.version}
++    echo 9 > $HOME/.node-gyp/${nodejs.version}/installVersion
++    ln -sfv ${nodejs}/include $HOME/.node-gyp/${nodejs.version}
++    export npm_config_nodedir=${nodejs}
++
++    # use updated node-gyp. fixes the following error on Darwin:
++    # PermissionError: [Errno 1] Operation not permitted: '/usr/sbin/pkgutil'
++    export npm_config_node_gyp=${node-gyp}/lib/node_modules/node-gyp/bin/node-gyp.js
+ 
+     runHook postConfigure
+   '';
+diff --git a/pkgs/top-level/all-packages.nix b/pkgs/top-level/all-packages.nix
+index 8f308703887769..197822e837fa83 100644
+--- a/pkgs/top-level/all-packages.nix
++++ b/pkgs/top-level/all-packages.nix
+@@ -36308,9 +36308,10 @@ with pkgs;
+   vscodium-fhsWithPackages = vscodium.fhsWithPackages;
+ 
+   openvscode-server = callPackage ../servers/openvscode-server {
+-    nodejs = nodejs_16;
++    nodejs = nodejs_18;
+     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Security;
+     inherit (darwin) cctools;
++    inherit (nodePackages) node-gyp;
+   };
+ 
+   code-server = callPackage ../servers/code-server {

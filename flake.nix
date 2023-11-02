@@ -24,13 +24,19 @@
         inherit secrets;
         inputs = self.inputs;
 
-        unstable = import nixpkgs-unstable {
+        unstable = import ((import nixpkgs-unstable {
           system = "x86_64-linux";
           config = {
             allowUnfree = true;
-            permittedInsecurePackages = [
-              "nodejs-16.20.2"
-            ];
+          };
+        }).applyPatches {
+          name = "261125";
+          src = nixpkgs-unstable;
+          patches = [ ./patches/261125.patch ];
+        }) {
+          system = "x86_64-linux";
+          config = {
+            allowUnfree = true;
           };
         };
       };
