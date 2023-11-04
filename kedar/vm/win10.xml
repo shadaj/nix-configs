@@ -36,6 +36,7 @@
     <loader readonly="yes" type="pflash">/run/libvirt/nix-ovmf/OVMF_CODE.fd</loader>
     <nvram>/var/lib/libvirt/qemu/nvram/win10_VARS.fd</nvram>
     <boot dev="hd"/>
+    <smbios mode="host"/>
   </os>
   <features>
     <acpi/>

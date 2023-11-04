@@ -24,16 +24,7 @@
         inherit secrets;
         inputs = self.inputs;
 
-        unstable = import ((import nixpkgs-unstable {
-          system = "x86_64-linux";
-          config = {
-            allowUnfree = true;
-          };
-        }).applyPatches {
-          name = "261125";
-          src = nixpkgs-unstable;
-          patches = [ ./patches/261125.patch ];
-        }) {
+        unstable = import nixpkgs-unstable {
           system = "x86_64-linux";
           config = {
             allowUnfree = true;
