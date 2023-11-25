@@ -25,13 +25,13 @@
     onActivation.upgrade = true;
 
     casks = [
-      "aerial" "kap" "arc" "logi-options-plus" "rectangle"
+      "kap" "arc" "logi-options-plus" "rectangle"
       "balenaetcher" "visual-studio-code" "monitorcontrol"
       "iterm2" "vlc" "docker"
       "obs" "wireshark" "xpra"
       "xquartz" "zoom" "zotero" "utm" "raycast"
     ] ++ (if inputs.host == "sarang" then [
-      "android-file-transfer" "loom" "signal" "spotify" "google-chrome"
+      "loom" "signal" "spotify" "google-chrome"
       "google-drive" "signal" "openrct2" "moonlight" "osu" "sidequest"
       "firefox" "adobe-creative-cloud"
     ] else []);
