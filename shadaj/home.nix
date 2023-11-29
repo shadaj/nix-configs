@@ -118,7 +118,6 @@ in
     automake
     gnumake
     cmake
-    bintools
 
     htop
     wget
@@ -134,6 +133,7 @@ in
   ] ++ (if host == "kedar" then [
     google-chrome
     lm_sensors
+    bintools
     # (import ./vivado { inherit pkgs; })
   ] else if host == "sarang" then [
     highlight
