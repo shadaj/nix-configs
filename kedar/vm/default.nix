@@ -70,7 +70,7 @@ in
     };
 
     environment.systemPackages = with pkgs; [
-      virtmanager
+      virt-manager
     ];
 
     systemd.services.libvirtd = {
