@@ -127,6 +127,7 @@ in
     killall
     tmux
     httpie
+    sccache
 
     ffmpeg
     texlive.combined.scheme-full
@@ -146,5 +147,13 @@ in
   home.sessionVariables = {
     OPENSSL_DIR = "${openssl.dev}";
     OPENSSL_LIB_DIR = "${openssl.out}/lib";
-  };
+    LIBRARY_PATH = ''${lib.makeLibraryPath [pkgs.libiconv]}''${LIBRARY_PATH:+:$LIBRARY_PATH}'';
+  } // (if host == "sarang" then {
+    NIX_CC_WRAPPER_TARGET_HOST_aarch64_apple_darwin = "1";
+    NIX_CFLAGS_COMPILE =
+      "-iframework ${darwin.apple_sdk.frameworks.CoreFoundation}/Library/Frameworks " +
+      "-iframework ${darwin.apple_sdk.frameworks.CoreServices}/Library/Frameworks " +
+      "-iframework ${darwin.apple_sdk.frameworks.Security}/Library/Frameworks " +
+      "-iframework ${darwin.apple_sdk.frameworks.SystemConfiguration}/Library/Frameworks";
+  } else {});
 }
