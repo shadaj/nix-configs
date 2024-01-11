@@ -3,7 +3,7 @@
 let
   ciSecrets = import secrets.ci;
 in {
-  imports = [ ./ci-access.nix ];
+  imports = [ ];
 
   virtualisation.oci-containers.containers.drone-server = {
     image = "drone/drone:2";

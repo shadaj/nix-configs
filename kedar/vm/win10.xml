@@ -57,6 +57,8 @@
     <cache mode="passthrough"/>
     <feature policy="require" name="invtsc"/>
     <feature policy="require" name="topoext"/>
+    <feature policy="require" name="svm"/>
+    <feature policy="disable" name="hypervisor"/>
   </cpu>
   <clock offset="localtime">
     <timer name="tsc" present="yes" mode="native"/>
@@ -89,9 +91,9 @@
       </source>
       <address type="pci" domain="0x0000" bus="0x00" slot="0x06" function="0x0"/>
     </hostdev>
-    <interface type="bridge">
+    <interface type="direct" trustGuestRxFilters="yes">
       <mac address="52:54:00:56:d9:73"/>
-      <source bridge="vmbridge0"/>
+      <source dev="enp6s0" mode="bridge"/> 
       <model type="virtio"/>
       <address type="pci" domain="0x0000" bus="0x00" slot="0x03" function="0x0"/>
     </interface>

@@ -117,10 +117,6 @@ in {
   networking.useDHCP = false;
   networking.interfaces.enp6s0.useDHCP = true;
   networking.hostId = "d503793a";
-  networking.interfaces.vmbridge0.useDHCP = true;
-  networking.bridges.vmbridge0 = {
-    interfaces = [ "enp6s0" ];
-  };
 
   # Set your time zone.
   time.timeZone = "America/Los_Angeles";
