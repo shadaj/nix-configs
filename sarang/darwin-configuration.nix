@@ -33,7 +33,7 @@
     ] ++ (if inputs.host == "sarang" then [
       "loom" "signal" "spotify" "google-chrome"
       "google-drive" "signal" "openrct2" "moonlight" "osu" "sidequest"
-      "firefox" "adobe-creative-cloud"
+      "firefox" "adobe-creative-cloud" "steam"
     ] else []);
   };
 
