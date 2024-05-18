@@ -43,7 +43,7 @@ in {
 
   # enable a module for collecting sensors
   boot.kernelModules = [ "nct6775" ];
-  boot.kernelParams = [ "acpi_enforce_resources=lax" ];
+  boot.kernelParams = [ "amd_pstate=active" "acpi_enforce_resources=lax" ];
 
   boot.kernel.sysctl = {
     "net.ipv6.conf.all.forwarding" = true;
@@ -96,7 +96,7 @@ in {
 
   powerManagement = {
     enable = true;
-    cpuFreqGovernor = "schedutil";
+    cpuFreqGovernor = "performance";
   };
 
   nixpkgs.config = {
