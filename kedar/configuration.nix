@@ -188,7 +188,7 @@ in {
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
-  services.xserver.layout = "us";
+  services.xserver.xkb.layout = "us";
   services.xserver.deviceSection = ''
     Option "Coolbits" "12"
     Option "AllowEmptyInitialConfiguration" "True"
@@ -237,6 +237,7 @@ in {
   };
 
   systemd.services.openvscode-server-shadaj = {
+    wants = [ "network-online.target" ];
     after = [ "network-online.target" ];
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {
@@ -248,6 +249,7 @@ in {
   };
 
   systemd.services.openvscode-server-ramnivas = {
+    wants = [ "network-online.target" ];
     after = [ "network-online.target" ];
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {
