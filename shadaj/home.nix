@@ -90,8 +90,8 @@ in
     nodejs-18_x
 
     git
-    unstable.sapling
-    unstable.watchman
+    sapling
+    watchman
     gh
 
     (sbt.override {
