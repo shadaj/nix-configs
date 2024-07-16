@@ -261,7 +261,7 @@ in {
   };
 
   services.postgresql.enable = true;
-  services.postgresql.package = pkgs.postgresql_13;
+  services.postgresql.package = (inputs.postgresPackage pkgs);
   services.postgresql.authentication = pkgs.lib.mkForce ''
     # TYPE  DATABASE        USER            ADDRESS                 METHOD
 

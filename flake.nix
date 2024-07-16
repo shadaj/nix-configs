@@ -17,12 +17,17 @@
     vscode-server.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, darwin, home-manager, secrets, vscode-server }: {
+  outputs = { self, nixpkgs, nixpkgs-unstable, darwin, home-manager, secrets, vscode-server }: let
+    postgresPackage = (pkgs: pkgs.postgresql_13);
+  in {
     nixosConfigurations.kedar = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = {
         inherit secrets;
-        inputs = self.inputs;
+        inputs = self.inputs // {
+          host = "kedar";
+          postgresPackage = postgresPackage;
+        };
 
         unstable = import nixpkgs-unstable {
           system = "x86_64-linux";
@@ -37,10 +42,9 @@
     darwinConfigurations."sarang" = darwin.lib.darwinSystem {
       system = "aarch64-darwin";
       modules = [ ./sarang/darwin-configuration.nix ];
-      inputs = {
-        inherit darwin nixpkgs;
-        inputs = self.inputs;
+      inputs = self.inputs // {
         host = "sarang";
+        postgresPackage = postgresPackage;
       };
     };
 

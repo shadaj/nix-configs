@@ -13,10 +13,10 @@
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   nix.registry.nixpkgs.flake = inputs.nixpkgs;
-  nix.registry.nixpkgs-unstable.flake = inputs.inputs.nixpkgs-unstable;
+  nix.registry.nixpkgs-unstable.flake = inputs.nixpkgs-unstable;
   nix.nixPath = [
     "nixpkgs=${inputs.nixpkgs}"
-    "nixos-unstable=${inputs.inputs.nixpkgs-unstable}"
+    "nixos-unstable=${inputs.nixpkgs-unstable}"
   ];
 
   homebrew = {
@@ -25,14 +25,12 @@
     onActivation.upgrade = true;
 
     casks = [
-      "kap" "arc" "logi-options-plus" "rectangle"
-      "balenaetcher" "visual-studio-code" "monitorcontrol"
+      "arc" "logi-options-plus" "rectangle"
+      "visual-studio-code" "monitorcontrol"
       "iterm2" "vlc" "docker"
-      "obs" "wireshark" "xpra"
-      "xquartz" "zoom" "zotero" "utm" "raycast"
+      "obs" "wireshark" "zoom" "zotero" "utm" "raycast"
     ] ++ (if inputs.host == "sarang" then [
-      "loom" "signal" "spotify" "google-chrome"
-      "google-drive" "signal" "openrct2" "moonlight" "osu" "sidequest"
+      "signal" "spotify" "google-drive" "signal" "openrct2" "moonlight" "osu"
       "firefox" "adobe-creative-cloud" "steam"
     ] else []);
   };
@@ -40,7 +38,7 @@
   services.postgresql = {
     enable = true;
     dataDir = "/usr/local/var/postgres";
-    package = pkgs.postgresql_13;
+    package = (inputs.postgresPackage pkgs);
   };
 
   # Create profile that loads the nix-darwin environment.
