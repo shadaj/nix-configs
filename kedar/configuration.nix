@@ -260,23 +260,26 @@ in {
     };
   };
 
-  services.postgresql.enable = true;
-  services.postgresql.package = (inputs.postgresPackage pkgs);
-  services.postgresql.authentication = pkgs.lib.mkForce ''
-    # TYPE  DATABASE        USER            ADDRESS                 METHOD
+  services.postgresql = {
+    enable = true;
+    package = (inputs.postgresPackage pkgs);
+    extraPlugins = (inputs.postgresPlugins pkgs);
+    authentication = pkgs.lib.mkForce ''
+      # TYPE  DATABASE        USER            ADDRESS                 METHOD
 
-    # "local" is for Unix domain socket connections only
-    local   all             all                                     trust
-    # IPv4 local connections:
-    host    all             all             127.0.0.1/32            trust
-    # IPv6 local connections:
-    host    all             all             ::1/128                 trust
-    # Allow replication connections from localhost, by a user with the
-    # replication privilege.
-    local   replication     all                                     trust
-    host    replication     all             127.0.0.1/32            trust
-    host    replication     all             ::1/128                 trust
-  '';
+      # "local" is for Unix domain socket connections only
+      local   all             all                                     trust
+      # IPv4 local connections:
+      host    all             all             127.0.0.1/32            trust
+      # IPv6 local connections:
+      host    all             all             ::1/128                 trust
+      # Allow replication connections from localhost, by a user with the
+      # replication privilege.
+      local   replication     all                                     trust
+      host    replication     all             127.0.0.1/32            trust
+      host    replication     all             ::1/128                 trust
+    '';
+  };
 
   services.vaultwarden = {
     enable = true;

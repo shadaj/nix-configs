@@ -18,7 +18,8 @@
   };
 
   outputs = { self, nixpkgs, nixpkgs-unstable, darwin, home-manager, secrets, vscode-server }: let
-    postgresPackage = (pkgs: pkgs.postgresql_13);
+    postgresPackage = (pkgs: pkgs.postgresql_14);
+    postgresPlugins = (pkgs: with pkgs.postgresql_14.pkgs; [ pgvector ]);
   in {
     nixosConfigurations.kedar = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
@@ -27,6 +28,7 @@
         inputs = self.inputs // {
           host = "kedar";
           postgresPackage = postgresPackage;
+          postgresPlugins = postgresPlugins;
         };
 
         unstable = import nixpkgs-unstable {
@@ -45,6 +47,7 @@
       inputs = self.inputs // {
         host = "sarang";
         postgresPackage = postgresPackage;
+        postgresPlugins = postgresPlugins;
       };
     };
 

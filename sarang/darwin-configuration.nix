@@ -39,6 +39,7 @@
     enable = true;
     dataDir = "/usr/local/var/postgres";
     package = (inputs.postgresPackage pkgs);
+    extraPlugins = (inputs.postgresPlugins pkgs);
   };
 
   # Create profile that loads the nix-darwin environment.
