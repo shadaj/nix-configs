@@ -90,8 +90,8 @@ in
     nodejs-18_x
 
     git
-    sapling
-    watchman
+    unstable.sapling
+    unstable.watchman
     gh
 
     (sbt.override {
@@ -141,19 +141,22 @@ in
     ngrok
     nodePackages.serve
     nodePackages.webtorrent-cli
-    unstable.yt-dlp
+    yt-dlp
   ] else []);
 
   home.sessionVariables = {
     OPENSSL_DIR = "${openssl.dev}";
     OPENSSL_LIB_DIR = "${openssl.out}/lib";
-    LIBRARY_PATH = ''${lib.makeLibraryPath [pkgs.libiconv]}''${LIBRARY_PATH:+:$LIBRARY_PATH}'';
+    LIBRARY_PATH = ''${lib.makeLibraryPath [pkgs.libiconv darwin.libobjc]}''${LIBRARY_PATH:+:$LIBRARY_PATH}'';
   } // (if host == "sarang" then {
     NIX_CC_WRAPPER_TARGET_HOST_aarch64_apple_darwin = "1";
-    NIX_CFLAGS_COMPILE =
-      "-iframework ${darwin.apple_sdk.frameworks.CoreFoundation}/Library/Frameworks " +
-      "-iframework ${darwin.apple_sdk.frameworks.CoreServices}/Library/Frameworks " +
-      "-iframework ${darwin.apple_sdk.frameworks.Security}/Library/Frameworks " +
-      "-iframework ${darwin.apple_sdk.frameworks.SystemConfiguration}/Library/Frameworks";
+    NIX_CFLAGS_COMPILE = (lib.strings.concatStringsSep " " (map
+      (pkg: "-iframework ${pkg}/Library/Frameworks")
+      (lib.attrsets.attrValues (
+        builtins.removeAttrs
+        darwin.apple_sdk.frameworks
+        [ "QuickTime" ]
+      ))
+    ));
   } else {});
 }
