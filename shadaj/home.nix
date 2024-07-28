@@ -147,7 +147,9 @@ in
   home.sessionVariables = {
     OPENSSL_DIR = "${openssl.dev}";
     OPENSSL_LIB_DIR = "${openssl.out}/lib";
-    LIBRARY_PATH = ''${lib.makeLibraryPath [pkgs.libiconv darwin.libobjc]}''${LIBRARY_PATH:+:$LIBRARY_PATH}'';
+    LIBRARY_PATH = let
+      libs = [pkgs.libiconv] ++ (if host == "sarang" then [darwin.libobjc] else []);
+    in ''${lib.makeLibraryPath libs}''${LIBRARY_PATH:+:$LIBRARY_PATH}'';
   } // (if host == "sarang" then {
     NIX_CC_WRAPPER_TARGET_HOST_aarch64_apple_darwin = "1";
     NIX_CFLAGS_COMPILE = (lib.strings.concatStringsSep " " (map
