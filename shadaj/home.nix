@@ -106,6 +106,7 @@ in
     octave
     python3
     protobuf
+    elan
 
     (clang.overrideAttrs (attrs: {
       # lower priority than binutils
