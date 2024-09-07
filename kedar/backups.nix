@@ -38,7 +38,7 @@ in {
   services.restic.backups.media = {
     package = unstable.restic;
     paths = [ "/swamp/media" ];
-    exclude = [ "/swamp/media/*/icloud" "/swamp/media/shared-icloud" ];
+    exclude = [ "/swamp/media/*/icloud" "/swamp/media/shared-icloud" "/swamp/media/honeymelon" ];
 
     repository = "s3:s3.us-west-000.backblazeb2.com/kedar-restic/media";
     initialize = true;
