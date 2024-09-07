@@ -4,6 +4,7 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixos-unstable-small.url = "github:nixos/nixpkgs/nixos-unstable-small";
 
     darwin.url = "github:lnl7/nix-darwin/master";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
@@ -17,7 +18,7 @@
     vscode-server.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, darwin, home-manager, secrets, vscode-server }: let
+  outputs = { self, nixpkgs, nixpkgs-unstable, nixos-unstable-small, darwin, home-manager, secrets, vscode-server }: let
     postgresPackage = (pkgs: pkgs.postgresql_14);
     postgresPlugins = (pkgs: with pkgs.postgresql_14.pkgs; [ pgvector ]);
   in {
@@ -31,12 +32,19 @@
           postgresPlugins = postgresPlugins;
         };
 
-        unstable = import nixpkgs-unstable {
+        unstable = (import nixpkgs-unstable {
           system = "x86_64-linux";
           config = {
             allowUnfree = true;
           };
-        };
+        });
+
+        nixos-unstable-small = (import nixos-unstable-small {
+          system = "x86_64-linux";
+          config = {
+            allowUnfree = true;
+          };
+        });
       };
       modules = [ ./kedar/configuration.nix ];
     };

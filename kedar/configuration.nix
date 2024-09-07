@@ -1,4 +1,4 @@
-{ config, pkgs, inputs, unstable, secrets, ... }:
+{ config, pkgs, inputs, unstable, nixos-unstable-small, secrets, ... }:
 
 let
   minecraftSecrets = import secrets.minecraft;
@@ -36,6 +36,7 @@ in {
     DefaultTimeoutStopSec=20s
   '';
 
+  boot.zfs.package = nixos-unstable-small.zfs;
   services.zfs.autoScrub.enable = true;
   services.zfs.trim.enable = true;
 
@@ -203,7 +204,7 @@ in {
   virtualisation.docker.enable = true;
   virtualisation.docker.storageDriver = "zfs";
   virtualisation.docker.extraOptions = "--config-file=${pkgs.writeText "daemon.json" (builtins.toJSON { dns = [ "1.1.1.1" "1.0.0.1" ]; })}";
-  virtualisation.docker.enableNvidia = true;
+  hardware.nvidia-container-toolkit.enable = true;
 
   services.tailscale.enable = true;
 
