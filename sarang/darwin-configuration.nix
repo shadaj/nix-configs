@@ -25,7 +25,7 @@
     onActivation.upgrade = true;
 
     casks = [
-      "arc" "logi-options-plus" "rectangle"
+      "arc" "logi-options+" "rectangle"
       "visual-studio-code" "monitorcontrol"
       "iterm2" "vlc" "docker"
       "obs" "wireshark" "zoom" "zotero" "utm" "raycast"
