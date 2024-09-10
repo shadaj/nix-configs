@@ -1,4 +1,4 @@
-{ config, pkgs, inputs, unstable, nixos-unstable-small, secrets, ... }:
+{ config, pkgs, inputs, unstable, secrets, ... }:
 
 let
   minecraftSecrets = import secrets.minecraft;
@@ -19,8 +19,10 @@ in {
 
   nix.registry.nixpkgs.flake = inputs.nixpkgs;
   nix.registry.nixpkgs-unstable.flake = inputs.nixpkgs-unstable;
+  nix.registry.nixos-unstable.flake = inputs.nixpkgs-unstable;
   nix.nixPath = [
     "nixpkgs=${inputs.nixpkgs}"
+    "nixpkgs-unstable=${inputs.nixpkgs-unstable}"
     "nixos-unstable=${inputs.nixpkgs-unstable}"
   ];
 
@@ -36,7 +38,7 @@ in {
     DefaultTimeoutStopSec=20s
   '';
 
-  boot.zfs.package = nixos-unstable-small.zfs;
+  boot.zfs.package = unstable.zfs;
   services.zfs.autoScrub.enable = true;
   services.zfs.trim.enable = true;
 
