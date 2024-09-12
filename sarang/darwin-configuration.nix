@@ -12,10 +12,10 @@
   nix.package = pkgs.nix;
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-  nix.registry.nixpkgs.flake = inputs.nixpkgs;
   nix.registry.nixpkgs-unstable.flake = inputs.nixpkgs-unstable;
+  nix.registry.nixos-unstable.flake = inputs.nixpkgs-unstable;
   nix.nixPath = [
-    "nixpkgs=${inputs.nixpkgs}"
+    "nixpkgs-unstable=${inputs.nixpkgs-unstable}"
     "nixos-unstable=${inputs.nixpkgs-unstable}"
   ];
 
