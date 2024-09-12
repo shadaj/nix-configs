@@ -33,11 +33,6 @@
       fsType = "zfs";
     };
 
-  fileSystems."/tank/photoprism" =
-    { device = "tank/root/photoprism";
-      fsType = "zfs";
-    };
-
   fileSystems."/var/lib/docker" =
     { device = "tank/docker";
       fsType = "zfs";

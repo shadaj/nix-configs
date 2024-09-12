@@ -38,20 +38,6 @@ in {
     '';
   };
 
-  services.nginx.virtualHosts."photos.kedar.shadaj.me" = {
-    forceSSL = true;
-    enableACME = true;
-    acmeRoot = null;
-    locations."/".proxyPass = "http://127.0.0.1:2342/";
-    locations."/".proxyWebsockets = true;
-
-    extraConfig = pkgs.lib.concatStringsSep "\n" (map (ip: ''
-      allow ${ip};
-    '') tailsSecrets."photos.kedar.shadaj.me") + ''
-      deny all;
-    '';
-  };
-
   services.nginx.virtualHosts."ci.kedar.shadaj.me" = {
     forceSSL = true;
     enableACME = true;

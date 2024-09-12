@@ -101,22 +101,4 @@
       '';
     };
   };
-
-  virtualisation.oci-containers.containers.photoprism = {
-    image = "photoprism/photoprism:221118-jammy";
-    environment = {
-      PHOTOPRISM_ADMIN_PASSWORD = (import secrets.photoprism).password;
-      PHOTOPRISM_ORIGINALS_LIMIT = "-1";
-      PHOTOPRISM_READONLY = "1";
-    };
-
-    volumes = [
-      "/tank/photoprism:/photoprism/storage"
-      "/swamp/media/honeymelon:/photoprism/originals"
-    ];
-
-    extraOptions = [ "--gpus" "all" ];
-
-    ports = ["2342:2342"];
-  };
 }
