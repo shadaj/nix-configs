@@ -38,11 +38,10 @@ in {
     DefaultTimeoutStopSec=20s
   '';
 
-  boot.zfs.package = unstable.zfs;
   services.zfs.autoScrub.enable = true;
   services.zfs.trim.enable = true;
 
-  boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
+  boot.kernelPackages = unstable.linuxPackages_6_10;
 
   # enable a module for collecting sensors
   boot.kernelModules = [ "nct6775" ];

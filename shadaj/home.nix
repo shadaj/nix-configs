@@ -69,8 +69,6 @@ in
       ms-toolsai.jupyter
       ms-vscode.cpptools
       golang.go
-      bbenoist.nix
-      tomoki1207.pdf
     ];
   };
 
