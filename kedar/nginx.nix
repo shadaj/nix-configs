@@ -79,19 +79,4 @@ in {
       deny all;
     '';
   };
-
-  services.nginx.virtualHosts."bitwarden.kedar.shadaj.me" = {
-    forceSSL = true;
-    enableACME = true;
-    acmeRoot = null;
-
-    locations."/".proxyPass = "http://127.0.0.1:${toString config.services.vaultwarden.config.ROCKET_PORT}";
-    locations."/".proxyWebsockets = true;
-
-    extraConfig = pkgs.lib.concatStringsSep "\n" (map (ip: ''
-      allow ${ip};
-    '') tailsSecrets."bitwarden.kedar.shadaj.me") + ''
-      deny all;
-    '';
-  };
 }

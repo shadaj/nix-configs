@@ -45,7 +45,19 @@
       <relaxed state="on"/>
       <vapic state="on"/>
       <spinlocks state="on" retries="8191"/>
-      <vendor_id state="on" value="1234567890ab"/>
+      <vpindex state="on"/>
+      <synic state="on"/>
+      <stimer state="on">
+        <direct state="on"/>
+      </stimer>
+      <reset state="on"/>
+      <vendor_id state="on" value="OriginalAMD"/>
+      <frequencies state="on"/>
+      <reenlightenment state="off"/>
+      <tlbflush state="on"/>
+      <ipi state="on"/>
+      <evmcs state="off"/>
+      <avic state="on"/>
     </hyperv>
     <kvm>
       <hidden state="on"/>
@@ -64,7 +76,7 @@
     <timer name="tsc" present="yes" mode="native"/>
     <timer name="rtc" tickpolicy="catchup"/>
     <timer name="pit" tickpolicy="delay"/>
-    <timer name="hpet" present="no"/>
+    <timer name="hpet" present="yes"/>
     <timer name="hypervclock" present="yes"/>
   </clock>
   <on_poweroff>destroy</on_poweroff>
@@ -83,19 +95,19 @@
       <address type='pci' domain="0x0000" bus="0x00" slot="0x01" function="0x0"/>
     </controller>
     <controller type="usb" index="0" model="qemu-xhci" ports="15">
-      <address type="pci" domain="0x0000" bus="0x00" slot="0x05" function="0x0"/>
+      <address type="pci" domain="0x0000" bus="0x00" slot="0x02" function="0x0"/>
     </controller>
     <hostdev mode="subsystem" type="pci" managed="yes">
       <source>
         <address domain="0x0000" bus="0x01" slot="0x00" function="0x0"/>
       </source>
-      <address type="pci" domain="0x0000" bus="0x00" slot="0x06" function="0x0"/>
+      <address type="pci" domain="0x0000" bus="0x00" slot="0x03" function="0x0"/>
     </hostdev>
     <interface type="direct" trustGuestRxFilters="yes">
       <mac address="52:54:00:56:d9:73"/>
       <source dev="enp6s0" mode="bridge"/> 
       <model type="virtio"/>
-      <address type="pci" domain="0x0000" bus="0x00" slot="0x03" function="0x0"/>
+      <address type="pci" domain="0x0000" bus="0x00" slot="0x04" function="0x0"/>
     </interface>
     <input type="mouse" bus="ps2"/>
     <input type="keyboard" bus="ps2"/>
@@ -104,59 +116,56 @@
         <address domain="0x0000" bus="0x0a" slot="0x00" function="0x0"/>
       </source>
       <rom file="/var/lib/libvirt/vbios/patched-bios.rom"/>
-      <address type="pci" domain="0x0000" bus="0x00" slot="0x02" function="0x0"/>
+      <address type="pci" domain="0x0000" bus="0x0a" slot="0x00" function="0x0"/>
     </hostdev>
     <hostdev mode="subsystem" type="pci" managed="yes">
       <source>
         <address domain="0x0000" bus="0x0a" slot="0x00" function="0x1"/>
       </source>
-      <address type="pci" domain="0x0000" bus="0x00" slot="0x04" function="0x0"/>
+      <address type="pci" domain="0x0000" bus="0x0a" slot="0x00" function="0x1"/>
     </hostdev>
     <hostdev mode="subsystem" type="pci" managed="yes">
       <source>
         <address domain="0x0000" bus="0x0a" slot="0x00" function="0x2"/>
       </source>
-      <address type="pci" domain="0x0000" bus="0x00" slot="0x07" function="0x0"/>
+      <address type="pci" domain="0x0000" bus="0x0a" slot="0x00" function="0x2"/>
     </hostdev>
     <hostdev mode="subsystem" type="pci" managed="yes">
       <source>
         <address domain="0x0000" bus="0x0a" slot="0x00" function="0x3"/>
       </source>
-      <address type="pci" domain="0x0000" bus="0x00" slot="0x09" function="0x0"/>
+      <address type="pci" domain="0x0000" bus="0x0a" slot="0x00" function="0x3"/>
     </hostdev>
     <hostdev mode="subsystem" type="pci" managed="yes">
       <source>
         <address domain="0x0000" bus="0x07" slot="0x00" function="0x0"/>
       </source>
-      <address type="pci" domain="0x0000" bus="0x00" slot="0x0a" function="0x0"/>
+      <address type="pci" domain="0x0000" bus="0x07" slot="0x00" function="0x0"/>
     </hostdev>
     <hostdev mode="subsystem" type="pci" managed="yes">
       <source>
         <address domain="0x0000" bus="0x07" slot="0x00" function="0x1"/>
       </source>
-      <address type="pci" domain="0x0000" bus="0x00" slot="0x0b" function="0x0"/>
+      <address type="pci" domain="0x0000" bus="0x07" slot="0x00" function="0x1"/>
     </hostdev>
     <hostdev mode="subsystem" type="pci" managed="yes">
       <source>
         <address domain="0x0000" bus="0x07" slot="0x00" function="0x3"/>
       </source>
-      <address type="pci" domain="0x0000" bus="0x00" slot="0x0d" function="0x0"/>
+      <address type="pci" domain="0x0000" bus="0x07" slot="0x00" function="0x3"/>
     </hostdev>
     <hostdev mode="subsystem" type="pci" managed="yes">
       <source>
         <address domain="0x0000" bus="0x0c" slot="0x00" function="0x3"/>
       </source>
-      <address type="pci" domain="0x0000" bus="0x00" slot="0x10" function="0x0"/>
+      <address type="pci" domain="0x0000" bus="0x0c" slot="0x00" function="0x3"/>
     </hostdev>
     <hostdev mode="subsystem" type="pci" managed="yes">
       <source>
         <address domain="0x0000" bus="0x0c" slot="0x00" function="0x4"/>
       </source>
-      <address type="pci" domain="0x0000" bus="0x00" slot="0x11" function="0x0"/>
+      <address type="pci" domain="0x0000" bus="0x0c" slot="0x00" function="0x4"/>
     </hostdev>
-    <memballoon model="virtio" autodeflate="on">
-      <address type="pci" domain="0x0000" bus="0x00" slot="0x08" function="0x0"/>
-    </memballoon>
     <tpm model="tpm-tis">
       <backend type="emulator" version="2.0" persistent_state="yes">
       </backend>

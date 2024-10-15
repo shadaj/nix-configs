@@ -136,6 +136,8 @@ in
     google-chrome
     lm_sensors
     bintools
+    terraform
+    google-cloud-sdk
     # (import ./vivado { inherit pkgs; })
   ] else if host == "sarang" then [
     highlight

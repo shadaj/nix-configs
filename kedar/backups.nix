@@ -95,34 +95,4 @@ in {
     environmentFile = backupSecrets.s3CredentialsFile;
     passwordFile = backupSecrets.passwordFile;
   };
-
-  services.restic.backups.vaultwarden = {
-    package = unstable.restic;
-    paths = [ "/var/lib/bitwarden_rs" ];
-
-    repository = "s3:s3.us-west-000.backblazeb2.com/kedar-restic/vaultwarden";
-    initialize = true;
-
-    pruneOpts = [
-      "--keep-last 1"
-      "--max-unused 5%"
-      "--compression max"
-      "-o s3.connections=16"
-    ];
-
-    checkOpts = [ "--with-cache" ];
-
-    extraBackupArgs = [
-      "--compression max"
-      "-o s3.connections=16"
-      "--verbose"
-    ];
-
-    timerConfig = {
-      OnCalendar = "*-*-* 00:00:00";
-    };
-
-    environmentFile = backupSecrets.s3CredentialsFile;
-    passwordFile = backupSecrets.passwordFile;
-  };
 }
