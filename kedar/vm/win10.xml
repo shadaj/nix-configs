@@ -103,7 +103,7 @@
       </source>
       <address type="pci" domain="0x0000" bus="0x00" slot="0x03" function="0x0"/>
     </hostdev>
-    <interface type="direct" trustGuestRxFilters="yes">
+    <interface type="direct">
       <mac address="52:54:00:56:d9:73"/>
       <source dev="enp6s0" mode="bridge"/> 
       <model type="virtio"/>
