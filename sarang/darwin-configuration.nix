@@ -31,7 +31,7 @@
       "obs" "wireshark" "zoom" "zotero" "utm" "raycast"
     ] ++ (if inputs.host == "sarang" then [
       "signal" "spotify" "google-drive" "signal" "openrct2" "moonlight" "osu"
-      "firefox" "adobe-creative-cloud" "steam"
+      "firefox" "adobe-creative-cloud" "steam" "dolphin"
     ] else []);
   };
 

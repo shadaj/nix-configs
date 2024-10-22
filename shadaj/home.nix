@@ -131,12 +131,13 @@ in
 
     ffmpeg
     texlive.combined.scheme-full
+
+    terraform
+    google-cloud-sdk
   ] ++ (if host == "kedar" then [
     google-chrome
     lm_sensors
     bintools
-    terraform
-    google-cloud-sdk
     # (import ./vivado { inherit pkgs; })
   ] else if host == "sarang" then [
     highlight
