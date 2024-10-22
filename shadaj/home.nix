@@ -18,6 +18,7 @@ in
     allowUnfree = true;
   };
 
+  programs.bash.enable = true;
   programs.fish = {
     enable = true;
     interactiveShellInit = (builtins.readFile ./fish-prompt.fish);
@@ -88,8 +89,8 @@ in
     nodejs-18_x
 
     git
-    unstable.sapling
-    unstable.watchman
+    sapling
+    watchman
     gh
 
     (sbt.override {
@@ -151,6 +152,7 @@ in
     LIBRARY_PATH = let
       libs = [pkgs.libiconv] ++ (if host == "sarang" then [darwin.libobjc] else []);
     in ''${lib.makeLibraryPath libs}''${LIBRARY_PATH:+:$LIBRARY_PATH}'';
+    SCCACHE_SERVER_PORT = "4227";
   } // (if host == "sarang" then {
     NIX_CC_WRAPPER_TARGET_HOST_aarch64_apple_darwin = "1";
     NIX_CFLAGS_COMPILE = (lib.strings.concatStringsSep " " (map
