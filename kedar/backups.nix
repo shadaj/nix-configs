@@ -38,7 +38,7 @@ in {
   services.restic.backups.media = {
     package = unstable.restic;
     paths = [ "/swamp/media" ];
-    exclude = [ "/swamp/media/*/icloud" "/swamp/media/shared-icloud" "/swamp/media/honeymelon" ];
+    exclude = [ "/swamp/media/*/icloud" "/swamp/media/shared-icloud" "/swamp/media/honeymelon" "/swamp/media/nsa320s/video/HomeVideos" ];
 
     repository = "s3:s3.us-west-000.backblazeb2.com/kedar-restic/media";
     initialize = true;
@@ -68,31 +68,28 @@ in {
     passwordFile = backupSecrets.passwordFile;
   };
 
-  services.restic.backups.time-machine = {
-    package = unstable.restic;
-    paths = [ "/swamp/time-machine" ];
+  systemd.services.rclone-time-machine = {
+    description = "rclone time machine";
+    restartIfChanged = false;
+    wants = [ "network-online.target" ];
+    after = [ "network-online.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "${pkgs.rclone}/bin/rclone sync -P --s3-upload-cutoff 1G --s3-chunk-size 1G --transfers 16 --fast-list --retries 16 --s3-env-auth --s3-endpoint s3.us-west-000.backblazeb2.com /swamp/time-machine :s3:kedar-restic/time-machine-rclone";
+      User = "root";
+      RuntimeDirectory = "rclone-time-machine";
+      CacheDirectory = "rclone-time-machine";
+      CacheDirectoryMode = "0700";
+      PrivateTmp = true;
+      EnvironmentFile = backupSecrets.s3CredentialsFile;
+    };
+  };
 
-    repository = "s3:s3.us-west-000.backblazeb2.com/kedar-restic/time-machine";
-    initialize = true;
-
-    pruneOpts = [
-      "--keep-last 1"
-      "--max-unused 5%"
-      "-o s3.connections=16"
-    ];
-
-    checkOpts = [ "--with-cache" ];
-
-    extraBackupArgs = [
-      "-o s3.connections=16"
-      "--verbose"
-    ];
-
+  systemd.timers.rclone-time-machine = {
+    wantedBy = [ "timers.target" ];
     timerConfig = {
+      Unit = "rclone-time-machine.service";
       OnCalendar = "*-*-* 03:00:00";
     };
-
-    environmentFile = backupSecrets.s3CredentialsFile;
-    passwordFile = backupSecrets.passwordFile;
   };
 }
