@@ -75,9 +75,15 @@ in {
     after = [ "network-online.target" ];
     serviceConfig = {
       Type = "oneshot";
+      ExecStartPre = [
+        "systemctl stop samba-smbd.service"
+      ];
       ExecStart = [
         "${pkgs.rclone}/bin/rclone sync -P --s3-upload-cutoff 1G --s3-chunk-size 1G --transfers 16 --fast-list --update --use-server-modtime --retries 16 --s3-env-auth --s3-endpoint s3.us-west-000.backblazeb2.com /swamp/time-machine :s3:kedar-restic/time-machine-rclone"
         "${pkgs.rclone}/bin/rclone -P --s3-env-auth --s3-endpoint s3.us-west-000.backblazeb2.com -q backend cleanup-hidden :s3:kedar-restic/time-machine-rclone"
+      ];
+      ExecStopPost = [
+        "systemctl start samba-smbd.service"
       ];
       User = "root";
       RuntimeDirectory = "rclone-time-machine";
