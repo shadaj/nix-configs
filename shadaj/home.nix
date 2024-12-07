@@ -143,7 +143,7 @@ in
     highlight
     ngrok
     nodePackages.serve
-    nodePackages.webtorrent-cli
+    # nodePackages.webtorrent-cli
     yt-dlp
   ] else []);
 
@@ -154,15 +154,5 @@ in
       libs = [pkgs.libiconv] ++ (if host == "sarang" then [darwin.libobjc] else []);
     in ''${lib.makeLibraryPath libs}''${LIBRARY_PATH:+:$LIBRARY_PATH}'';
     SCCACHE_SERVER_PORT = "4227";
-  } // (if host == "sarang" then {
-    NIX_CC_WRAPPER_TARGET_HOST_aarch64_apple_darwin = "1";
-    NIX_CFLAGS_COMPILE = (lib.strings.concatStringsSep " " (map
-      (pkg: "-iframework ${pkg}/Library/Frameworks")
-      (lib.attrsets.attrValues (
-        builtins.removeAttrs
-        darwin.apple_sdk.frameworks
-        [ "QuickTime" ]
-      ))
-    ));
-  } else {});
+  };
 }
