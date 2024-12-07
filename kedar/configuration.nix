@@ -1,4 +1,4 @@
-{ config, pkgs, inputs, unstable, secrets, ... }:
+{ config, pkgs, inputs, unstable, nixpkgs-old-kernel, secrets, ... }:
 
 let
   minecraftSecrets = import secrets.minecraft;
@@ -41,7 +41,9 @@ in {
   services.zfs.autoScrub.enable = true;
   services.zfs.trim.enable = true;
 
-  boot.kernelPackages = unstable.linuxPackages_6_10;
+  boot.kernelPackages = nixpkgs-old-kernel.linuxPackages_6_10;
+
+  zramSwap.enable = true;
 
   # enable a module for collecting sensors
   boot.kernelModules = [ "nct6775" ];
@@ -169,24 +171,13 @@ in {
   networking.firewall.trustedInterfaces = [ "tailscale0" ];
   networking.firewall.allowPing = true;
   networking.firewall.extraCommands = ''
-    iptables -I INPUT -i docker0 ! -s 192.168.0.0/24 -m addrtype --dst-type LOCAL -j DROP;
-    iptables -I INPUT -i docker0 ! -s 192.168.0.0/24 -m addrtype --dst-type LOCAL -m state --state ESTABLISHED,RELATED -j ACCEPT;
-    iptables -N DOCKER-USER || true;
-    iptables -I DOCKER-USER -i docker0 -d 192.168.0.0/16 -j DROP;
-    iptables -I DOCKER-USER -i docker0 -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED -j ACCEPT;
-    iptables -I DOCKER-USER -i docker0 -d 100.64.0.0/10 -j DROP;
-    iptables -I DOCKER-USER -i docker0 -d 100.64.0.0/10 -m state --state ESTABLISHED,RELATED -j ACCEPT;
-
     # Samba connectivity
     iptables -t raw -A OUTPUT -p udp -m udp --dport 137 -j CT --helper netbios-ns
   '';
 
-  # Enable sound.
-  sound.enable = true;
-  hardware.pulseaudio.enable = true;
-
   services.xserver.videoDrivers = [ "nvidia" ];
-  hardware.opengl.driSupport32Bit = true;
+  hardware.nvidia.open = true;
+  hardware.graphics.enable32Bit = true;
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
@@ -203,8 +194,6 @@ in {
 
   # Enable Docker
   virtualisation.docker.enable = true;
-  virtualisation.docker.storageDriver = "zfs";
-  virtualisation.docker.extraOptions = "--config-file=${pkgs.writeText "daemon.json" (builtins.toJSON { dns = [ "1.1.1.1" "1.0.0.1" ]; })}";
   hardware.nvidia-container-toolkit.enable = true;
 
   services.tailscale.enable = true;
@@ -265,7 +254,7 @@ in {
   services.postgresql = {
     enable = true;
     package = (inputs.postgresPackage pkgs);
-    extraPlugins = (inputs.postgresPlugins pkgs);
+    extensions = (inputs.postgresPlugins pkgs);
     authentication = pkgs.lib.mkForce ''
       # TYPE  DATABASE        USER            ADDRESS                 METHOD
 

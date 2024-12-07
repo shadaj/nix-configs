@@ -2,13 +2,14 @@
   description = "system configurations";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixpkgs-old-kernel.url = "github:nixos/nixpkgs?rev=ccc0c2126893dd20963580b6478d1a10a4512185";
 
     darwin.url = "github:lnl7/nix-darwin/master";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
 
-    home-manager.url = "github:nix-community/home-manager/release-24.05";
+    home-manager.url = "github:nix-community/home-manager/release-24.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     secrets.url = "github:input-output-hk/empty-flake?rev=2040a05b67bf9a669ce17eca56beb14b4206a99a";
@@ -17,7 +18,7 @@
     vscode-server.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, darwin, home-manager, secrets, vscode-server }: let
+  outputs = { self, nixpkgs, nixpkgs-unstable, nixpkgs-old-kernel, darwin, home-manager, secrets, vscode-server }: let
     postgresPackage = (pkgs: pkgs.postgresql_14);
     postgresPlugins = (pkgs: with pkgs.postgresql_14.pkgs; [ pgvector ]);
   in {
@@ -32,6 +33,13 @@
         };
 
         unstable = (import nixpkgs-unstable {
+          system = "x86_64-linux";
+          config = {
+            allowUnfree = true;
+          };
+        });
+
+        nixpkgs-old-kernel = (import nixpkgs-old-kernel {
           system = "x86_64-linux";
           config = {
             allowUnfree = true;

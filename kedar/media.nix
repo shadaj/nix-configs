@@ -3,27 +3,27 @@
   services.samba = {
     enable = true;
     openFirewall = true;
-    securityType = "user";
-    extraConfig = ''
-      workgroup = WORKGROUP
-      server string = kedar
-      netbios name = kedar
-      security = user
-      hosts allow = 192.168.0.0/16 fe80::/10 100.64.0.0/10 localhost
-      guest account = nobody
-      map to guest = bad user
+    settings = {
+      global = {
+        security = "user";
 
-      use sendfile = yes
+        "workgroup" = "WORKGROUP";
+        "server string" = "kedar";
+        "netbios name" = "kedar";
+        "hosts allow" = "192.168.0.0/16 fe80::/10 100.64.0.0/10 localhost";
+        "guest account" = "nobody";
+        "map to guest" = "bad user";
 
-      printcap name = /dev/null
-      load printers = no
-      printing = bsd
+        "use sendfile" = "yes";
 
-      vfs objects = catia fruit streams_xattr
-      fruit:metadata = stream
-    '';
+        "printcap name" = "/dev/null";
+        "load printers" = "no";
+        "printing" = "bsd";
 
-    shares = {
+        "vfs objects" = "catia fruit streams_xattr";
+        "fruit:metadata" = "stream";
+      };
+
       media = {
         path = "/swamp/media";
         browseable = "yes";
