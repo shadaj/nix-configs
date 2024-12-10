@@ -61,18 +61,6 @@ in
     };
   };
 
-  programs.vscode = {
-    enable = (host == "kedar");
-    package = vscode;
-    extensions = with unstable.vscode-extensions; [
-      ms-python.vscode-pylance
-      ms-python.python
-      ms-toolsai.jupyter
-      ms-vscode.cpptools
-      golang.go
-    ];
-  };
-
   programs.direnv.enable = true;
   programs.direnv.nix-direnv.enable = true;
 
