@@ -160,6 +160,7 @@ in {
     config.services.samba.package
     pkgs.tailscale
     pkgs.xpra
+    (pkgs.sunshine.override { cudaSupport = true; })
   ];
 
   services.gvfs.enable = true;
@@ -182,10 +183,6 @@ in {
   # Enable the X11 windowing system.
   services.xserver.enable = true;
   services.xserver.xkb.layout = "us";
-  services.xserver.deviceSection = ''
-    Option "Coolbits" "12"
-    Option "AllowEmptyInitialConfiguration" "True"
-  '';
 
   # Enable the Gnome Desktop Environment.
   services.xserver.displayManager.gdm.enable = true;
