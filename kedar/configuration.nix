@@ -1,4 +1,4 @@
-{ config, pkgs, inputs, unstable, nixpkgs-old-kernel, secrets, ... }:
+{ config, pkgs, inputs, unstable, secrets, ... }:
 
 let
   minecraftSecrets = import secrets.minecraft;
@@ -41,13 +41,13 @@ in {
   services.zfs.autoScrub.enable = true;
   services.zfs.trim.enable = true;
 
-  boot.kernelPackages = nixpkgs-old-kernel.linuxPackages_6_10;
+  boot.kernelPackages = pkgs.linuxPackages_6_12;
 
   zramSwap.enable = true;
 
   # enable a module for collecting sensors
   boot.kernelModules = [ "nct6775" ];
-  boot.kernelParams = [ "amd_pstate=active" "acpi_enforce_resources=lax" ];
+  boot.kernelParams = [ "amd_pstate=guided" "acpi_enforce_resources=lax" ];
 
   boot.kernel.sysctl = {
     "net.ipv6.conf.all.forwarding" = true;
@@ -100,7 +100,7 @@ in {
 
   powerManagement = {
     enable = true;
-    cpuFreqGovernor = "performance";
+    cpuFreqGovernor = "schedutil";
   };
 
   nixpkgs.config = {
