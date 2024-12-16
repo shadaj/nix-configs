@@ -231,7 +231,7 @@ in {
     serviceConfig = {
       User = "shadaj";
       Group = "openvscode-server";
-      ExecStart = "${pkgs.bash}/bin/bash -i -c \"eval \\\"\$(${pkgs.openssh}/bin/ssh-agent -s)\\\"; source /home/shadaj/.profile; rm -f /run/openvscode-server/shadaj.sock; ${unstable.vscode}/bin/code serve-web --socket-path /run/openvscode-server/shadaj.sock --without-connection-token --extensions-dir /home/shadaj/.vscode/extensions\"";
+      ExecStart = "${pkgs.bash}/bin/bash -i -c \"eval \\\"\$(${pkgs.openssh}/bin/ssh-agent -s)\\\"; source /home/shadaj/.profile; rm -f /run/openvscode-server/shadaj.sock; ${pkgs.vscode}/bin/code serve-web --socket-path /run/openvscode-server/shadaj.sock --without-connection-token --extensions-dir /home/shadaj/.vscode/extensions\"";
       ExecStartPost = "${pkgs.bash}/bin/bash -c \"until [ -S /run/openvscode-server/shadaj.sock ]; do sleep 1; done; sleep 1; chgrp openvscode-server /run/openvscode-server/shadaj.sock; chmod g+rw /run/openvscode-server/shadaj.sock\"";
     };
   };
@@ -243,7 +243,7 @@ in {
     serviceConfig = {
       User = "ramnivas";
       Group = "openvscode-server";
-      ExecStart = "${pkgs.bash}/bin/bash -i -c \"eval \\\"\$(${pkgs.openssh}/bin/ssh-agent -s)\\\"; rm -f /run/openvscode-server/ramnivas.sock; ${unstable.vscode}/bin/code serve-web --socket-path /run/openvscode-server/ramnivas.sock --without-connection-token --extensions-dir /home/ramnivas/.vscode/extensions\"";
+      ExecStart = "${pkgs.bash}/bin/bash -i -c \"eval \\\"\$(${pkgs.openssh}/bin/ssh-agent -s)\\\"; rm -f /run/openvscode-server/ramnivas.sock; ${pkgs.vscode}/bin/code serve-web --socket-path /run/openvscode-server/ramnivas.sock --without-connection-token --extensions-dir /home/ramnivas/.vscode/extensions\"";
       ExecStartPost = "${pkgs.bash}/bin/bash -c \"until [ -S /run/openvscode-server/ramnivas.sock ]; do sleep 1; done; sleep 1; chgrp openvscode-server /run/openvscode-server/ramnivas.sock; chmod g+rw /run/openvscode-server/ramnivas.sock\"";
     };
   };

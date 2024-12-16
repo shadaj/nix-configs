@@ -4,7 +4,7 @@ let
   backupSecrets = import secrets.backup;
 in {
   services.restic.backups.home = {
-    package = unstable.restic;
+    package = pkgs.restic;
     paths = [ "/home" ];
 
     repository = "s3:s3.us-west-000.backblazeb2.com/kedar-restic/home";
@@ -36,7 +36,7 @@ in {
   };
 
   services.restic.backups.media = {
-    package = unstable.restic;
+    package = pkgs.restic;
     paths = [ "/swamp/media" ];
     exclude = [ "/swamp/media/*/icloud" "/swamp/media/shared-icloud" "/swamp/media/honeymelon" "/swamp/media/nsa320s/video/HomeVideos" ];
 
