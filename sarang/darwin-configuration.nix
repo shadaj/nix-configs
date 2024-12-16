@@ -31,7 +31,8 @@
       "obs" "wireshark" "zoom" "zotero" "utm" "raycast"
     ] ++ (if inputs.host == "sarang" then [
       "signal" "spotify" "google-drive" "signal" "openrct2" "moonlight" "osu"
-      "firefox" "adobe-creative-cloud" "steam" "dolphin"
+      "firefox" "adobe-creative-cloud" "steam" "dolphin" "notion-calendar"
+      "slack" "discord"
     ] else []);
   };
 
@@ -44,21 +45,6 @@
 
   # Create profile that loads the nix-darwin environment.
   programs.fish.enable = true;
-
-  # https://github.com/LnL7/nix-darwin/issues/122
-  environment.etc."fish/nixos-env-preinit.fish".text = pkgs.lib.mkMerge [
-    (pkgs.lib.mkBefore ''
-      set -l oldPath $PATH
-    '')
-    (pkgs.lib.mkAfter ''
-      for elt in $PATH
-        if not contains -- $elt $oldPath /usr/local/bin /usr/bin /bin /usr/sbin /sbin
-          set -ag fish_user_paths $elt
-        end
-      end
-      set -el oldPath
-    '')
-  ];
 
   # Used for backwards compatibility, please read the changelog before changing.
   # $ darwin-rebuild changelog
