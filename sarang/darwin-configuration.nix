@@ -27,7 +27,7 @@
     casks = [
       "arc" "logi-options+" "rectangle"
       "visual-studio-code" "monitorcontrol"
-      "iterm2" "vlc" "docker"
+      "iterm2" "ghostty" "vlc" "docker"
       "obs" "wireshark" "zoom" "zotero" "utm" "raycast"
     ] ++ (if inputs.host == "sarang" then [
       "signal" "spotify" "google-drive" "signal" "openrct2" "moonlight" "osu"
