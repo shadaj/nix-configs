@@ -168,7 +168,7 @@ in {
   # Open ports in the firewall.
   networking.firewall.enable = true;
   networking.firewall.checkReversePath = "loose";
-  networking.firewall.allowedTCPPorts = [ 9 ]; # time machine
+  networking.firewall.allowedTCPPorts = [ 9 8581 40381 51357 ]; # time machine, homebridge
   networking.firewall.trustedInterfaces = [ "tailscale0" ];
   networking.firewall.allowPing = true;
   networking.firewall.extraCommands = ''
@@ -191,6 +191,10 @@ in {
 
   # Enable Docker
   virtualisation.docker.enable = true;
+  virtualisation.docker.daemon.settings = {
+    mtu = 1280;
+  };
+
   hardware.nvidia-container-toolkit.enable = true;
 
   services.tailscale.enable = true;
@@ -267,6 +271,16 @@ in {
       host    replication     all             127.0.0.1/32            trust
       host    replication     all             ::1/128                 trust
     '';
+  };
+
+  virtualisation.oci-containers.containers.homebridge = {
+    image = "homebridge/homebridge:latest";
+
+    volumes = [
+      "/home/shadaj/homebridge:/homebridge"
+    ];
+
+    extraOptions = [ "--network=host" ];
   };
 
   # for home-manager
