@@ -74,7 +74,7 @@ in
   } else {};
 
   home.packages = [
-    nodejs-18_x
+    nodejs_22
 
     git
     sapling
