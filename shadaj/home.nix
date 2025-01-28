@@ -94,6 +94,8 @@ in
     python3
     protobuf
     elan
+    nixd
+    swiftlint
 
     (clang.overrideAttrs (attrs: {
       # lower priority than binutils

@@ -32,7 +32,7 @@
     ] ++ (if inputs.host == "sarang" then [
       "signal" "spotify" "google-drive" "signal" "openrct2" "moonlight" "osu"
       "firefox" "adobe-creative-cloud" "steam" "dolphin" "notion-calendar"
-      "slack" "discord"
+      "slack" "discord" "zed"
     ] else []);
   };
 
