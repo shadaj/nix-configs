@@ -95,7 +95,6 @@ in
     protobuf
     elan
     nixd
-    swiftlint
 
     (clang.overrideAttrs (attrs: {
       # lower priority than binutils
@@ -130,6 +129,7 @@ in
     bintools
     # (import ./vivado { inherit pkgs; })
   ] else if host == "sarang" then [
+    swiftlint
     highlight
     ngrok
     nodePackages.serve
