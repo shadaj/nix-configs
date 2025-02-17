@@ -107,6 +107,7 @@ in
     automake
     gnumake
     cmake
+    uv
 
     htop
     wget
@@ -117,9 +118,11 @@ in
     tmux
     httpie
     sccache
+    sioyek
 
     ffmpeg
     texlive.combined.scheme-full
+    python3Packages.pygments
 
     terraform
     google-cloud-sdk
