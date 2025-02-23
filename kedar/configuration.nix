@@ -4,7 +4,7 @@ let
   minecraftSecrets = import secrets.minecraft;
 
   serverSecrets = import secrets.server;
-in {
+in rec {
   imports = [
     ./hardware-configuration.nix
     secrets.users
@@ -160,6 +160,7 @@ in {
     config.services.samba.package
     pkgs.tailscale
     pkgs.xpra
+    boot.kernelPackages.perf
     (pkgs.sunshine.override { cudaSupport = true; })
   ];
 
