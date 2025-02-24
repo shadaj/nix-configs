@@ -161,7 +161,6 @@ in rec {
     pkgs.tailscale
     pkgs.xpra
     boot.kernelPackages.perf
-    (pkgs.sunshine.override { cudaSupport = true; })
   ];
 
   services.gvfs.enable = true;
