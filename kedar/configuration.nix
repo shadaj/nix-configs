@@ -2,8 +2,6 @@
 
 let
   minecraftSecrets = import secrets.minecraft;
-
-  serverSecrets = import secrets.server;
 in rec {
   imports = [
     ./hardware-configuration.nix
@@ -30,6 +28,7 @@ in rec {
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot.memtest86.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.supportedFilesystems = [ "zfs" ];
   boot.loader.systemd-boot.consoleMode = "max";
