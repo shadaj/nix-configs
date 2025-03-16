@@ -61,9 +61,7 @@
     <feature policy="disable" name="hypervisor"/>
   </cpu>
   <clock offset="localtime">
-    <timer name="tsc" present="yes" mode="native"/>
-    <timer name="rtc" tickpolicy="catchup"/>
-    <timer name="pit" tickpolicy="delay"/>
+    <timer name='pit' tickpolicy='discard'/>
     <timer name="hpet" present="yes"/>
     <timer name="hypervclock" present="yes"/>
   </clock>
@@ -93,7 +91,7 @@
     </hostdev>
     <interface type="direct">
       <mac address="52:54:00:56:d9:73"/>
-      <source dev="enp6s0" mode="bridge"/> 
+      <source dev="enp6s0" mode="bridge"/>
       <model type="virtio"/>
       <address type="pci" domain="0x0000" bus="0x00" slot="0x04" function="0x0"/>
     </interface>
