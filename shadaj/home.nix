@@ -30,7 +30,6 @@ in
       source ~/bin/iterm2_shell_integration.fish
     '' + (if host == "kedar" then '''' else if host == "sarang" then ''
       alias matlab="/Applications/MATLAB_R2019b.app/bin/matlab -nodesktop"
-      set PATH /Applications/Tailscale.app/Contents/MacOS $PATH
     '' else '''');
   };
 
