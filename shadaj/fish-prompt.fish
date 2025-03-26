@@ -27,6 +27,10 @@ function fish_print_sl_root # almost the same as hg
             echo $dir/.sl
             return 0
         end
+        if test -f $dir'/.git/sl/dirstate'
+            echo $dir/.git/sl
+            return 0
+        end
         # Go up one directory
         set dir (string replace -r '[^/]*/?$' '' $dir)
     end
@@ -120,10 +124,13 @@ function __fish_sl_prompt --description 'Write out the hg prompt'
 end
 
 function __fish_vcs_prompt --description "Print the prompts for all available vcsen"
-	__fish_git_prompt
-	__fish_hg_prompt
-	__fish_svn_prompt
-  __fish_sl_prompt
+__fish_hg_prompt # sets global variables we reuse
+  # first try sl
+  if __fish_sl_prompt
+    return 0
+  end
+  __fish_git_prompt
+  __fish_svn_prompt
 end
 
 function fish_prompt --description 'Write out the prompt'
