@@ -61,8 +61,10 @@
     <feature policy="disable" name="hypervisor"/>
   </cpu>
   <clock offset="localtime">
-    <timer name='pit' tickpolicy='discard'/>
-    <timer name="hpet" present="yes"/>
+    <timer name="tsc" present="yes" mode="native"/>
+    <timer name="rtc" tickpolicy="catchup"/>
+    <timer name="pit" tickpolicy="discard"/>
+    <timer name="hpet" present="no"/>
     <timer name="hypervclock" present="yes"/>
   </clock>
   <on_poweroff>destroy</on_poweroff>
