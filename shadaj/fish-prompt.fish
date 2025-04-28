@@ -27,7 +27,7 @@ function fish_print_sl_root # almost the same as hg
             echo $dir/.sl
             return 0
         end
-        if test -f $dir'/.git/sl/dirstate'
+        if test -f $dir'/.git/sl/config'
             echo $dir/.git/sl
             return 0
         end
