@@ -73,7 +73,7 @@ in
   } else {};
 
   home.packages = [
-    nodejs_20
+    nodejs_22
 
     git
     sapling
@@ -88,7 +88,6 @@ in
     go
     z3
     coq
-    racket
     octave
     python3
     protobuf
@@ -117,7 +116,6 @@ in
     tmux
     httpie
     sccache
-    sioyek
 
     ffmpeg
     texlive.combined.scheme-full
@@ -129,6 +127,7 @@ in
     google-chrome
     lm_sensors
     bintools
+    racket
     # (import ./vivado { inherit pkgs; })
   ] else if host == "sarang" then [
     swiftlint
