@@ -230,7 +230,6 @@ in rec {
   systemd.services.openvscode-server-shadaj = {
     wants = [ "network-online.target" ];
     after = [ "network-online.target" ];
-    wantedBy = [ "multi-user.target" ];
     serviceConfig = {
       User = "shadaj";
       Group = "openvscode-server";
@@ -242,7 +241,6 @@ in rec {
   systemd.services.openvscode-server-ramnivas = {
     wants = [ "network-online.target" ];
     after = [ "network-online.target" ];
-    wantedBy = [ "multi-user.target" ];
     serviceConfig = {
       User = "ramnivas";
       Group = "openvscode-server";
