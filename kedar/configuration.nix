@@ -192,6 +192,10 @@ in rec {
   virtualisation.docker.enable = true;
   virtualisation.docker.daemon.settings = {
     mtu = 1280;
+    dns = [
+      "8.8.8.8"
+      "8.8.4.4"
+    ];
   };
 
   hardware.nvidia-container-toolkit.enable = true;
