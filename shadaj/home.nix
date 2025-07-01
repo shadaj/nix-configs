@@ -142,7 +142,7 @@ in
     OPENSSL_DIR = "${openssl.dev}";
     OPENSSL_LIB_DIR = "${openssl.out}/lib";
     LIBRARY_PATH = let
-      libs = [pkgs.libiconv] ++ (if host == "sarang" then [darwin.libobjc] else []);
+      libs = [pkgs.libiconv];
     in ''${lib.makeLibraryPath libs}''${LIBRARY_PATH:+:$LIBRARY_PATH}'';
     SCCACHE_SERVER_PORT = "4227";
   };
