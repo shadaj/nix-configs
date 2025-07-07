@@ -1,0 +1,109 @@
+{
+  "editor.fontFamily": "JetBrains Mono",
+  "editor.fontLigatures": true,
+  "editor.fontSize": 15,
+  "editor.lineHeight": 1.618,
+  "editor.tabSize": 2,
+  "terminal.integrated.fontSize": 15,
+  "terminal.integrated.lineHeight": 1.4,
+  "files.associations": {
+    "*.cu": "cpp",
+    "*.sl": "clojure",
+    "*.smt": "clojure",
+    "*.dedalus": "souffle",
+    "*.mdx": "markdown"
+  },
+  "git.autofetch": true,
+  "files.watcherExclude": {
+    "**/.bloop": true,
+    "**/.metals": true,
+    "**/.ammonite": true
+  },
+  "editor.inlineSuggest.enabled": true,
+  "files.exclude": {
+    "**/.classpath": true,
+    "**/.project": true,
+    "**/.settings": true,
+    "**/.factorypath": true
+  },
+  "editor.bracketPairColorization.enabled": true,
+  "workbench.colorCustomizations": {
+    "[One Dark Pro]": {
+      "editorInlayHint.foreground": "#b4b4b4",
+      "editorInlayHint.background": "#51515174",
+    },
+    "[Atom One Light]": {
+      "editorInlayHint.foreground": "#5c5c5c",
+      "editorInlayHint.background": "#d8d8d874",
+      "activityBar.border": "#80808059",
+      "sideBar.background": "#fafafa",
+      "sideBar.border": "#80808059"
+    }
+  },
+  "editor.inlayHints.fontSize": 15,
+  "editor.indentSize": "tabSize",
+  "[rust]": {
+    "editor.tabSize": 4,
+  },
+  "[python]": {
+    "editor.tabSize": 4,
+  },
+  "[latex]": {
+    "editor.wordWrap": "on"
+  },
+  "workbench.preferredDarkColorTheme": "One Dark Pro",
+  "workbench.preferredLightColorTheme": "Atom One Light",
+  "search.useGlobalIgnoreFiles": true,
+  "window.autoDetectColorScheme": true,
+  "remote.SSH.useLocalServer": false,
+  "remote.SSH.remotePlatform": {
+    "kedar": "linux"
+  },
+  "latex-workshop.view.pdf.internal.synctex.keybinding": "double-click",
+  "latex-workshop.view.pdf.invertMode.enabled": "auto",
+  "latex-workshop.view.pdf.invert": 0.92,
+  "latex-workshop.view.pdf.invertMode.brightness": 0.96,
+  "ltex.latex.environments": {
+    "mathpar": "ignore",
+    "acks": "ignore",
+    "CCSXML": "ignore",
+    "algorithm": "ignore",
+    "grammar": "ignore"
+  },
+  "ltex.latex.commands": {
+    "\\texttt{}": "dummy",
+    "\\equivalent": "dummy",
+    "\\shadaj{}": "ignore",
+    "\\jmh{}": "ignore",
+    "\\todo{}": "ignore",
+    "\\author{}": "ignore",
+    "\\keywords{}": "ignore",
+    "\\acmJournal{}": "ignore",
+    "\\acmNumber{}": "ignore",
+    "\\alvin{}": "ignore",
+    "\\SetKw{}{}": "ignore",
+    "\\SetKwInput{}{}": "ignore",
+    "\\SetKwBlock{}{}{}": "ignore",
+    "\\SetKwProg{}{}{}{}": "ignore",
+    "\\inferrule{}{}": "ignore",
+    "\\lstset{}": "ignore",
+    "\\setsecnumdepth{}": "ignore",
+    "\\pgfplotsset{}": "ignore",
+    "\\MakeOuterQuote{}": "ignore",
+  },
+  "ltex.enabled": [
+    "context",
+    "context.tex",
+    "html",
+    "latex",
+    "markdown",
+    "org",
+    "restructuredtext",
+    "rsweave"
+  ],
+  "github.copilot.nextEditSuggestions.enabled": true,
+  "terminal.integrated.cursorStyle": "line",
+  "workbench.startupEditor": "none",
+  "terminal.integrated.suggest.enabled": true,
+  "github.copilot.nextEditSuggestions.fixes": true
+}

@@ -138,6 +138,11 @@ in
     yt-dlp
   ] else []);
 
+  home.file."Library/Application Support/Code/User/settings.json" = {
+    source = ./vscode-settings.json;
+    enable = isDarwin;
+  };
+
   home.sessionVariables = {
     OPENSSL_DIR = "${openssl.dev}";
     OPENSSL_LIB_DIR = "${openssl.out}/lib";
