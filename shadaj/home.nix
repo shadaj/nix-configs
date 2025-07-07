@@ -143,6 +143,11 @@ in
     enable = isDarwin;
   };
 
+  home.file."Library/Application Support/com.mitchellh.ghostty/config" = {
+    source = ./ghostty-config;
+    enable = isDarwin;
+  };
+
   home.sessionVariables = {
     OPENSSL_DIR = "${openssl.dev}";
     OPENSSL_LIB_DIR = "${openssl.out}/lib";

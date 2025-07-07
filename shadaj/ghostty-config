@@ -1,0 +1,6 @@
+font-family = "JetBrains Mono"
+font-size = "16"
+theme = "light:OneHalfLight,dark:OneHalfDarkModified"
+cursor-style = "bar"
+adjust-cursor-thickness = "400%"
+keybind = global:cmd+shift+grave_accent=toggle_quick_terminal
