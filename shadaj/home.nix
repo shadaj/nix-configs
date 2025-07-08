@@ -148,6 +148,11 @@ in
     enable = isDarwin;
   };
 
+  home.file.".config/fish/fish_variables" = {
+    source = ./fish_variables;
+    enable = isDarwin;
+  };
+
   home.sessionVariables = {
     OPENSSL_DIR = "${openssl.dev}";
     OPENSSL_LIB_DIR = "${openssl.out}/lib";
