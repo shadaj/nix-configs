@@ -47,6 +47,7 @@
         ./sarang/darwin-configuration.nix
         {
           system.primaryUser = "shadaj";
+          system.stateVersion = 4;
         }
       ];
       inputs = self.inputs // {

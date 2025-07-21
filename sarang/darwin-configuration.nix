@@ -26,9 +26,10 @@
     casks = [
       "google-chrome" "logi-options+" "rectangle"
       "visual-studio-code" "monitorcontrol"
-      "iterm2" "ghostty" "vlc" "docker-desktop"
-      "obs" "wireshark-app" "zoom" "zotero" "utm" "raycast"
+      "ghostty" "docker-desktop"
+      "wireshark-app" "zoom" "utm" "raycast"
     ] ++ (if inputs.host == "sarang" then [
+      "google-chrome" "iterm2" "vlc" "obs" "zotero"
       "signal" "spotify" "google-drive" "signal" "openrct2" "moonlight" "osu"
       "firefox" "adobe-creative-cloud" "steam" "dolphin" "notion-calendar"
       "slack" "discord" "zed@preview" "notion"
@@ -44,8 +45,4 @@
 
   # Create profile that loads the nix-darwin environment.
   programs.fish.enable = true;
-
-  # Used for backwards compatibility, please read the changelog before changing.
-  # $ darwin-rebuild changelog
-  system.stateVersion = 4;
 }
