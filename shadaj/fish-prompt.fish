@@ -133,6 +133,7 @@ __fish_hg_prompt # sets global variables we reuse
   __fish_svn_prompt
 end
 
+if not set -q PROMPT_COMMAND
 function fish_prompt --description 'Write out the prompt'
   if not set -q __fish_git_prompt_show_informative_status
     set -g __fish_git_prompt_show_informative_status 1
@@ -232,4 +233,5 @@ function fish_prompt --description 'Write out the prompt'
   echo -n "$suffix "
 
   set_color normal
+end
 end
