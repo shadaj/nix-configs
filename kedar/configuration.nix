@@ -46,7 +46,7 @@ in rec {
 
   # enable a module for collecting sensors
   boot.kernelModules = [ "nct6775" ];
-  boot.kernelParams = [ "amd_pstate=guided" "acpi_enforce_resources=lax" ];
+  boot.kernelParams = [ "amd_pstate=guided" "acpi_enforce_resources=lax" "libata.force=nolpm" ];
 
   boot.kernel.sysctl = {
     "net.ipv6.conf.all.forwarding" = true;
@@ -151,9 +151,9 @@ in rec {
     pkgs.stdenv.cc.cc
   ];
 
-  virtualisation.virtualbox.host.enable = true;
-  virtualisation.virtualbox.host.enableExtensionPack = true;
-  users.extraGroups.vboxusers.members = [ "shadaj" ];
+  # virtualisation.virtualbox.host.enable = true;
+  # virtualisation.virtualbox.host.enableExtensionPack = true;
+  # users.extraGroups.vboxusers.members = [ "shadaj" ];
 
   environment.systemPackages = [
     config.services.samba.package
