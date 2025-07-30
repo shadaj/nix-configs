@@ -46,7 +46,7 @@ in rec {
 
   # enable a module for collecting sensors
   boot.kernelModules = [ "nct6775" ];
-  boot.kernelParams = [ "amd_pstate=guided" "acpi_enforce_resources=lax" "libata.force=nolpm" ];
+  boot.kernelParams = [ "amd_pstate=guided" "acpi_enforce_resources=lax" ];
 
   boot.kernel.sysctl = {
     "net.ipv6.conf.all.forwarding" = true;
