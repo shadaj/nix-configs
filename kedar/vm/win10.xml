@@ -8,10 +8,7 @@
   </metadata>
   <memory unit="KiB">25165824</memory>
   <currentMemory unit="KiB">25165824</currentMemory>
-  <memoryBacking>
-    <source type="memfd"/>
-  </memoryBacking>
-  <vcpu placement="static">12</vcpu>
+  <vcpu placement="static">22</vcpu>
   <iothreads>1</iothreads>
   <cputune>
     <vcpupin vcpu="0" cpuset="6"/>
@@ -26,11 +23,21 @@
     <vcpupin vcpu="9" cpuset="22"/>
     <vcpupin vcpu="10" cpuset="11"/>
     <vcpupin vcpu="11" cpuset="23"/>
+    <vcpupin vcpu="12" cpuset="1"/>
+    <vcpupin vcpu="13" cpuset="13"/>
+    <vcpupin vcpu="14" cpuset="2"/>
+    <vcpupin vcpu="15" cpuset="14"/>
+    <vcpupin vcpu="16" cpuset="3"/>
+    <vcpupin vcpu="17" cpuset="15"/>
+    <vcpupin vcpu="18" cpuset="4"/>
+    <vcpupin vcpu="19" cpuset="16"/>
+    <vcpupin vcpu="20" cpuset="5"/>
+    <vcpupin vcpu="21" cpuset="17"/>
   </cputune>
   <os>
     <type arch="x86_64" machine="q35">hvm</type>
-    <loader readonly="yes" type="pflash">/run/libvirt/nix-ovmf/OVMF_CODE.fd</loader>
-    <nvram>/var/lib/libvirt/qemu/nvram/win10_VARS.fd</nvram>
+    <loader readonly="yes" type="pflash">/run/libvirt/nix-ovmf/OVMF_CODE.ms.fd</loader>
+    <nvram template="/run/libvirt/nix-ovmf/OVMF_VARS.ms.fd" templateFormat="raw" format="raw">/var/lib/libvirt/qemu/nvram/win10_VARS.fd</nvram>
     <boot dev="hd"/>
     <smbios mode="host"/>
   </os>
@@ -39,14 +46,16 @@
     <apic/>
     <hyperv mode="passthrough">
       <vendor_id state="on" value="OriginalAMD"/>
+      <avic state="on"/>
     </hyperv>
     <kvm>
       <hidden state="on"/>
     </kvm>
     <vmport state="off"/>
+    <smm state="on"/>
   </features>
   <cpu mode="host-passthrough" check="partial">
-    <topology sockets="1" dies="1" cores="6" threads="2"/>
+    <topology sockets="1" dies="1" cores="11" threads="2"/>
     <cache mode="passthrough"/>
     <feature policy="require" name="invtsc"/>
     <feature policy="require" name="topoext"/>
@@ -55,6 +64,9 @@
     <feature policy="disable" name="hypervisor"/>
   </cpu>
   <clock offset="localtime">
+    <timer name="rtc" tickpolicy="catchup"/>
+    <timer name="pit" tickpolicy="discard"/>
+    <timer name="hpet" present="no"/>
     <timer name="hypervclock" present="yes"/>
   </clock>
   <on_poweroff>destroy</on_poweroff>

@@ -60,6 +60,7 @@ in
           (pkgs.OVMF.override {
             secureBoot = true;
             tpmSupport = true;
+            msVarsTemplate = true;
           }).fd
         ];
       };
