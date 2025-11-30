@@ -36,8 +36,8 @@
   </cputune>
   <os>
     <type arch="x86_64" machine="q35">hvm</type>
-    <loader readonly="yes" type="pflash">/run/libvirt/nix-ovmf/OVMF_CODE.ms.fd</loader>
-    <nvram template="/run/libvirt/nix-ovmf/OVMF_VARS.ms.fd" templateFormat="raw" format="raw">/var/lib/libvirt/qemu/nvram/win10_VARS.fd</nvram>
+    <loader readonly="yes" type="pflash">/run/libvirt/nix-ovmf/edk2-x86_64-secure-code.fd</loader>
+    <nvram template="/run/libvirt/nix-ovmf/edk2-i386-vars.fd" templateFormat="raw" format="raw">/var/lib/libvirt/qemu/nvram/win10_VARS.fd</nvram>
     <boot dev="hd"/>
     <smbios mode="host"/>
   </os>

@@ -33,9 +33,9 @@ in rec {
   boot.supportedFilesystems = [ "zfs" ];
   boot.loader.systemd-boot.consoleMode = "max";
 
-  systemd.extraConfig = ''
-    DefaultTimeoutStopSec=20s
-  '';
+  # systemd.extraConfig = ''
+  #   DefaultTimeoutStopSec=20s
+  # '';
 
   services.zfs.autoScrub.enable = true;
   services.zfs.trim.enable = true;
@@ -136,7 +136,7 @@ in rec {
   };
 
   services.sshd.enable = true;
-  programs.ssh.startAgent = true;
+  # programs.ssh.startAgent = true;
   programs.mosh.enable = true;
   programs.nix-ld.enable = true;
 
@@ -159,7 +159,6 @@ in rec {
     config.services.samba.package
     pkgs.tailscale
     pkgs.xpra
-    boot.kernelPackages.perf
   ];
 
   services.gvfs.enable = true;
@@ -184,9 +183,9 @@ in rec {
   services.xserver.xkb.layout = "us";
 
   # Enable the Gnome Desktop Environment.
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
-  services.xserver.displayManager.gdm.autoSuspend = false;
+  services.displayManager.gdm.enable = true;
+  services.desktopManager.gnome.enable = true;
+  services.displayManager.gdm.autoSuspend = false;
 
   # Enable Docker
   virtualisation.docker.enable = true;
@@ -198,7 +197,8 @@ in rec {
     ];
   };
 
-  hardware.nvidia-container-toolkit.enable = true;
+  # currently causes udev loop (see https://github.com/NixOS/nixpkgs/issues/463645)
+  # hardware.nvidia-container-toolkit.enable = true;
 
   services.tailscale.enable = true;
 

@@ -54,17 +54,6 @@ in
     virtualisation.libvirtd = {
       enable = true;
 
-      qemu.ovmf = {
-        enable = true;
-        packages = [
-          (pkgs.OVMF.override {
-            secureBoot = true;
-            tpmSupport = true;
-            msVarsTemplate = true;
-          }).fd
-        ];
-      };
-
       onBoot = "ignore";
       onShutdown = "shutdown";
       extraConfig = "log_filters=\"3:remote 4:event 3:util.json 3:rpc 1:*\"\nlog_outputs=\"1:file:/var/log/libvirt/libvirtd.log\"";
@@ -77,7 +66,7 @@ in
     systemd.services.libvirtd = {
       # scripts use binaries from these packages
       # NOTE: All these hooks are run with root privileges... Be careful!
-      path = with pkgs; [ libvirt procps utillinux kmod swtpm ];
+      path = with pkgs; [ libvirt procps util-linux kmod swtpm ];
       preStart = ''
         mkdir -p /var/lib/libvirt/vbios
         ln -sf ${( import ./patched-vbios.nix { inherit pkgs secrets; } )}/patched.rom /var/lib/libvirt/vbios/patched-bios.rom

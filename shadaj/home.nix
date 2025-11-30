@@ -3,7 +3,7 @@
 with pkgs; # bring all of Nixpkgs into scope
 
 let
-  javaPkg = openjdk23;
+  javaPkg = openjdk25;
 in
 {
   # Let Home Manager install and manage itself.
@@ -35,8 +35,22 @@ in
 
   programs.git = {
     enable = true;
-    userName = "Shadaj Laddad";
-    userEmail = "shadaj@users.noreply.github.com";
+
+    settings = {
+      user = {
+        name = "Shadaj Laddad";
+        email = "shadaj@users.noreply.github.com";
+      };
+
+      pull = {
+        rebase = "false";
+      };
+
+      init = {
+        defaultBranch = "main";
+      };
+    };
+
     ignores = [
       "shell.nix" ".direnv/" ".envrc" ".venv/"
       "metals.sbt" ".bloop/" ".bsp/" ".metals/"
@@ -47,16 +61,6 @@ in
 
     lfs = {
       enable = true;
-    };
-
-    extraConfig = {
-      pull = {
-        rebase = "false";
-      };
-
-      init = {
-        defaultBranch = "main";
-      };
     };
   };
 
@@ -128,6 +132,7 @@ in
     lm_sensors
     bintools
     racket
+    perf
     # (import ./vivado { inherit pkgs; })
   ] else if host == "sarang" then [
     swiftlint
