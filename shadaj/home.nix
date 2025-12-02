@@ -119,7 +119,6 @@ in
     killall
     tmux
     httpie
-    sccache
 
     ffmpeg
     texlive.combined.scheme-full
