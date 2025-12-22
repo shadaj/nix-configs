@@ -40,7 +40,8 @@ in rec {
   services.zfs.autoScrub.enable = true;
   services.zfs.trim.enable = true;
 
-  boot.kernelPackages = pkgs.linuxPackages_6_12;
+  boot.kernelPackages = pkgs.linuxPackages_6_18;
+  boot.zfs.package = pkgs.zfs_2_4;
 
   zramSwap.enable = true;
 
