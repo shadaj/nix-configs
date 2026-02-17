@@ -142,11 +142,6 @@ in
     yt-dlp
   ] else []);
 
-  home.file."Library/Application Support/Code/User/settings.json" = {
-    source = ./vscode-settings.json;
-    enable = isDarwin;
-  };
-
   home.file."Library/Application Support/com.mitchellh.ghostty/config" = {
     source = ./ghostty-config;
     enable = isDarwin;
