@@ -1,7 +1,8 @@
-{ config, pkgs, secrets, ...}:
+{ unstable, ...}:
 {
   services.samba = {
     enable = true;
+    package = unstable.samba;
     openFirewall = true;
     settings = {
       global = {

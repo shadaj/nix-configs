@@ -1,5 +1,5 @@
 # based on https://github.com/cole-h/nixos-config/blob/nixos/hosts/scadrial/modules/libvirt/default.nix
-{ config, pkgs, secrets, ... }:
+{ pkgs, secrets, ... }:
 let
   # https://github.com/PassthroughPOST/VFIO-Tools/blob/0bdc0aa462c0acd8db344c44e8692ad3a281449a/libvirt_hooks/qemu
   qemuHook = pkgs.writeShellScript "qemu" ''

@@ -2,7 +2,7 @@
 
 let
   minecraftSecrets = import secrets.minecraft;
-in rec {
+in {
   imports = [
     ./hardware-configuration.nix
     secrets.users
@@ -106,7 +106,7 @@ in rec {
   nixpkgs.config = {
     allowUnfree = true;
 
-    packageOverrides = super: let self = super.pkgs; in {
+    packageOverrides = super: {
       tailscale = unstable.tailscale;
     };
   };

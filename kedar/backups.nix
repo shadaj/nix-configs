@@ -1,4 +1,4 @@
-{ config, pkgs, unstable, secrets, ...}:
+{ pkgs, secrets, ...}:
 
 let
   backupSecrets = import secrets.backup;
