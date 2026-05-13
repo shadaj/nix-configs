@@ -1,4 +1,4 @@
-{ config, pkgs, unstable, host, isDarwin, ... }:
+{ pkgs, host, isDarwin, ... }:
 
 with pkgs; # bring all of Nixpkgs into scope
 
@@ -144,11 +144,6 @@ in
 
   home.file."Library/Application Support/com.mitchellh.ghostty/config" = {
     source = ./ghostty-config;
-    enable = isDarwin;
-  };
-
-  home.file.".config/fish/fish_variables" = {
-    source = ./fish_variables;
     enable = isDarwin;
   };
 
