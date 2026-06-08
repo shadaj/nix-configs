@@ -137,8 +137,7 @@ in
     swiftlint
     highlight
     ngrok
-    nodePackages.serve
-    # nodePackages.webtorrent-cli
+    serve
     yt-dlp
   ] else []);
 
