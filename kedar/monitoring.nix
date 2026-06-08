@@ -32,5 +32,6 @@
   services.grafana = {
     enable = true;
     settings.server.protocol = "socket";
+    settings.security.secret_key = "SW2YcwTIb9zpOOhoPsMm";
   };
 }

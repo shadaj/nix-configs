@@ -8,7 +8,7 @@ in {
   security.acme.defaults.email = serverSecrets.acmeEmail;
   security.acme.defaults = {
     dnsProvider = "cloudflare";
-    credentialsFile = "/var/lib/secrets/certs.secret";
+    environmentFile = "/var/lib/secrets/certs.secret";
     dnsResolver = "1.1.1.1:53";
   };
 

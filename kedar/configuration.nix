@@ -59,40 +59,46 @@ in {
     "/root/tailscale.state" = secrets.tailscale-state;
   };
 
-  boot.initrd.extraUtilsCommands = ''
-    for BIN in ${pkgs.iproute2}/{s,}bin/*; do
-      copy_bin_and_libs $BIN
-    done
+  boot.initrd.systemd.contents."ca-bundle.crt" = {
+    source = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+    target = "/etc/ssl/certs/ca-bundle.crt";
+  };
 
-    for BIN in ${pkgs.iptables-legacy}/{s,}bin/*; do
-      copy_bin_and_libs $BIN
-    done
+  boot.initrd.systemd.contents."root-profile" = {
+    text = "zpool import -a || true; ${config.boot.zfs.package}/bin/zfs load-key swamp || true; systemd-tty-ask-password-agent --query; exit";
+    target = "/var/empty/.profile";
+  };
 
-    copy_bin_and_libs ${pkgs.tailscale}/bin/.tailscaled-wrapped
+  boot.initrd.systemd.storePaths = [
+    config.boot.zfs.package
+    pkgs.iproute2
+    pkgs.iptables-legacy
+    pkgs.psmisc
+    pkgs.tailscale
+  ];
 
-    mkdir -p $out/secrets/etc/ssl/certs
-    cp ${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt $out/secrets/etc/ssl/certs/ca-bundle.crt
-  '';
+  boot.initrd.network.enable = true;
 
-
-  boot.initrd.network = {
+  boot.initrd.network.ssh = {
     enable = true;
+    port = 2222;
+    hostKeys = [ "/boot/initrd_rsa_key" ];
+    authorizedKeys = (import secrets.users { config = config; pkgs = pkgs; }).users.users.shadaj.openssh.authorizedKeys.keys;
+  };
 
-    udhcpc.extraArgs = [ "--timeout 5 --tryagain 20 --background" ];
-
-    ssh = {
-      enable = true;
-      port = 2222;
-      hostKeys = [ "/boot/initrd_rsa_key" ];
-      authorizedKeys = (import secrets.users { config = config; pkgs = pkgs; }).users.users.shadaj.openssh.authorizedKeys.keys;
+  boot.initrd.systemd.services.tailscaled = {
+    description = "Start Tailscale in the initrd";
+    wantedBy = [ "initrd.target" ];
+    after = [ "systemd-networkd.service" ];
+    path = [ pkgs.iproute2 pkgs.iptables-legacy ];
+    serviceConfig = {
+      Environment = [ "SSL_CERT_FILE=/etc/ssl/certs/ca-bundle.crt" ];
+      Restart = "always";
+      RestartSec = "5";
+      Type = "simple";
     };
-
-    postCommands = ''
-      /bin/.tailscaled-wrapped --state /root/tailscale.state &
-
-      zpool import tank
-      zpool import swamp
-      echo "zfs load-key -a; killall zfs; exit" >> /root/.profile
+    script = ''
+      exec ${pkgs.tailscale}/bin/.tailscaled-wrapped --state /root/tailscale.state
     '';
   };
 
