@@ -119,6 +119,7 @@ in
     killall
     tmux
     httpie
+    ripgrep
 
     ffmpeg
     texlive.combined.scheme-full
