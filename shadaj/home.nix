@@ -1,4 +1,4 @@
-{ pkgs, host, isDarwin, ... }:
+{ pkgs, unstable, host, isDarwin, ... }:
 
 with pkgs; # bring all of Nixpkgs into scope
 
@@ -57,6 +57,7 @@ in
       ".sl/"
       ".vsls.json"
       ".vscode/"
+      ".infinity/"
     ] ++ (if isDarwin then [ ".DS_Store" ] else []);
 
     lfs = {
@@ -81,6 +82,7 @@ in
 
     git
     sapling
+    unstable.jujutsu
     watchman
     gh
 
