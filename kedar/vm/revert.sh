@@ -32,4 +32,11 @@ systemctl start display-manager.service
 
 nvidia-smi -pm 1
 
-cp /var/lib/libvirt/swtpm/05776f22-15b8-4e4f-ae00-047d63bfd6fc/tpm2/tpm2-00.permall /home/shadaj/vm/swtpm/05776f22-15b8-4e4f-ae00-047d63bfd6fc/tpm2-00.permall
+TPM_UUID="05776f22-15b8-4e4f-ae00-047d63bfd6fc"
+TPM_BACKUP="/home/shadaj/vm/swtpm/$TPM_UUID/tpm2-00.permall"
+TPM_STATE="/var/lib/libvirt/swtpm/$TPM_UUID/tpm2/tpm2-00.permall"
+
+mkdir -p "$(dirname "$TPM_BACKUP")"
+if [ -f "$TPM_STATE" ]; then
+  cp "$TPM_STATE" "$TPM_BACKUP"
+fi

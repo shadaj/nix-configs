@@ -25,7 +25,7 @@ let
     # set -e # If a script exits with an error, we should as well.
 
     # check if it's a non-empty executable file
-    if [ -f "$HOOKPATH" ] && [ -s "$HOOKPATH"] && [ -x "$HOOKPATH" ]; then
+    if [ -f "$HOOKPATH" ] && [ -s "$HOOKPATH" ] && [ -x "$HOOKPATH" ]; then
         eval \"$HOOKPATH\" "$@"
     elif [ -d "$HOOKPATH" ]; then
         while read file; do

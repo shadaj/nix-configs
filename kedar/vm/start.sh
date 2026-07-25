@@ -1,7 +1,13 @@
 #!/bin/sh
 
-mkdir -p /var/lib/libvirt/swtpm/05776f22-15b8-4e4f-ae00-047d63bfd6fc/tpm2
-cp /home/shadaj/vm/swtpm/05776f22-15b8-4e4f-ae00-047d63bfd6fc/tpm2-00.permall /var/lib/libvirt/swtpm/05776f22-15b8-4e4f-ae00-047d63bfd6fc/tpm2/tpm2-00.permall
+TPM_UUID="05776f22-15b8-4e4f-ae00-047d63bfd6fc"
+TPM_BACKUP="/home/shadaj/vm/swtpm/$TPM_UUID/tpm2-00.permall"
+TPM_STATE="/var/lib/libvirt/swtpm/$TPM_UUID/tpm2/tpm2-00.permall"
+
+mkdir -p "$(dirname "$TPM_STATE")"
+if [ -f "$TPM_BACKUP" ]; then
+  cp "$TPM_BACKUP" "$TPM_STATE"
+fi
 
 nvidia-smi -pm 0
 

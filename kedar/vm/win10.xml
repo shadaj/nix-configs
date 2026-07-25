@@ -34,9 +34,12 @@
     <vcpupin vcpu="20" cpuset="5"/>
     <vcpupin vcpu="21" cpuset="17"/>
   </cputune>
-  <os>
+  <os firmware="efi">
     <type arch="x86_64" machine="q35">hvm</type>
-    <loader readonly="yes" type="pflash">/run/libvirt/nix-ovmf/edk2-x86_64-secure-code.fd</loader>
+    <firmware>
+      <feature enabled="yes" name="secure-boot"/>
+    </firmware>
+    <loader readonly="yes" secure="yes" type="pflash">/run/libvirt/nix-ovmf/edk2-x86_64-secure-code.fd</loader>
     <nvram template="/run/libvirt/nix-ovmf/edk2-i386-vars.fd" templateFormat="raw" format="raw">/var/lib/libvirt/qemu/nvram/win10_VARS.fd</nvram>
     <boot dev="hd"/>
     <smbios mode="host"/>
@@ -78,6 +81,12 @@
   </pm>
   <devices>
     <emulator>/run/libvirt/nix-emulators/qemu-system-x86_64</emulator>
+    <graphics type="vnc" port="5900" autoport="no" listen="0.0.0.0" passwd="temp1234">
+      <listen type="address" address="0.0.0.0"/>
+    </graphics>
+    <video>
+      <model type="virtio" heads="1" primary="yes"/>
+    </video>
     <controller type="pci" index="0" model="pcie-root"/>
     <controller type="pci" index="1" model="pcie-root-port">
       <model name="pcie-root-port"/>
