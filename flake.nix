@@ -14,7 +14,7 @@
     secrets.url = "github:input-output-hk/empty-flake?rev=2040a05b67bf9a669ce17eca56beb14b4206a99a";
 
     vscode-server.url = "github:msteen/nixos-vscode-server";
-    vscode-server.inputs.nixpkgs.follows = "nixpkgs";
+    # vscode-server.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = { self, nixpkgs, nixpkgs-unstable, darwin, home-manager, secrets, vscode-server }: let
@@ -92,7 +92,7 @@
       };
 
       modules = [
-        vscode-server.nixosModules.home
+        vscode-server.homeModules.default
         ./shadaj/home.nix
         {
           home = {
