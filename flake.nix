@@ -15,9 +15,12 @@
 
     vscode-server.url = "github:msteen/nixos-vscode-server";
     # vscode-server.inputs.nixpkgs.follows = "nixpkgs";
+
+    moonshine.url = "github:hgaiser/moonshine";
+    moonshine.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, darwin, home-manager, secrets, vscode-server }: let
+  outputs = { self, nixpkgs, nixpkgs-unstable, darwin, home-manager, secrets, vscode-server, moonshine }: let
     postgresPackage = (pkgs: pkgs.postgresql_14);
     postgresPlugins = (pkgs: with pkgs.postgresql_14.pkgs; [ pgvector ]);
   in {

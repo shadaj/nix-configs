@@ -135,6 +135,7 @@ in
     bintools
     racket
     perf
+    bubblewrap
     # (import ./vivado { inherit pkgs; })
   ] else if host == "sarang" then [
     swiftlint

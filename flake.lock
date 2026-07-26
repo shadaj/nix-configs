@@ -60,6 +60,26 @@
         "type": "github"
       }
     },
+    "moonshine": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1785363566,
+        "narHash": "sha256-XPlxv1rTteqHnbpApWvd2djFsi9UsbEqndLt4hj+nUo=",
+        "owner": "hgaiser",
+        "repo": "moonshine",
+        "rev": "0acb4c5c9cd32753a23999b98d71156c4dc40041",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hgaiser",
+        "repo": "moonshine",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1784432872,
@@ -111,6 +131,7 @@
       "inputs": {
         "darwin": "darwin",
         "home-manager": "home-manager",
+        "moonshine": "moonshine",
         "nixpkgs": "nixpkgs",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "secrets": "secrets",

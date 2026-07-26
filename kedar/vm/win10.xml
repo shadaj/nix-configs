@@ -8,31 +8,37 @@
   </metadata>
   <memory unit="KiB">25165824</memory>
   <currentMemory unit="KiB">25165824</currentMemory>
-  <vcpu placement="static">22</vcpu>
+  <vcpu placement="static">18</vcpu>
   <iothreads>1</iothreads>
   <cputune>
-    <vcpupin vcpu="0" cpuset="6"/>
-    <vcpupin vcpu="1" cpuset="18"/>
-    <vcpupin vcpu="2" cpuset="7"/>
-    <vcpupin vcpu="3" cpuset="19"/>
-    <vcpupin vcpu="4" cpuset="8"/>
-    <vcpupin vcpu="5" cpuset="20"/>
-    <vcpupin vcpu="6" cpuset="9"/>
-    <vcpupin vcpu="7" cpuset="21"/>
-    <vcpupin vcpu="8" cpuset="10"/>
-    <vcpupin vcpu="9" cpuset="22"/>
-    <vcpupin vcpu="10" cpuset="11"/>
-    <vcpupin vcpu="11" cpuset="23"/>
-    <vcpupin vcpu="12" cpuset="1"/>
-    <vcpupin vcpu="13" cpuset="13"/>
-    <vcpupin vcpu="14" cpuset="2"/>
-    <vcpupin vcpu="15" cpuset="14"/>
-    <vcpupin vcpu="16" cpuset="3"/>
-    <vcpupin vcpu="17" cpuset="15"/>
-    <vcpupin vcpu="18" cpuset="4"/>
-    <vcpupin vcpu="19" cpuset="16"/>
-    <vcpupin vcpu="20" cpuset="5"/>
-    <vcpupin vcpu="21" cpuset="17"/>
+    <vcpupin vcpu="0"  cpuset="3"/>
+    <vcpupin vcpu="1"  cpuset="15"/>
+
+    <vcpupin vcpu="2"  cpuset="4"/>
+    <vcpupin vcpu="3"  cpuset="16"/>
+
+    <vcpupin vcpu="4"  cpuset="5"/>
+    <vcpupin vcpu="5"  cpuset="17"/>
+
+    <vcpupin vcpu="6"  cpuset="6"/>
+    <vcpupin vcpu="7"  cpuset="18"/>
+
+    <vcpupin vcpu="8"  cpuset="7"/>
+    <vcpupin vcpu="9"  cpuset="19"/>
+
+    <vcpupin vcpu="10" cpuset="8"/>
+    <vcpupin vcpu="11" cpuset="20"/>
+
+    <vcpupin vcpu="12" cpuset="9"/>
+    <vcpupin vcpu="13" cpuset="21"/>
+
+    <vcpupin vcpu="14" cpuset="10"/>
+    <vcpupin vcpu="15" cpuset="22"/>
+
+    <vcpupin vcpu="16" cpuset="11"/>
+    <vcpupin vcpu="17" cpuset="23"/>
+
+    <emulatorpin cpuset="0-2,12-14"/>
   </cputune>
   <os firmware="efi">
     <type arch="x86_64" machine="q35">hvm</type>
@@ -58,18 +64,17 @@
     <smm state="on"/>
   </features>
   <cpu mode="host-passthrough" check="partial">
-    <topology sockets="1" dies="1" cores="11" threads="2"/>
+    <topology sockets="1" dies="1" cores="9" threads="2"/>
     <cache mode="passthrough"/>
     <feature policy="require" name="invtsc"/>
     <feature policy="require" name="topoext"/>
     <feature policy="require" name="svm"/>
-    <feature policy="disable" name="x2apic"/>
     <feature policy="disable" name="hypervisor"/>
   </cpu>
   <clock offset="localtime">
     <timer name="rtc" tickpolicy="catchup"/>
     <timer name="pit" tickpolicy="discard"/>
-    <timer name="hpet" present="no"/>
+    <timer name="hpet" present="yes"/>
     <timer name="hypervclock" present="yes"/>
   </clock>
   <on_poweroff>destroy</on_poweroff>

@@ -13,6 +13,7 @@ in {
     ./backups.nix
     ./monitoring.nix
     ./nginx.nix
+    inputs.moonshine.nixosModules.default
   ];
 
   nix.registry.nixpkgs.flake = inputs.nixpkgs;
@@ -109,13 +110,36 @@ in {
     cpuFreqGovernor = "schedutil";
   };
 
-  nixpkgs.config = {
-    allowUnfree = true;
+    nixpkgs = {
+      overlays = [
+        (final: prev: {
+          # https://github.com/NixOS/nixpkgs/pull/545602
+          umu-launcher-unwrapped = prev.umu-launcher-unwrapped.overrideAttrs (oldAttrs: rec {
+            version = "1.4.4";
 
-    packageOverrides = super: {
-      tailscale = unstable.tailscale;
+            src = final.fetchFromGitHub {
+              owner = "Open-Wine-Components";
+              repo = "umu-launcher";
+              tag = version;
+              hash = "sha256-0KJtJd0tY8ewoaUIJ+1cIDlr7eRTWLGTpkkNMn60JIY=";
+            };
+
+            cargoDeps = final.rustPlatform.fetchCargoVendor {
+              inherit src;
+              hash = "sha256-f9Me1dCS5GxXN4mADS6Z20M7YnX5ck3JXOXUFhM+h5o=";
+            };
+          });
+        })
+      ];
+
+      config = {
+        allowUnfree = true;
+
+        packageOverrides = super: {
+          tailscale = unstable.tailscale;
+        };
+      };
     };
-  };
 
   networking.hostName = "kedar"; # Define your hostname.
   networking.nameservers = [ "1.1.1.1" "1.0.0.1" ];
@@ -156,7 +180,8 @@ in {
 
   programs.nix-ld.libraries = [
     pkgs.stdenv.cc.cc
-  ];
+    pkgs.libGL
+  ] ++ (pkgs.steam-run.args.multiPkgs pkgs);
 
   # virtualisation.virtualbox.host.enable = true;
   # virtualisation.virtualbox.host.enableExtensionPack = true;
@@ -166,6 +191,7 @@ in {
     config.services.samba.package
     pkgs.tailscale
     pkgs.xpra
+    pkgs.heroic
   ];
 
   services.gvfs.enable = true;
@@ -230,6 +256,16 @@ in {
 
   users.groups.openvscode-server = {};
 
+  users.groups.moonshine = {};
+  users.users.moonshine = {
+    isNormalUser = true;
+    uid = 2000;
+    group = "moonshine";
+    home = "/tank/games/moonshine";
+    createHome = true;
+    extraGroups = [ "audio" "input" "render" "video" ];
+  };
+
   systemd.services.openvscode-socket-folder = {
     wantedBy = [ "openvscode-server-shadaj.service" "openvscode-server-ramnivas.service" ];
     serviceConfig = {
@@ -289,6 +325,39 @@ in {
     ];
 
     extraOptions = [ "--network=host" ];
+  };
+
+  services.moonshine = {
+    enable = true;
+    user = "moonshine";
+
+    # Everything from the Configuration section of the main README goes
+    # here, written as nix instead of TOML.
+    settings = {
+      application = [
+        {
+          title = "Steam";
+          command = [
+            "/run/current-system/sw/bin/steam"
+            "steam://open/bigpicture"
+          ];
+        }
+
+        {
+          title = "Heroic";
+          command = [
+            "/run/current-system/sw/bin/heroic"
+            "--force-device-scale-factor=2"
+            "--fullscreen"
+          ];
+        }
+      ];
+    };
+  };
+
+  programs.steam = {
+    enable = true;
+    package = unstable.steam;
   };
 
   # for home-manager
