@@ -20,7 +20,7 @@
     moonshine.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, darwin, home-manager, secrets, vscode-server, moonshine }: let
+  outputs = { self, nixpkgs, nixpkgs-unstable, darwin, home-manager, secrets, vscode-server, ... }: let
     postgresPackage = (pkgs: pkgs.postgresql_14);
     postgresPlugins = (pkgs: with pkgs.postgresql_14.pkgs; [ pgvector ]);
   in {
