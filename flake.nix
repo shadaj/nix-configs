@@ -16,7 +16,7 @@
     vscode-server.url = "github:msteen/nixos-vscode-server";
     # vscode-server.inputs.nixpkgs.follows = "nixpkgs";
 
-    moonshine.url = "github:hgaiser/moonshine";
+    moonshine.url = "github:hgaiser/moonshine/v0.16.0";
     moonshine.inputs.nixpkgs.follows = "nixpkgs";
   };
 
