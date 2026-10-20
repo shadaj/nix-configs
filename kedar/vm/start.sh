@@ -30,7 +30,14 @@ sleep 5
 # Unload all Nvidia drivers
 modprobe -r nvidia_drm
 modprobe -r nvidia_modeset
-modprobe -r nvidia_uvm
+# UVM's device major can change on reload. NixOS's udev mknod rules do not
+# replace existing nodes, so remove them only after a successful unload.
+if modprobe -r nvidia_uvm; then
+  udevadm settle || exit 1
+  rm -f /dev/nvidia-uvm /dev/nvidia-uvm-tools
+else
+  exit 1
+fi
 modprobe -r nvidia
 modprobe -r i2c_nvidia_gpu
 # Looks like these might need to be unloaded on Ryzen Systems. Not sure yet.

@@ -22,6 +22,9 @@ modprobe nvidia_uvm
 modprobe nvidia_modeset
 modprobe nvidia_drm
 
+# Wait for udev to recreate the UVM nodes before starting GPU clients.
+udevadm settle || exit 1
+
 # nvidia-xconfig --query-gpu-info > /dev/null 2>&1
 # echo "efi-framebuffer.0" > /sys/bus/platform/drivers/efi-framebuffer/bind
 
